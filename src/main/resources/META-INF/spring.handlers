@@ -1,0 +1,1 @@
+http\://services.wisc.edu/schema/spring-ehcache=edu.wisc.services.cache.config.AnnotationDrivenEhCacheNamespaceHandler
