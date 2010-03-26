@@ -1,0 +1,7 @@
+com.googlecode.ecache.annotations
+com.googlecode.ecache.annotations.config
+com.googlecode.ecache.annotations.impl
+com.googlecode.ecache.annotations.interceptor
+com.googlecode.ecache.annotations.key
+com.googlecode.ecache.annotations.util
+com.googlecode.ecache.annotations.utils
