@@ -27,10 +27,14 @@ When the above POJO is defined as a bean in a Spring IoC container, the bean ins
      http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
      http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.0.xsd">
 
-    <ehcache:config/>
+    <ehcache:config cache-manager="ehCacheManager" />
     
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
     
     <bean id="weatherDao" class="x.y.service.DefaultWeatherDao"/>
 </beans>
 }}}
+
+===Tip===
+You can omit the `cache-manager` attribute in the `<ehcache:config/>` tag if the bean name of the `CacheManager` that you want to wire in has the name `cacheManager`. If the `CacheManager` bean that you want to dependency-inject has any other name, then you have to use the `cache-manager` attribute explicitly, as in the preceding example.
+
