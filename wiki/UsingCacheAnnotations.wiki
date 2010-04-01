@@ -1,10 +1,10 @@
-=Using @Cacheable=
+=Using `@Cacheable`=
 
 Declaring cache semantics directly in the Java source code puts the declarations much closer to the affected code. There is not much danger of undue coupling, because code that is meant to have its results cached is almost always deployed that way anyway.
 
 The ease-of-use afforded by the use of the `@Cacheable` annotation is best illustrated with an example, which is explained in the text that follows. Consider the following class definition:
 {{{
-public interface WeatherDao {
+public class DefaultWeatherDao implements WeatherDao {
     
     @Cacheable(cacheName="weatherCache")
     public Weather getWeather(String zipCode);
@@ -12,4 +12,25 @@ public interface WeatherDao {
     @Cacheable(cacheName="locationSearchCache")
     public List<Location> findLocations(String locationSearch);
 }
+}}}
+
+When the above POJO is defined as a bean in a Spring IoC container, the bean instance can be made transactional by adding merely one line of XML configuration:
+{{{
+<!-- from the file 'context.xml' -->
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.0.xsd">
+
+    <ehcache:config/>
+    
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+    
+    <bean id="weatherDao" class="x.y.service.DefaultWeatherDao"/>
+</beans>
 }}}
