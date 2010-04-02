@@ -49,7 +49,6 @@ When using proxies, you should apply the `@Cacheable` annotation only to methods
 ===Self-Invocation===
 Only external method calls coming in through the proxy are intercepted. This means that self-invocation, in effect, a method within the target object calling another method of the target object, will not lead to an actual cache interception at runtime even if the invoked method is marked with `@Cacheable`.
 
-
 ===Table 1. `<ehcache:config/>`  settings===
 || *Attribute* || *Default* || *Description* ||
 || `cache-manager` || cacheManager || The bean name of the !CacheManager that is to be used to drive caching. This attribute is not required, and only needs to be specified explicitly if the bean name of the desired !CacheManager is not 'cacheManager'. ||
@@ -58,3 +57,18 @@ Only external method calls coming in through the proxy are intercepted. This mea
 || `self-populating-cache-scope` || shared || Are the SelfPopulatingCache wrappers scoped to the method or are they shared among all methods using each self populating cache. ||
 || `proxy-target-class` || false || Applies to proxy mode only. Controls what type of caching proxies are created for classes annotated with the `@Cacheable` annotation. If the proxy-target-class attribute is set to true, then class-based proxies are created. If proxy-target-class is false or if the attribute is omitted, then standard JDK interface-based proxies are created. (See [http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/aop.html#aop-proxying Spring Reference Section 7.6, “Proxying mechanisms”] for a detailed examination of the different proxy types.)||
 || `order` || Ordered.LOWEST_PRECEDENCE || Defines the order of the caching advice that is applied to beans annotated with `@Cacheable`. (For more information about the rules related to ordering of AOP advice, see [http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/aop.html#aop-ataspectj-advice-ordering Spring Reference Section 7.2.4.7, “Advice ordering”].) No specified ordering means that the AOP subsystem determines the order of the advice. ||
+
+===`@Cacheable` Settings===
+The `@Cacheable` annotation is metadata that specifies that a method must have cache semantics; for example, “cache the result of this method call in a cache named `weatherCache`, blocking other threads that are trying to make the same call with the same arguments to share the result”. The default `@Cacheable` settings are as follows:
+
+* Cache Name is unset and required by the developer
+* Self Populating is `false`
+* keyGeneratorName is empty, the default key generator is used.
+* exceptionCacheName is empty, no exception caching is done.
+
+These default settings can be changed; the various properties of the `@Cacheable` annotation are summarized in the following table:
+|| *Property* || *Type* || *Description* ||
+|| cacheName || String || Required name of the cache to use ||
+|| selfPopulating || boolean || Optional if the method should have self-populating semantics. This results in calls to the annotated method to be made within a !EhCache !CacheEntryFactory. This is useful for expensive shared resources that should be retrieved a minimal number of times. ||
+|| keyGeneratorName || String || Optional bean name of a !CacheKeyGenerator to use for generating cache keys for this method. ||
+|| exceptionCacheName || String || Optional name of the cache to use for caching exceptions. If not specified exceptions result in nothing being cached. If specified the thrown exception is stored in the cache for the generated key and re-thrown for subsequent method calls as long as it remains in the exception cache. ||
