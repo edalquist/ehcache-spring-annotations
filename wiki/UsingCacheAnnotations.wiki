@@ -35,7 +35,7 @@ When the above POJO is defined as a bean in a Spring IoC container, the bean ins
 </beans>
 }}}
 
-===CacheManager Reference===
+===!CacheManager Reference===
 You can omit the `cache-manager` attribute in the `<ehcache:config/>` tag if the bean name of the `CacheManager` that you want to wire in has the name `cacheManager`. If the `CacheManager` bean that you want to dependency-inject has any other name, then you have to use the `cache-manager` attribute explicitly, as in the preceding example.
 
 ===Annotation Placement===
@@ -48,3 +48,10 @@ When using proxies, you should apply the `@Cacheable` annotation only to methods
 
 ===Self-Invocation===
 Only external method calls coming in through the proxy are intercepted. This means that self-invocation, in effect, a method within the target object calling another method of the target object, will not lead to an actual cache interception at runtime even if the invoked method is marked with `@Cacheable`.
+
+
+===Table 1. `<ehcache:config/>`  settings===
+|| *Attribute* || *Default* || *Description* ||
+|| transaction-manager || transactionManager || Name of transaction manager to use. Only required if the name of the transaction manager is not transactionManager, as in the example above. ||
+|| proxy-target-class || false || Applies to proxy mode only. Controls what type of transactional proxies are created for classes annotated with the @Transactional annotation. If the proxy-target-class attribute is set to true, then class-based proxies are created. If proxy-target-class is false or if the attribute is omitted, then standard JDK interface-based proxies are created. (See Section 7.6, “Proxying mechanisms” for a detailed examination of the different proxy types.)||
+||order || Ordered.LOWEST_PRECEDENCE || Defines the order of the transaction advice that is applied to beans annotated with @Transactional. (For more information about the rules related to ordering of AOP advice, see Section 7.2.4.7, “Advice ordering”.) No specified ordering means that the AOP subsystem determines the order of the advice. ||
