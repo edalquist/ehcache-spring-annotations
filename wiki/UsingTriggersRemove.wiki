@@ -1,13 +1,56 @@
 #summary How to use the @TriggersRemove annotation.
 
-= Introduction =
+= Using @TriggersRemove =
 
-Add your content here.
+ehcache-spring-annotations includes another annotation - @TriggersRemove - which can be applied to methods in order to trigger removal of a single element from the cache or a full clear. 
 
+= Example =
 
-= Details =
+Consider the same example referred to on UsingCacheAnnotations:
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+}
+}}}
+
+Say we want to add an update method to this class:
+
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+
+    public Weather updateWeather(String zipCode, Weather newWeather);
+
+}
+}}}
+
+If we simply add @TriggersRemove(cacheName="weatherCache") to the updateWeather function as defined above, it won't work.
+The reason for this is due to the cache key generators, which depend on the MethodInvocation - which includes the method arguments and method name. 
+If you need to use @TriggersRemove, you have to align the cachekey generator used in the @Cacheable annotation and the corresponding @TriggersRemove.
+
+Example:
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache", keyGeneratorName="myKeyGenerator")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+
+    @TriggersRemove(cacheName="weatherCache", keyGeneratorName="myKeyGenerator")
+    public Weather updateWeather(String zipCode, Weather newWeather);
+
+}
+}}}
