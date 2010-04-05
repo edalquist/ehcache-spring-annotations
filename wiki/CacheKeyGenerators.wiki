@@ -12,3 +12,4 @@ Every method invocation advised by @Cacheable or @!TriggersRemove has to have a 
 ||*[#ReflectionHashCodeCacheKeyGenerator ReflectionHashCodeCacheKeyGenerator]*|| Does the same object graph traversal than !HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
 
 == Common Key Generator Configuration ==
+All of the included !CacheKeyGenerator implementations extend [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/AbstractCacheKeyGenerator.html AbstractCacheKeyGenerator] which provides some common configuration options.
