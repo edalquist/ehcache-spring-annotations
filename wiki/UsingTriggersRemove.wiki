@@ -1,8 +1,8 @@
-#summary How to use the @TriggersRemove annotation.
+#summary How to use the `@TriggersRemove` annotation.
 
-= Using @TriggersRemove =
+= Using `@TriggersRemove` =
 
-ehcache-spring-annotations includes another annotation - @TriggersRemove - which can be applied to methods in order to trigger removal of a single element from the cache or a full clear. 
+ehcache-spring-annotations includes another annotation - `@TriggersRemove` - which can be applied to methods in order to trigger removal of a single element from the cache or a full clear. 
 
 = Example =
 
@@ -35,7 +35,7 @@ public class DefaultWeatherDao implements WeatherDao {
 }
 }}}
 
-If we simply add @TriggersRemove(cacheName="weatherCache") to the updateWeather function as defined above, it won't work.
+If we simply add `@TriggersRemove(cacheName="weatherCache")` to the updateWeather function as defined above, it won't work.
 The reason for this is due to the cache key generators, which depend on the MethodInvocation - which includes the method arguments and method name. 
 If you need to use @TriggersRemove, you have to align the cachekey generator used in the @Cacheable annotation and the corresponding @TriggersRemove.
 
