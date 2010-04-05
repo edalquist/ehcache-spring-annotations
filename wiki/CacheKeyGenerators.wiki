@@ -14,5 +14,11 @@ Every method invocation advised by @Cacheable or @!TriggersRemove has to have a 
 == Common Key Generator Configuration ==
 All of the included !CacheKeyGenerator implementations extend [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/AbstractCacheKeyGenerator.html AbstractCacheKeyGenerator] which provides the following common configuration options.
 
-=== Check for Cycles ===
-Default *false*: 
+==== Check for Cycles ====
+Default *false*: If true the key generator will track visited objects during recursion and if a cycle is detected handle it correctly. If false the exact behavior is undefined but many of the key generators will fail with StackOverflowError due to infinite recursion.
+
+==== Include Method ====
+Default *true*:
+
+==== Include Parameter Types ====
+Default *false*:
