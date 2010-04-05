@@ -6,7 +6,9 @@ Every method invocation advised by @Cacheable or @!TriggersRemove has to have a 
 
 = Provided Cache Key Generators =
 ||*[#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
-||*StringCacheKeyGenerator*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
-||*ListCacheKeyGenerator*|| ||
-||*MessageDigestCacheKeyGenerator*|| ||
-||*ReflectionHashCodeCacheKeyGenerator*|| ||
+||*[#StringCacheKeyGenerator StringCacheKeyGenerator]*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
+||*[#ListCacheKeyGenerator ListCacheKeyGenerator]*|| Does a deep inspection converting arrays to Lists and returning an immutable List of the key arguments. Useful if complete assurance is required when doing key comparisons ||
+||*[#MessageDigestCacheKeyGenerator MessageDigestCacheKeyGenerator]*|| Does the same object graph traversal than !HashCodeCacheKeyGenerator does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. ||
+||*[#ReflectionHashCodeCacheKeyGenerator ReflectionHashCodeCacheKeyGenerator]*|| Does the same object graph traversal than !HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
+
+== Common Key Generator Configuration ==
