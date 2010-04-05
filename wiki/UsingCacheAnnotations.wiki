@@ -14,7 +14,7 @@ public class DefaultWeatherDao implements WeatherDao {
 }
 }}}
 
-When the above POJO is defined as a bean in a Spring IoC container, the bean instance can be made transactional by adding merely one line of XML configuration:
+When the above POJO is defined as a bean in a Spring IoC container, the bean instance can be made 'cacheable' by adding merely one line of XML configuration:
 {{{
 <!-- from the file 'context.xml' -->
 <?xml version="1.0" encoding="UTF-8"?>
