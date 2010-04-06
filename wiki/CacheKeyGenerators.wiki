@@ -110,6 +110,8 @@ dao.getWeather("49931");
 == !ReflectionHashCodeCacheKeyGenerator ==
 Does the same object graph traversal than [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but uses reflection to generate a hash code for objects that don't implement hashCode. For each object visited reflection is used to find the hashCode method. If the hashCode method only exists on the base Object reflection is then used to recurse on every non-transient, non-static field in the object.
 
+ * This key generator is the slowest included in the library.
+ * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments correctly implement hashCode.
 
 The key `-78777307802668` would be generated for the following example call with the default options:
 {{{
@@ -124,3 +126,5 @@ private static class WeatherId {
 //@Cacheable annotated method
 dao.getWeather(new WeatherId("49931"));
 }}}
+
+Note in the example WeatherId does not implement hashCode but a consistent key is still generated.
