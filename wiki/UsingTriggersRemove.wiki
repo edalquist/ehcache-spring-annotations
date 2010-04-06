@@ -4,9 +4,9 @@
 
 ehcache-spring-annotations includes another annotation - `@TriggersRemove` - which can be applied to methods in order to trigger removal of a single element from the cache or optionally trigger removal of all objects from the cache.
 
-= removeAll Example =
+= removeAll Example  =
 
-The first example will demonstrate the removeAll option, which is *not* enabled by default.
+The first example will demonstrate the removeAll option, which is *not* enabled by default. It is 
 
 Consider the same example referred to on UsingCacheAnnotations:
 
@@ -58,8 +58,8 @@ public class DefaultWeatherDao implements WeatherDao {
 }
 }}}
 
-Say we want to add an delete method to this class. Ideally, we'd like to use `@TriggersRemove` on this
-delete method to remove the sample element from the cache :
+Say we want to add an delete method to this class. It will contain some logic to remove the Weather object from persistence.
+Ideally, we'd like to use `@TriggersRemove` on this new delete method to remove the corresponding element from the cache automatically upon invocation:
 
 {{{
 public class DefaultWeatherDao implements WeatherDao {
@@ -113,7 +113,9 @@ Elsewhere in your Spring configuration you will configure a [CacheKeyGenerators 
     <bean id="weatherDao" class="x.y.service.DefaultWeatherDao"/>
 
     <bean id="myKeyGenerator" class="com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator">
-      <property name="includeMethod" value="false"/>
+        <property name="includeMethod" value="false"/>
     </bean>
 </beans>
 }}}
+
+With the includeMethod property set to false on a `HashCodeCacheKeyGenerator` instance, the method name will be ignored when generating cache Element keys. This instance will only use the method arguments. In this case, the getWeather and deleteWeather methods have the same type and number of arguments (a single String). 
