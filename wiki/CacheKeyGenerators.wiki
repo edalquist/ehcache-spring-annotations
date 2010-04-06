@@ -1,4 +1,5 @@
 #summary Overview of available CacheKeyGenerator implementations
+#labels Featured
 
 = Introduction =
 
