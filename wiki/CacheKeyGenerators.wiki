@@ -23,8 +23,11 @@ Default *true*: If true the declaring class, method name and method return type 
 @Cacheable(cache="weatherCache")
 public Weather getWeatherById(String locationId);
 
+@Cacheable(cache="weatherCache")
 public Weather getWeatherByZip(String zipCode);
 }}}
+
+
 
 ==== Include Parameter Types ====
 Default *false*:
