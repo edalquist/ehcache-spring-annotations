@@ -37,10 +37,15 @@ public class DefaultWeatherDao implements WeatherDao {
 }
 }}}
 
+The clearWeatherCache method doesn't have to have a single line of code. Upon invocation, all Elements inside the Ehcache named "weatherCache" will be removed. This example is sometimes useful in conjunction with a trigger for periodic execution.
 
-= Example =
+= Default Example =
 
-Consider the same example referred to on UsingCacheAnnotations:
+In the preceding example, the removeAll option is enabled and all Elements from the cache are removed.
+
+The default behavior of the `@TriggersRemove` will only remove one Element upon invocation.
+
+Consider our example again:
 
 {{{
 public class DefaultWeatherDao implements WeatherDao {
@@ -53,7 +58,8 @@ public class DefaultWeatherDao implements WeatherDao {
 }
 }}}
 
-Say we want to add an update method to this class:
+Say we want to add an delete method to this class. Ideally, we'd like to use `@TriggersRemove` on this
+delete method to remove the sample element from the cache :
 
 {{{
 public class DefaultWeatherDao implements WeatherDao {
@@ -64,14 +70,14 @@ public class DefaultWeatherDao implements WeatherDao {
     @Cacheable(cacheName="locationSearchCache")
     public List<Location> findLocations(String locationSearch);
 
-    public Weather updateWeather(String zipCode, Weather newWeather);
-
+    public Weather deleteWeather(String zipCode);
 }
 }}}
 
-Simply adding `@TriggersRemove(cacheName="weatherCache")` to the updateWeather function as defined above won't work. The default CacheKeyGenerator uses the [http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInvocation.html MethodInvocation] - which includes the method arguments and method name. 
+Simply adding `@TriggersRemove(cacheName="weatherCache")` to the deleteWeather function as defined above won't work. 
+The default CacheKeyGenerator uses the [http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInvocation.html MethodInvocation] - which includes the method arguments *and* method name. 
 
-In order to use `@TriggersRemove`, you have to align the CacheKeyGenerator used in the `@Cacheable` 
+In order to use `@TriggersRemove` to remove a single element, you have to configure an appropriate CacheKeyGenerator.
 
 Example:
 {{{
@@ -85,6 +91,29 @@ public class DefaultWeatherDao implements WeatherDao {
 
     @TriggersRemove(cacheName="weatherCache", keyGeneratorName="myKeyGenerator")
     public Weather updateWeather(String zipCode, Weather newWeather);
-
 }
+}}}
+
+Elsewhere in your Spring configuration you will configure a CacheKeyGenerator named 'myKeyGenerator':
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.0.xsd">
+
+    <ehcache:annotation-driven cache-manager="ehCacheManager" />
+    
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+    
+    <bean id="weatherDao" class="x.y.service.DefaultWeatherDao"/>
+
+    <bean id="myKeyGenerator" class="com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator">
+      <property name="includeMethod" value="false"/>
+    </bean>
+</beans>
 }}}
