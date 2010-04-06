@@ -1,3 +1,4 @@
+#labels Featured
 =Using `@Cacheable`=
 
 Declaring cache semantics directly in the Java source code puts the declarations much closer to the affected code. There is not much danger of undue coupling, because code that is meant to have its results cached is almost always deployed that way anyway.
