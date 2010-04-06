@@ -31,7 +31,7 @@ public Weather getWeatherByZip(String zipCode);
 If both of these methods are called with the argument "49931" and the include method property is true different cache keys will be created. If the include method property is false the keys would be the same and could result in a collision if different Weather objects exist for "49931" as the locationId versus "49931" as the zipCode.
 
 ==== Include Parameter Types ====
-Default *false*: If true and *Include Method* is true the method parameter types are also included in key generation. This is broken out separately from the *Include Method* option because of the additional runtime cost. [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#getParameterTypes() Method.getParameterTypes()] is used for including the parameter type data. This call results in the Class array being cloned on every call resulting in extra CPU and garbage collection costs for every key generated. Consider the following use case:
+Default *true*: If true and *Include Method* is true the method parameter types are also included in key generation. This is broken out separately from the *Include Method* option because of the additional runtime cost. [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#getParameterTypes() Method.getParameterTypes()] is used for including the parameter type data. This call results in the Class array being cloned on every call resulting in extra CPU and garbage collection costs for every key generated. Consider the following use case:
 {{{
 @Cacheable(cache="weatherCache")
 public Weather getWeather(Long locationId);
@@ -45,5 +45,25 @@ Even with *Include Method* true if both of these methods are called with `null` 
 == !HashCodeCacheKeyGenerator ==
 Generates a simple 64bit hash code based on the method arguments. The hash code generation algorithm is very close to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] with the only major differences being the use of a long instead of an int and that Collections and Maps are iterated over.
 
+ * This key generated depends on all of the method arguments correctly implementing the hashCode method. The only exception is for arrays, Collections and Maps as these are handled element by element.
  * This is the fastest key generator included in the library.
  * With only 64 bits of key space there some potential for key collisions, especially since the Java hash code implementation is not a cryptographic hash code.
+
+The key `-78777307802699` would be generated for the following example call with the default options:
+{{{
+//@Cacheable annotated method
+dao.getWeather("49931");
+}}}
+
+== !StringCacheKeyGenerator ==
+Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] to generate a generally human readable key.
+
+* This key generated depends on all of the method arguments correctly implementing the toString method. The only exception is for arrays as these are handled element by element.
+ * This is the second fastest key generator included in the library.
+ * For arguments that implement toString in such a way that their identity is written out this generator is more collision resistant than the [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]
+
+The key `[class x.y.z.WeatherDaoImpl, getWeather class x.y.z.Weather, [class java.lang.String], [49931]]` would be generated for the following example call with the default options:
+{{{
+//@Cacheable annotated method
+dao.getWeather("49931");
+}}}
