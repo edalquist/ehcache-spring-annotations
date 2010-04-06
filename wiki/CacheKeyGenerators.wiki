@@ -18,7 +18,13 @@ All of the included !CacheKeyGenerator implementations extend [http://ehcache-sp
 Default *false*: If true the key generator will track visited objects during recursion and if a cycle is detected handle it correctly. If false the exact behavior is undefined but many of the key generators will fail with StackOverflowError due to infinite recursion.
 
 ==== Include Method ====
-Default *true*:
+Default *true*: If true the declaring class, method name and method return type are included in the generated cache key. The effect of this is that keys become scoped to the annotated method. Consider the following method definitions:
+{{{
+@Cacheable(cache="weatherCache")
+public Weather getWeatherById(String locationId);
+
+public Weather getWeatherByZip(String zipCode);
+}}}
 
 ==== Include Parameter Types ====
 Default *false*:
