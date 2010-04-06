@@ -2,7 +2,41 @@
 
 = Using `@TriggersRemove` =
 
-ehcache-spring-annotations includes another annotation - `@TriggersRemove` - which can be applied to methods in order to trigger removal of a single element from the cache or a full clear. 
+ehcache-spring-annotations includes another annotation - `@TriggersRemove` - which can be applied to methods in order to trigger removal of a single element from the cache or optionally trigger removal of all objects from the cache.
+
+= removeAll Example =
+
+The first example will demonstrate the removeAll option, which is *not* enabled by default.
+
+Consider the same example referred to on UsingCacheAnnotations:
+
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+}
+}}}
+
+We can add a method to this class that triggers invocation of [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#removeAll() Ehcache#removeAll()] each time it is executed:
+
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+
+    @TriggersRemove(cacheName="weatherCache", removeAll=true)
+    public void clearWeatherCache();
+}
+}}}
+
 
 = Example =
 
@@ -35,9 +69,9 @@ public class DefaultWeatherDao implements WeatherDao {
 }
 }}}
 
-If we simply add `@TriggersRemove(cacheName="weatherCache")` to the updateWeather function as defined above, it won't work.
-The reason for this is due to the cache key generators, which depend on the [http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInvocation.html MethodInvocation] - which includes the method arguments and method name. 
-If you need to use `@TriggersRemove`, you have to align the `CacheKeyGenerator` used in the `@Cacheable` annotation and the corresponding `@TriggersRemove`.
+Simply adding `@TriggersRemove(cacheName="weatherCache")` to the updateWeather function as defined above won't work. The default CacheKeyGenerator uses the [http://aopalliance.sourceforge.net/doc/org/aopalliance/intercept/MethodInvocation.html MethodInvocation] - which includes the method arguments and method name. 
+
+In order to use `@TriggersRemove`, you have to align the CacheKeyGenerator used in the `@Cacheable` 
 
 Example:
 {{{
