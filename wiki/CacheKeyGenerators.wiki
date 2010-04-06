@@ -30,4 +30,4 @@ public Weather getWeatherByZip(String zipCode);
 If both of these methods are called with the argument "49931" and the include method property is true different cache keys will be created. If the include method property is false the keys would be the same and could result in a collision if different Weather objects exist for "49931" as the locationId versus "49931" as the zipCode.=
 
 ==== Include Parameter Types ====
-Default *false*:
+Default *false*: If true and *Include Method* is true the method parameter types are also included in key generation. This is broken out separately from the include method option because of the additional cost. [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/reflect/Method.html#getParameterTypes() Method.getParameterTypes()] results in the Class array being cloned on every call.
