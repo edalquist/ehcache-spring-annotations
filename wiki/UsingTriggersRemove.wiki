@@ -6,9 +6,9 @@ ehcache-spring-annotations includes another annotation - `@TriggersRemove` - whi
 
 = removeAll Example  =
 
-The first example will demonstrate the removeAll option, which is *not* enabled by default. It is 
+The first example will demonstrate the removeAll option, which is *not* enabled by default. 
 
-Consider the same example referred to on UsingCacheAnnotations:
+Consider the original example from UsingCacheAnnotations:
 
 {{{
 public class DefaultWeatherDao implements WeatherDao {
