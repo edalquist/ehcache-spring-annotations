@@ -64,7 +64,7 @@ Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString
  * For arguments that implement toString in such a way that their identity is written out this generator is more collision resistant than the [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]
  * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString such that the object's identity is included.
 
-The key `[class x.y.z.WeatherDaoImpl, getWeather class x.y.z.Weather, [class java.lang.String], [49931]]` would be generated for the following example call with the default options:
+The key `"[class x.y.z.WeatherDaoImpl, getWeather class x.y.z.Weather, [class java.lang.String], [49931]]"` would be generated for the following example call with the default options:
 {{{
 //@Cacheable annotated method
 dao.getWeather("49931");
@@ -93,8 +93,34 @@ Arrays.asList(
 }}}
 
 == !MessageDigestCacheKeyGenerator ==
-Does the same object graph traversal that [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used.
+Does the same object graph traversal that [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. This results in a much larger key space and the use of a cryptographic hashing function for better key distribution.
 
+ * This key generated depends on all of the method arguments correctly implementing the hashCode method. The only exception is for arrays, Collections and Maps as these are handled element by element.
+ * Any supported MessageDigest algorithm can be used. The result is always a URL safe base64 encoding of the hash byte array.
+ * The default digest algorithm is SHA-1
+ * This key generator is the second slowest included in the library.
+ * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments correctly implement hashCode.
+
+The key `"FKeW4z_I5_yc_z9J98GmaM4aWSU"` would be generated for the following example call with the default options:
+{{{
+//@Cacheable annotated method
+dao.getWeather("49931");
+}}}
 
 == !ReflectionHashCodeCacheKeyGenerator ==
-Does the same object graph traversal than [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but uses reflection to generate a hash code for objects that don't implement hashCode.
+Does the same object graph traversal than [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but uses reflection to generate a hash code for objects that don't implement hashCode. For each object visited reflection is used to find the hashCode method. If the hashCode method only exists on the base Object reflection is then used to recurse on every non-transient, non-static field in the object.
+
+
+The key `-78777307802668` would be generated for the following example call with the default options:
+{{{
+private static class WeatherId {
+    private final String id;
+
+    public WeatherId(String id) {
+        this.id = id;
+    }
+}
+
+//@Cacheable annotated method
+dao.getWeather(new WeatherId("49931"));
+}}}
