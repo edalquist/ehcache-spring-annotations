@@ -1,4 +1,5 @@
 #summary How to use the @TriggersRemove annotation.
+#labels Featured
 
 = Using `@TriggersRemove` =
 
