@@ -127,4 +127,4 @@ private static class WeatherId {
 dao.getWeather(new WeatherId("49931"));
 }}}
 
-Note in the example WeatherId does not implement hashCode but a consistent key is still generated.
+Note in the example !WeatherId does not implement hashCode but a consistent key is still generated.
