@@ -58,7 +58,7 @@ dao.getWeather("49931");
 == !StringCacheKeyGenerator ==
 Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] to generate a generally human readable key.
 
-* This key generated depends on all of the method arguments correctly implementing the toString method. The only exception is for arrays as these are handled element by element.
+ * This key generated depends on all of the method arguments correctly implementing the toString method. The only exception is for arrays as these are handled element by element.
  * This is the second fastest key generator included in the library.
  * For arguments that implement toString in such a way that their identity is written out this generator is more collision resistant than the [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]
 
