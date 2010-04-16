@@ -1,4 +1,4 @@
-#summary How to use @Cacheable annotation
+#summary How to use the @Cacheable annotation.
 #labels Featured
 
 =Using `@Cacheable`=
