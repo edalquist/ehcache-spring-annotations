@@ -7,14 +7,14 @@ To help reduce space consumption in the SVN repository for the project the follo
 = Details =
 
 After running `release:perform` build the site from the tagged project.
-{{
+{{{
 cd target/checkout/
 mvn site
 cd target/site
-}}
+}}}
 
 In a separate terminal copy and checkout the existing site. They sync the newly generated site with the checkout and commit the changes.
-{{
+{{{
 # Copy and checkout previous site 
 svn cp https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.2 https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.3
 svn co https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.3
@@ -30,4 +30,4 @@ find ./1.0.3/ -type f | grep -v .svn | xargs dos2unix
 
 # Commit the modified site
 svn commit
-}}
+}}}
