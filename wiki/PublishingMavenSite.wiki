@@ -1,4 +1,4 @@
-#Developer instructions for publishing the maven generated site to SVN
+#summary Developer instructions for publishing the maven generated site to SVN
 
 = Introduction =
 
