@@ -2,6 +2,8 @@
 
 = Latest Release =
 
-Version 1.0.1, released Tuesday April 6. First production release.
+Version 1.0.2, released Friday April 16. [http://code.google.com/p/ehcache-spring-annotations/issues/list?can=1&q=label%3AMilestone-Release1.0.2 Bug fix] release
 
 = Previous Releases = 
+
+Version 1.0.1, released Tuesday April 6. First production release.
