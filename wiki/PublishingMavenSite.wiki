@@ -1,0 +1,33 @@
+#Developer instructions for publishing the maven generated site to SVN
+
+= Introduction =
+
+To help reduce space consumption in the SVN repository for the project the following approach to uploading the generated site should be used.
+
+= Details =
+
+After running `release:perform` build the site from the tagged project.
+{{
+cd target/checkout/
+mvn site
+cd target/site
+}}
+
+In a separate terminal copy and checkout the existing site. They sync the newly generated site with the checkout and commit the changes.
+{{
+# Copy and checkout previous site 
+svn cp https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.2 https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.3
+svn co https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.3
+
+# Sync the new site over the previous site, removing files that no longer exist
+rsync -avr --progress --exclude '.svn'  --delete /path/to/ehcache-spring-annotations/target/checkout/target/site ./1.0.3/
+
+# Add new files into SVN control, this will generate a lot of 'is already under version control' warnings which can be ignored
+find ./1.0.3/ -type f | grep -v .svn | xargs svn add
+
+# Some reporting plugins generate output with inconsistent line endings, fix this
+find ./1.0.3/ -type f | grep -v .svn | xargs dos2unix
+
+# Commit the modified site
+svn commit
+}}
