@@ -13,7 +13,7 @@ mvn site
 cd target/site
 }}}
 
-In a separate terminal copy and checkout the existing site. They sync the newly generated site with the checkout and commit the changes.
+In a separate terminal copy and checkout the existing site. Then sync the newly generated site with the checkout and commit the changes.
 {{{
 # Copy and checkout previous site 
 svn cp https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.2 https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.3
