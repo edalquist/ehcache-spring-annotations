@@ -7,7 +7,7 @@
 Every method invocation advised by @Cacheable or @!TriggersRemove has to have a key generated for use when access the corresponding cache. The [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] interface defines the API for generating these keys.
 
 = Provided Cache Key Generators =
-||*[#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
+||*[HashCodeCacheKeyGenerator]*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
 ||*[#StringCacheKeyGenerator StringCacheKeyGenerator]*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
 ||*[#ListCacheKeyGenerator ListCacheKeyGenerator]*|| Does a deep inspection converting arrays to Lists and returning an immutable List of the key arguments. Useful if complete assurance is required when doing key comparisons ||
 ||*[#MessageDigestCacheKeyGenerator MessageDigestCacheKeyGenerator]*|| Does the same object graph traversal that [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. ||
@@ -43,19 +43,6 @@ public Weather getWeather(String zipCode);
 
 Even with *Include Method* true if both of these methods are called with `null` as the parameter the same cache key would be generated. By setting *Include Parameter Types* to true the parameter types will be included in the key and the collision will be avoided.
 
-== !HashCodeCacheKeyGenerator ==
-Generates a simple 64bit hash code based on the method arguments. The hash code generation algorithm is very close to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] with the only major differences being the use of a long instead of an int and that Collections and Maps are iterated over.
-
- * This key generated depends on all of the method arguments correctly implementing the hashCode method. The only exception is for arrays, Collections and Maps as these are handled element by element.
- * This is the fastest key generator included in the library.
- * With only 64 bits of key space there some potential for key collisions, especially since the Java hash code implementation is not a cryptographic hash code.
- * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments correctly implement hashCode.
-
-The key `-78777307802699` would be generated for the following example call with the default options:
-{{{
-//@Cacheable annotated method
-dao.getWeather("49931");
-}}}
 
 == !StringCacheKeyGenerator ==
 Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] to generate a generally human readable key.
