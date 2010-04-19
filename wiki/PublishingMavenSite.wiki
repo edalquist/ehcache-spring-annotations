@@ -31,3 +31,9 @@ find ./1.0.3/ -type f | grep -v .svn | xargs dos2unix
 # Commit the modified site
 svn commit
 }}}
+
+Merge the new site with the 'current' site:
+{{{
+svn co https://ehcache-spring-annotations.googlecode.com/svn/site/current/
+## TODO figure this out during next release
+}}}
