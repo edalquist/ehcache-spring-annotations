@@ -1,5 +1,6 @@
 #summary Overview of available CacheKeyGenerator implementations
 #labels Featured
+#sidebar TableOfContents
 
 = Introduction =
 
