@@ -1,4 +1,5 @@
 #summary Fast and simple key generator
+#sidebar TableOfContents
 
 == !HashCodeCacheKeyGenerator ==
 Generates a simple 64bit hash code based on the method arguments. The hash code generation algorithm is very close to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] with the only major differences being the use of a long instead of an int and that Collections and Maps are iterated over.
