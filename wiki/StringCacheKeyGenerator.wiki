@@ -1,0 +1,28 @@
+#summary A human readable key generator
+#sidebar TableOfContents
+
+== [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/StringCacheKeyGenerator.html StringCacheKeyGenerator] ==
+Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] to generate a generally human readable key.
+
+ * This key generated depends on all of the method arguments correctly implementing the toString method. The only exception is for arrays as these are handled element by element.
+ * This is the second fastest key generator included in the library.
+ * For arguments that implement toString in such a way that their identity is written out this generator is more collision resistant than the [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]
+ * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString such that the object's identity is included.
+ * This key generator is automatically registered in the Spring application context using the default constructor under the [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/HashCodeCacheKeyGenerator.html#DEFAULT_BEAN_NAME HashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME] constant.
+
+The key `"[class x.y.z.WeatherDaoImpl, getWeather class x.y.z.Weather, [class java.lang.String], [49931]]"` would be generated for the following example call with the default options:
+{{{
+//@Cacheable annotated method
+dao.getWeather("49931");
+}}}
+
+
+Example dao:
+{{{
+class WeatherDao {
+    @Cacheable(cacheName="", keyGeneratorName=StringCacheKeyGenerator.DEFAULT_BEAN_NAME)
+    Weather getWeather(String zip) {
+        ...
+    }
+}
+}}}
