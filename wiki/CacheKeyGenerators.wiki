@@ -8,7 +8,7 @@ Every method invocation advised by @Cacheable or @!TriggersRemove has to have a 
 
 = Provided Cache Key Generators =
 ||*[HashCodeCacheKeyGenerator]*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
-||*[#StringCacheKeyGenerator StringCacheKeyGenerator]*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
+||*[StringCacheKeyGenerator]*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
 ||*[#ListCacheKeyGenerator ListCacheKeyGenerator]*|| Does a deep inspection converting arrays to Lists and returning an immutable List of the key arguments. Useful if complete assurance is required when doing key comparisons ||
 ||*[#MessageDigestCacheKeyGenerator MessageDigestCacheKeyGenerator]*|| Does the same object graph traversal that [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. ||
 ||*[#ReflectionHashCodeCacheKeyGenerator ReflectionHashCodeCacheKeyGenerator]*|| Does the same object graph traversal than !HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
@@ -43,20 +43,6 @@ public Weather getWeather(String zipCode);
 
 Even with *Include Method* true if both of these methods are called with `null` as the parameter the same cache key would be generated. By setting *Include Parameter Types* to true the parameter types will be included in the key and the collision will be avoided.
 
-
-== !StringCacheKeyGenerator ==
-Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] to generate a generally human readable key.
-
- * This key generated depends on all of the method arguments correctly implementing the toString method. The only exception is for arrays as these are handled element by element.
- * This is the second fastest key generator included in the library.
- * For arguments that implement toString in such a way that their identity is written out this generator is more collision resistant than the [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]
- * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString such that the object's identity is included.
-
-The key `"[class x.y.z.WeatherDaoImpl, getWeather class x.y.z.Weather, [class java.lang.String], [49931]]"` would be generated for the following example call with the default options:
-{{{
-//@Cacheable annotated method
-dao.getWeather("49931");
-}}}
 
 == !ListCacheKeyGenerator ==
 Does a deep inspection converting arrays to Lists and returning an immutable, Serializable, List of the arguments as the key. Useful if complete equality assurance is required when doing key comparisons as the original arguments are used for every key comparison.
