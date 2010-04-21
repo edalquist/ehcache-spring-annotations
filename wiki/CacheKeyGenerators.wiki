@@ -44,7 +44,14 @@ public Weather getWeather(String zipCode);
 Even with *Include Method* true if both of these methods are called with `null` as the parameter the same cache key would be generated. By setting *Include Parameter Types* to true the parameter types will be included in the key and the collision will be avoided.
 
 = Performance =
-[http://spreadsheets.google.com/oimg?key=0AkKQRXLIUcBodERDaEFTV2VxNU1OOGVpRTY2N09SZmc&oid=1&v=1271783783546&nonsense=performance.png]
+Included in the unit tests for the project is the `CacheKeyGeneratorPerformanceTest`. This does some very simple synthetic benchmarking of the included !CacheKeyGenerators. The following results are from running this test on a 2.6GHz Core 2 Duo machine. While the actual key generation rates will vary based on hardware and configurations the ratios between the various key generators should be a good guide for any system.
+
+|| *Cache Key Generator* || *Keys/ms* || *% Increase* ||
+|| HashCodeCacheKeyGenerator	4035.06			106.82%
+ListCacheKeyGenerator	1951.05			60.90%
+StringCacheKeyGenerator	1212.56			111.72%
+MessageDigestCacheKeyGenerator_"MD5"	572.73			1570.84%
+ReflectionHashCodeCacheKeyGenerator	34.28			
 
 
 == !ListCacheKeyGenerator ==
