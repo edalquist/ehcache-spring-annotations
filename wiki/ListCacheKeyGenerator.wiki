@@ -6,6 +6,10 @@
 
 Does a deep inspection converting arrays to Lists and returning an immutable, Serializable, List of the arguments as the key. Useful if complete equality assurance is required when doing key comparisons as the original arguments are used for every key comparison.
 
+=== The Importance of hashCode and equals ===
+This key generator completely depends on all arguments implementing hashCode and equals correctly. Most IDEs can auto-generate hashCode and equals methods, for additional guidance on implementing hashCode and equals reading [http://java.sun.com/developer/Books/effectivejava/Chapter3.pdf Chapter 3 of Effective Java].
+
+
  * This key generated depends on all of the method arguments correctly implementing the hashCode and equals methods. The only exception is for arrays as these are handled element by element.
  * This generator creates keys quickly but comparing keys is much slower as the Lists have to be iterated every time hashCode and equals is called.
  * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString such that the object's identity is included.
