@@ -10,7 +10,7 @@ Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString
 This key generator completely depends on all arguments implementing toString such that the object's identity is included. Most IDEs can auto-generate toString methods, for additional guidance on implementing toString reading [http://java.sun.com/developer/Books/effectivejava/Chapter3.pdf Chapter 3 of Effective Java].
 
 === Generator Notes ===
- * For arguments that implement toString in such a way that their identity is written out this generator is more collision resistant than the [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator]
+ * For arguments that implement toString in such a way that their identity is written out this generator is more collision resistant than the [HashCodeCacheKeyGenerator]
  * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString correctly.
 
 === Example Key ===
