@@ -6,10 +6,11 @@
 
 Generates a simple 64bit hash code based on the method arguments. The hash code generation algorithm is very close to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] with the only major differences being the use of a long instead of an int and that Collections and Maps are recursed on the same way deepHashCode recurses on arrays.
 
-==== Special Object Handling ====
+=== Special Object Handling ===
 The following objects have special handling for generation of their hash codes.
  * *Class* - Uses the hashCode of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#getName() Class.getName()] since Class just uses the Object identity hashCode.
  * *Enum*  - Uses the hashCode of Enum.getClass().getName() and of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Enum.html#name() Enum.name()]
+
 
  * This key generated depends on all of the method arguments correctly implementing the hashCode method. The only exception is for arrays, Collections and Maps as these are handled element by element.
  * This is the fastest provided key generator.
@@ -25,7 +26,7 @@ dao.getWeather("49931");
 Example dao:
 {{{
 class WeatherDao {
-    @Cacheable(cacheName="", keyGeneratorName=HashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME)
+    @Cacheable(cacheName="weatherCache", keyGeneratorName=HashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME)
     Weather getWeather(String zip) {
         ...
     }
