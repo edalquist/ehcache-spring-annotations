@@ -6,13 +6,13 @@
 
 Generates a simple 64bit hash code based on the method arguments. The hash code generation algorithm is very close to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode]. The only major differences being the use of a long instead of an int and that Collections and Maps are recursed on the same way deepHashCode recurses on arrays.
 
+=== The Importance of hashCode ===
+This key generator completely depends on all arguments implementing hashCode correctly. Most IDEs can auto-generate hashCode methods, for additional guidance on implementing hashCode reading [http://java.sun.com/developer/Books/effectivejava/Chapter3.pdf Chapter 3 of Effective Java].
+
 === Special Object Handling ===
 The following objects have special handling for generation of their hash codes.
  * *Class* - Uses the hashCode of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#getName() Class.getName()] since Class just uses the Object identity hashCode.
  * *Enum*  - Uses the hashCode of Enum.getClass().getName() and of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Enum.html#name() Enum.name()]
-
-=== The Importance of hashCode ===
-This key generator completely depends on all arguments implementing hashCode correctly. Most IDEs can auto-generate hashCode methods, for additional guidance on implementing hashCode reading [http://java.sun.com/developer/Books/effectivejava/Chapter3.pdf Chapter 3 of Effective Java].
 
 === Generator Notes ===
  * This is the fastest provided key generator.
