@@ -7,11 +7,11 @@
 Every method invocation advised by @Cacheable or @!TriggersRemove has to have a key generated for use when access the corresponding cache. The [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] interface defines the API for generating these keys.
 
 = Provided Cache Key Generators =
-||*[HashCodeCacheKeyGenerator]*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
-||*[StringCacheKeyGenerator]*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
-||*[#ListCacheKeyGenerator ListCacheKeyGenerator]*|| Does a deep inspection converting arrays to Lists and returning an immutable List of the key arguments. Useful if complete assurance is required when doing key comparisons ||
-||*[#MessageDigestCacheKeyGenerator MessageDigestCacheKeyGenerator]*|| Does the same object graph traversal that [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. ||
-||*[#ReflectionHashCodeCacheKeyGenerator ReflectionHashCodeCacheKeyGenerator]*|| Does the same object graph traversal than !HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
+||*HashCodeCacheKeyGenerator*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
+||*StringCacheKeyGenerator*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
+||*ListCacheKeyGenerator*|| Does a deep inspection converting arrays to Lists and returning an immutable List of the key arguments. Useful if complete assurance is required when doing key comparisons ||
+||*MessageDigestCacheKeyGenerator*|| Does the same object graph traversal that HashCodeCacheKeyGenerator does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. ||
+||*ReflectionHashCodeCacheKeyGenerator*|| Does the same object graph traversal than HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
 
 == Common Key Generator Configuration ==
 All of the included !CacheKeyGenerator implementations extend [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/AbstractCacheKeyGenerator.html AbstractCacheKeyGenerator] which provides the following common configuration options.
