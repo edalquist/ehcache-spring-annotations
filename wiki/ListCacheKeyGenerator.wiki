@@ -1,0 +1,26 @@
+#summary Retains all arguments for complete comparison.
+#sidebar TableOfContents
+
+|| *!JavaDoc* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.html ListCacheKeyGenerator] ||
+|| *Default Bean Name* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.html#DEFAULT_BEAN_NAME ListCacheKeyGenerator.DEFAULT_BEAN_NAME] ||
+
+Does a deep inspection converting arrays to Lists and returning an immutable, Serializable, List of the arguments as the key. Useful if complete equality assurance is required when doing key comparisons as the original arguments are used for every key comparison.
+
+ * This key generated depends on all of the method arguments correctly implementing the hashCode and equals methods. The only exception is for arrays as these are handled element by element.
+ * This generator creates keys quickly but comparing keys is much slower as the Lists have to be iterated every time hashCode and equals is called.
+ * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString such that the object's identity is included.
+
+The key following example call with the default options:
+{{{
+//@Cacheable annotated method
+dao.getWeather("49931");
+}}}
+Would generate a key that would pass hashCode and equals comparisons with:
+{{{
+Arrays.asList(
+    x.y.z.WeatherDaoImpl.class,
+    "getWeather",
+    x.y.z.Weather.class,
+    Arrays.asList(String.class),
+    Arrays.asList("49931"));
+}}}
