@@ -13,8 +13,11 @@ Every method invocation advised by @Cacheable or @!TriggersRemove has to have a 
 ||*MessageDigestCacheKeyGenerator*|| Does the same object graph traversal that HashCodeCacheKeyGenerator does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used to provide a secure hash with a significantly larger key space. ||
 ||*ReflectionHashCodeCacheKeyGenerator*|| Does the same object graph traversal than HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
 
-== Common Key Generator Configuration ==
-All of the included !CacheKeyGenerator implementations extend [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/AbstractCacheKeyGenerator.html AbstractCacheKeyGenerator] which provides the following common configuration options.
+= Key Consistency =
+All of the included cache key generators will generate keys that are consistent between JVM executions and safe for distribution between JVMs in a distributed/clustered caching environment. The exception to this is if the method arguments don't fulfill the contract of the !CacheKeyGenerator being used as many require correct implementation of hashCode, equals, and/or toString. 
+
+= Common !CacheKeyGenerator Configuration =
+All of the included [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] implementations extend [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/AbstractCacheKeyGenerator.html AbstractCacheKeyGenerator] which provides the following common configuration options.
 
 ==== Check for Cycles ====
 Default *false*: If true the key generator will track visited objects during recursion and if a cycle is detected handle it correctly. If false the exact behavior is undefined but many of the key generators will fail with StackOverflowError due to infinite recursion.
@@ -50,27 +53,5 @@ Included in the unit tests for the project is the `CacheKeyGeneratorPerformanceT
 || HashCodeCacheKeyGenerator || 4035.06 || 106.82% ||
 || ListCacheKeyGenerator || 1951.05 || 60.90% ||
 || StringCacheKeyGenerator || 1212.56 || 111.72% ||
-|| MessageDigestCacheKeyGenerator_"MD5" || 572.73 || 1570.84% ||
+|| MessageDigestCacheKeyGenerator (MD5) || 572.73 || 1570.84% ||
 || ReflectionHashCodeCacheKeyGenerator || 34.28 || ||
-
-== !ReflectionHashCodeCacheKeyGenerator ==
-Does the same object graph traversal than [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but uses reflection to generate a hash code for objects that don't implement hashCode. For each object visited reflection is used to find the hashCode method. If the hashCode method only exists on the base Object reflection is then used to recurse on every non-transient, non-static field in the object.
-
- * This key generator is the slowest included in the library.
- * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments correctly implement hashCode.
-
-The key `-78777307802668` would be generated for the following example call with the default options:
-{{{
-private static class WeatherId {
-    private final String id;
-
-    public WeatherId(String id) {
-        this.id = id;
-    }
-}
-
-//@Cacheable annotated method
-dao.getWeather(new WeatherId("49931"));
-}}}
-
-Note in the example !WeatherId does not implement hashCode but a consistent key is still generated.
