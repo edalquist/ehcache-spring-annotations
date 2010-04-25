@@ -11,8 +11,8 @@ This key generator completely depends on all arguments implementing hashCode cor
 
 === Special Object Handling ===
 The following objects have special handling for generation of their hash codes.
- * *Class* - Uses the hashCode of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#getName() Class.getName()] since Class just uses the Object identity hashCode.
- * *Enum*  - Uses the hashCode of Enum.getClass().getName() and of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Enum.html#name() Enum.name()]
+ * *Class* - Uses the digest of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Class.html#getName() Class.getName()] since Class just uses the Object identity hashCode.
+ * *Enum*  - Uses the digest of Enum.getClass().getName() and of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Enum.html#name() Enum.name()]
 
 === Generator Notes ===
  * Any supported [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] algorithm can be used. The result is always a URL safe base64 encoding of the hash bytes.
