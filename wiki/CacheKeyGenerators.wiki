@@ -10,7 +10,7 @@ Every method invocation advised by @Cacheable or @!TriggersRemove has to have a 
 ||*HashCodeCacheKeyGenerator*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
 ||*StringCacheKeyGenerator*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
 ||*ListCacheKeyGenerator*|| Does a deep inspection converting arrays to Lists and returning an immutable List of the key arguments. Useful if complete assurance is required when doing key comparisons ||
-||*MessageDigestCacheKeyGenerator*|| Does the same object graph traversal that HashCodeCacheKeyGenerator does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. ||
+||*MessageDigestCacheKeyGenerator*|| Does the same object graph traversal that HashCodeCacheKeyGenerator does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used to provide a secure hash with a significantly larger key space. ||
 ||*ReflectionHashCodeCacheKeyGenerator*|| Does the same object graph traversal than HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
 
 == Common Key Generator Configuration ==
@@ -52,22 +52,6 @@ Included in the unit tests for the project is the `CacheKeyGeneratorPerformanceT
 || StringCacheKeyGenerator || 1212.56 || 111.72% ||
 || MessageDigestCacheKeyGenerator_"MD5" || 572.73 || 1570.84% ||
 || ReflectionHashCodeCacheKeyGenerator || 34.28 || ||
-
-
-== !MessageDigestCacheKeyGenerator ==
-Does the same object graph traversal that [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used. This results in a much larger key space and the use of a cryptographic hashing function for better key distribution.
-
- * This key generated depends on all of the method arguments correctly implementing the hashCode method. The only exception is for arrays, Collections and Maps as these are handled element by element.
- * Any supported MessageDigest algorithm can be used. The result is always a URL safe base64 encoding of the hash byte array.
- * The default digest algorithm is SHA-1
- * This key generator is the second slowest included in the library.
- * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments correctly implement hashCode.
-
-The key `"FKeW4z_I5_yc_z9J98GmaM4aWSU"` would be generated for the following example call with the default options:
-{{{
-//@Cacheable annotated method
-dao.getWeather("49931");
-}}}
 
 == !ReflectionHashCodeCacheKeyGenerator ==
 Does the same object graph traversal than [#HashCodeCacheKeyGenerator HashCodeCacheKeyGenerator] does but uses reflection to generate a hash code for objects that don't implement hashCode. For each object visited reflection is used to find the hashCode method. If the hashCode method only exists on the base Object reflection is then used to recurse on every non-transient, non-static field in the object.
