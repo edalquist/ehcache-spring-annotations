@@ -23,6 +23,17 @@ The key following example call with the default options:
 //@Cacheable annotated method
 dao.getWeather("49931");
 }}}
+
+Example dao:
+{{{
+class WeatherDao {
+    @Cacheable(cacheName="weatherCache", keyGeneratorName=ListCacheKeyGenerator.DEFAULT_BEAN_NAME)
+    Weather getWeather(String zip) {
+        ...
+    }
+}
+}}}
+
 Would generate a key that would pass hashCode and equals comparisons with:
 {{{
 Arrays.asList(
