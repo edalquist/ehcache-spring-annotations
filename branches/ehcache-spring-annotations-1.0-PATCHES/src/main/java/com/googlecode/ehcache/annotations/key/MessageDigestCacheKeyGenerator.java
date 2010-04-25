@@ -54,7 +54,11 @@ import org.slf4j.LoggerFactory;
  * @version $Revision$
  */
 public class MessageDigestCacheKeyGenerator extends AbstractCacheKeyGenerator<String> {
+    /**
+     * Name of the bean this generator is registered under using the default constructor.
+     */
     public static final String DEFAULT_BEAN_NAME = "com.googlecode.ehcache.annotations.key.MessageDigestCacheKeyGenerator.DEFAULT_BEAN_NAME";
+    
     public static final String DEFAULT_ALGORITHM = "SHA-1";
     protected static final int DEFAULT_BYTE_BUFFER_SIZE = 64;
     
@@ -63,18 +67,32 @@ public class MessageDigestCacheKeyGenerator extends AbstractCacheKeyGenerator<St
     private final MessageDigest baseMessageDigest;
     private boolean cloneNotSupported;
     
+    /**
+     * Uses {@link #DEFAULT_ALGORITHM} for the algorithm
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator() 
+     */
     public MessageDigestCacheKeyGenerator() throws NoSuchAlgorithmException {
-        this(DEFAULT_ALGORITHM, true, false);
+        this(DEFAULT_ALGORITHM);
     }
     
+    /**
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator() 
+     */
     public MessageDigestCacheKeyGenerator(String algorithm) throws NoSuchAlgorithmException {
-        this(algorithm, true, false);
+        this.baseMessageDigest = MessageDigest.getInstance(algorithm);
     }
     
+    /**
+     * Uses {@link #DEFAULT_ALGORITHM} for the algorithm
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator(boolean, boolean) 
+     */
     public MessageDigestCacheKeyGenerator(boolean includeMethod, boolean includeParameterTypes) throws NoSuchAlgorithmException {
         this(DEFAULT_ALGORITHM, includeMethod, includeParameterTypes);
     }
     
+    /**
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator(boolean, boolean) 
+     */
     public MessageDigestCacheKeyGenerator(String algorithm, boolean includeMethod, boolean includeParameterTypes) throws NoSuchAlgorithmException {
         super(includeMethod, includeParameterTypes);
         this.baseMessageDigest = MessageDigest.getInstance(algorithm);
