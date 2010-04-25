@@ -15,7 +15,7 @@ The following objects have special handling for generation of their hash codes.
  * *Enum*  - Uses the hashCode of Enum.getClass().getName() and of [http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Enum.html#name() Enum.name()]
 
 === Generator Notes ===
- * Any supported MessageDigest algorithm can be used. The result is always a URL safe base64 encoding of the hash bytes.
+ * Any supported [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] algorithm can be used. The result is always a URL safe base64 encoding of the hash bytes.
  * The default digest algorithm is SHA-1
  * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments correctly implement hashCode.
 
