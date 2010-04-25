@@ -10,11 +10,12 @@ Does a deep inspection converting arrays to Lists and returning an immutable, Se
 This key generator completely depends on all arguments implementing hashCode and equals correctly. Most IDEs can auto-generate hashCode and equals methods, for additional guidance on implementing hashCode and equals reading [http://java.sun.com/developer/Books/effectivejava/Chapter3.pdf Chapter 3 of Effective Java].
 
 === Serializable Arguments ===
-For use of the disk store or clustering options all arguments must be completely Serializable.
+For use of the disk store or clustering options in EhCache all arguments must be completely Serializable.
 
 === Generator Notes ===
- * This generator creates keys quickly but comparing keys is much slower as the Lists have to be iterated every time equals is called. The hashCode result is cached by the immutable List that is returned.
- * The arguments must not change for the duration of the cached response. If they change the cached value will likely be 'lost' in the cache.
+ * This generator creates keys quickly but comparing keys is much slower as the Lists have to be iterated every time equals is called.
+ * The hashCode result is cached by the immutable List that is returned.
+ * The argument values must not change in a way that affects their hashCode or equals operations. If they change the cached value will likely be 'lost' in the cache.
  * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString such that the object's identity is included.
 
 === Example Key ===
