@@ -45,14 +45,23 @@ import java.util.Map;
  * @version $Revision$
  */
 public class HashCodeCacheKeyGenerator extends AbstractCacheKeyGenerator<Long> {
+    /**
+     * Name of the bean this generator is registered under using the default constructor.
+     */
     public static final String DEFAULT_BEAN_NAME = "com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME";
     
     protected static final int INITIAL_HASH = 1;
     protected static final int MULTIPLIER = 31;
     
+    /**
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator() 
+     */
     public HashCodeCacheKeyGenerator() {
     }
 
+    /**
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator(boolean, boolean) 
+     */
     public HashCodeCacheKeyGenerator(boolean includeMethod, boolean includeParameterTypes) {
         super(includeMethod, includeParameterTypes);
     }

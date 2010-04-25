@@ -58,11 +58,20 @@ import java.util.List;
  * @version $Revision$
  */
 public class ListCacheKeyGenerator extends AbstractCacheKeyGenerator<ReadOnlyList<Serializable>> {
+    /**
+     * Name of the bean this generator is registered under using the default constructor.
+     */
     public static final String DEFAULT_BEAN_NAME = "com.googlecode.ehcache.annotations.key.ListCacheKeyGenerator.DEFAULT_BEAN_NAME";
     
+    /**
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator() 
+     */
     public ListCacheKeyGenerator() {
     }
 
+    /**
+     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator(boolean, boolean) 
+     */
     public ListCacheKeyGenerator(boolean includeMethod, boolean includeParameterTypes) {
         super(includeMethod, includeParameterTypes);
     }
