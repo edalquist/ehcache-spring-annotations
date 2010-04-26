@@ -4,7 +4,7 @@
 
 = Introduction =
 
-Every method invocation advised by @Cacheable or @!TriggersRemove has to have a key generated for use when access the corresponding cache. The [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] interface defines the API for generating these keys.
+Every method invocation advised by @Cacheable or @!TriggersRemove has to have a key generated for use when access the corresponding cache. The [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] interface defines the API for generating these keys.
 
 = Provided Cache Key Generators =
 ||*HashCodeCacheKeyGenerator*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
