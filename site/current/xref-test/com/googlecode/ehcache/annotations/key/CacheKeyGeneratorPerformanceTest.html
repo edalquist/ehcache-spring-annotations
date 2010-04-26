@@ -170,37 +170,40 @@
 <a name="160" href="#160">160</a>                 
 <a name="161" href="#161">161</a>                 <strong class="jxr_keyword">long</strong> keyCount = 0;
 <a name="162" href="#162">162</a>                 <strong class="jxr_keyword">while</strong> (runTest) {
-<a name="163" href="#163">163</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> MethodInvocation invocation : invocations) {
-<a name="164" href="#164">164</a>                         <strong class="jxr_keyword">final</strong> Serializable key = generator.generateKey(invocation);
-<a name="165" href="#165">165</a>                         <em class="jxr_comment">//include cost of generated keys hashCode API</em>
-<a name="166" href="#166">166</a>                         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> index = 0; index &lt; 10; index++) {
-<a name="167" href="#167">167</a>                             key.hashCode(); 
-<a name="168" href="#168">168</a>                         }
-<a name="169" href="#169">169</a>                         keyCount++;
-<a name="170" href="#170">170</a>                     }
-<a name="171" href="#171">171</a>                 }
-<a name="172" href="#172">172</a>              
-<a name="173" href="#173">173</a>                 totalKeyCount.addAndGet(keyCount);
-<a name="174" href="#174">174</a>                 await();
-<a name="175" href="#175">175</a>             }
-<a name="176" href="#176">176</a>         }
-<a name="177" href="#177">177</a> 
-<a name="178" href="#178">178</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> await() {
-<a name="179" href="#179">179</a>             <strong class="jxr_keyword">if</strong> (testComplete) {
-<a name="180" href="#180">180</a>                 <strong class="jxr_keyword">return</strong>;
-<a name="181" href="#181">181</a>             }
-<a name="182" href="#182">182</a>             <strong class="jxr_keyword">try</strong> {
-<a name="183" href="#183">183</a>                 testThreadStateLatch.await();
+<a name="163" href="#163">163</a>                     Serializable lastKey = <strong class="jxr_keyword">null</strong>;
+<a name="164" href="#164">164</a>                     <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> MethodInvocation invocation : invocations) {
+<a name="165" href="#165">165</a>                         <strong class="jxr_keyword">final</strong> Serializable key = generator.generateKey(invocation);
+<a name="166" href="#166">166</a>                         <em class="jxr_comment">//include cost of generated keys hashCode API</em>
+<a name="167" href="#167">167</a>                         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> index = 0; index &lt; 10; index++) {
+<a name="168" href="#168">168</a>                             key.hashCode();
+<a name="169" href="#169">169</a>                         }
+<a name="170" href="#170">170</a>                         key.equals(lastKey);
+<a name="171" href="#171">171</a>                         lastKey = key;
+<a name="172" href="#172">172</a>                         keyCount++;
+<a name="173" href="#173">173</a>                     }
+<a name="174" href="#174">174</a>                 }
+<a name="175" href="#175">175</a>              
+<a name="176" href="#176">176</a>                 totalKeyCount.addAndGet(keyCount);
+<a name="177" href="#177">177</a>                 await();
+<a name="178" href="#178">178</a>             }
+<a name="179" href="#179">179</a>         }
+<a name="180" href="#180">180</a> 
+<a name="181" href="#181">181</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> await() {
+<a name="182" href="#182">182</a>             <strong class="jxr_keyword">if</strong> (testComplete) {
+<a name="183" href="#183">183</a>                 <strong class="jxr_keyword">return</strong>;
 <a name="184" href="#184">184</a>             }
-<a name="185" href="#185">185</a>             <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
-<a name="186" href="#186">186</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a name="185" href="#185">185</a>             <strong class="jxr_keyword">try</strong> {
+<a name="186" href="#186">186</a>                 testThreadStateLatch.await();
 <a name="187" href="#187">187</a>             }
-<a name="188" href="#188">188</a>             <strong class="jxr_keyword">catch</strong> (BrokenBarrierException e) {
+<a name="188" href="#188">188</a>             <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
 <a name="189" href="#189">189</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
 <a name="190" href="#190">190</a>             }
-<a name="191" href="#191">191</a>         }
-<a name="192" href="#192">192</a>     }
-<a name="193" href="#193">193</a> }
+<a name="191" href="#191">191</a>             <strong class="jxr_keyword">catch</strong> (BrokenBarrierException e) {
+<a name="192" href="#192">192</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a name="193" href="#193">193</a>             }
+<a name="194" href="#194">194</a>         }
+<a name="195" href="#195">195</a>     }
+<a name="196" href="#196">196</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
