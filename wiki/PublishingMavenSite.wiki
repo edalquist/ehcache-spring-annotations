@@ -20,7 +20,7 @@ svn cp https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.2 https://
 svn co https://ehcache-spring-annotations.googlecode.com/svn/site/1.0.3
 
 # Sync the new site over the previous site, removing files that no longer exist
-rsync -avr --progress --exclude '.svn'  --delete /path/to/ehcache-spring-annotations/target/checkout/target/site ./1.0.3/
+rsync -avr --progress --exclude '.svn'  --delete /path/to/ehcache-spring-annotations/target/checkout/target/site/ ./1.0.3/
 
 # Add new files into SVN control, this will generate a lot of 'is already under version control' warnings which can be ignored
 find ./1.0.3/ -type f | grep -v .svn | xargs svn add
