@@ -7,8 +7,9 @@ Ehcache does not automatically remove elements from your cache that have exceede
   * [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#evictExpiredElements() Ehcache#evictExpiredElements()] is called
   * Or a get or remove operation is called on the cache that passes in the same key as the expired element
 
+ehcache-spring-annotations contains a feature in version 1.1 and later that allows you to configure periodic invocation of [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#evictExpiredElements() Ehcache#evictExpiredElements()].
+
 = Configuring evict-expired-elements =
-As of ehcache-spring-annotations 1.1 and later, you can add configure periodic invocation of evictExpiredElements:
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -25,9 +26,8 @@ As of ehcache-spring-annotations 1.1 and later, you can add configure periodic i
       <!-- interval is in minutes -->
       <ehcache:evict-expired-elements interval="20"/>
     </ehcache:config>
+
     <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-    
-    
 </beans>
 }}}
 
