@@ -3,6 +3,7 @@
 = Preface =
 
 Ehcache does not automatically remove elements from your cache that have exceeded timeToLive and timeToIdle. These elements remain in the cache until either:
+
 * [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#evictExpiredElements() Ehcache#evictExpiredElements] is called
 * or a get or remove operation is called on the cache that passes in the same key as the expired element
 
