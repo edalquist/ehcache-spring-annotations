@@ -3,7 +3,7 @@
 = Preface =
 
 Ehcache does not automatically remove elements from your cache that have exceeded timeToLive and timeToIdle. These elements remain in the cache until either:
-* http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#evictExpiredElements() is called
+* [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#evictExpiredElements() Ehcache#evictExpiredElements] is called
 * or a get or remove operation is called on the cache that passes in the same key as the expired element
 
 = Configuring evict-expired-elements =
@@ -32,7 +32,7 @@ As of ehcache-spring-annotations 1.1 and later, you can add configure periodic i
 }}}
 
 When this context file is processed by spring, ehcache-spring-annotations will setup a 
-http://java.sun.com/javase/6/docs/api/java/util/TimerTask.html and a http://java.sun.com/javase/6/docs/api/java/util/Timer.html to invoke evictExpiredElements on all caches with the interval you specified (in minutes).
+[http://java.sun.com/javase/6/docs/api/java/util/TimerTask.html TimerTask] and a [http://java.sun.com/javase/6/docs/api/java/util/Timer.html Timer] to invoke evictExpiredElements on all caches with the interval you specified (in minutes).
 
 = Include/Exclude caches = 
 
