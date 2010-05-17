@@ -1,4 +1,4 @@
-#summary How to configure periodic invocation of evictExpiredElements()
+#summary How to configure periodic invocation of evictExpiredElements() [1.1 and later]
 
 = Preface =
 
