@@ -4,8 +4,8 @@
 
 Ehcache does not automatically remove elements from your cache that have exceeded timeToLive and timeToIdle. These elements remain in the cache until either:
 
-* [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#evictExpiredElements() Ehcache#evictExpiredElements] is called
-* or a get or remove operation is called on the cache that passes in the same key as the expired element
+  * [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#evictExpiredElements() Ehcache#evictExpiredElements] is called
+  * Or a get or remove operation is called on the cache that passes in the same key as the expired element
 
 = Configuring evict-expired-elements =
 As of ehcache-spring-annotations 1.1 and later, you can add configure periodic invocation of evictExpiredElements:
