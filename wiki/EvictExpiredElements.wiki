@@ -10,7 +10,6 @@ Ehcache does not automatically remove elements from your cache that have exceede
 = Configuring evict-expired-elements =
 As of ehcache-spring-annotations 1.1 and later, you can add configure periodic invocation of evictExpiredElements:
 {{{
-<!-- from the file 'context.xml' -->
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -41,7 +40,6 @@ The 'ehcache:evict-expired-elements' element allows you to list names and/or pat
 The following example will only call evictExpiredElements on the cache named "foo", the cache named "bar", and any cache that starts with "jpa.":
 
 {{{
-<!-- from the file 'context.xml' -->
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -54,7 +52,6 @@ The following example will only call evictExpiredElements on the cache named "fo
 
     <ehcache:annotation-driven cache-manager="ehCacheManager" />
     <ehcache:config>
-      <!-- interval is in minutes -->
       <ehcache:evict-expired-elements interval="20">
         <ehcache:include name="foo"/>
         <ehcache:include name="bar"/>
@@ -69,7 +66,6 @@ The following example will only call evictExpiredElements on the cache named "fo
 The next example will include all caches except the cache named "bucky" and the caches that end with "badger":
 
 {{{
-<!-- from the file 'context.xml' -->
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -82,7 +78,6 @@ The next example will include all caches except the cache named "bucky" and the 
 
     <ehcache:annotation-driven cache-manager="ehCacheManager" />
     <ehcache:config>
-      <!-- interval is in minutes -->
       <ehcache:evict-expired-elements interval="20">
         <ehcache:exclude name="bucky"/>
         <ehcache:exclude pattern=".*badger$"/>
