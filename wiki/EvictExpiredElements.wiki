@@ -91,5 +91,5 @@ The next example will include all caches except the cache named "bucky" and the 
 
 = Caveats =
 
-  * If you specify any "exclude" elements, a "include All caches" directive is added at the front of the list. 
+  * If you specify "exclude" elements without any preceding "include" elements, an "include All caches" directive is added at the front of the list. 
   * You can create more complex rules using includes and excludes together, however you must specify ALL includes before any excludes.
