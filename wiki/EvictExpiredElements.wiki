@@ -24,7 +24,7 @@ As of ehcache-spring-annotations 1.1 and later, you can add configure periodic i
     <ehcache:config>
       <!-- interval is in minutes -->
       <ehcache:evict-expired-elements interval="20"/>
-    </ehcache:config
+    </ehcache:config>
     <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
     
     
@@ -59,9 +59,37 @@ The following example will only call evictExpiredElements on the cache named "fo
         <ehcache:include name="bar"/>
         <ehcache:include pattern="jpa\..*"/>
       </ehcache:evict-expired-elements>
-    </ehcache:config
+    </ehcache:config>
+
     <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-    
-    
 </beans>
 }}}
+
+The next example will include all caches except the cache named "bucky" and the caches that end with "badger":
+
+{{{
+<!-- from the file 'context.xml' -->
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
+
+    <ehcache:annotation-driven cache-manager="ehCacheManager" />
+    <ehcache:config>
+      <!-- interval is in minutes -->
+      <ehcache:evict-expired-elements interval="20">
+        <ehcache:exclude name="bucky"/>
+        <ehcache:exclude pattern=".*badger$"/>
+      </ehcache:evict-expired-elements>
+    </ehcache:config>
+
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+</beans>
+}}}
+
+If you specify any "exclude" elements, a "include All caches" directive is added at the front of the list.
