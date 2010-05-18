@@ -163,78 +163,79 @@
 <a name="153" href="#153">153</a>         cacheAttributeSource.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 <a name="154" href="#154">154</a>         
 <a name="155" href="#155">155</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues propertyValues = cacheAttributeSource.getPropertyValues();
-<a name="156" href="#156">156</a>         propertyValues.add(<span class="jxr_string">"cacheManagerBeanName"</span>, element.getAttribute(XSD_ATTR__CACHE_MANAGER));
-<a name="157" href="#157">157</a>         propertyValues.add(<span class="jxr_string">"createCaches"</span>, Boolean.parseBoolean(element.getAttribute(XSD_ATTR__CREATE_MISSING_CACHES)));
-<a name="158" href="#158">158</a>         propertyValues.add(<span class="jxr_string">"defaultCacheKeyGenerator"</span>, defaultCacheKeyGenerator);
-<a name="159" href="#159">159</a>         <strong class="jxr_keyword">final</strong> String blockingCacheScope = element.getAttribute(XSD_ATTR__SELF_POPULATING_CACHE_SCOPE);
-<a name="160" href="#160">160</a>         <strong class="jxr_keyword">if</strong> (blockingCacheScope != <strong class="jxr_keyword">null</strong>) {
-<a name="161" href="#161">161</a>             propertyValues.add(<span class="jxr_string">"selfPopulatingCacheScope"</span>, SelfPopulatingCacheScope.valueOf(blockingCacheScope.toUpperCase()));
-<a name="162" href="#162">162</a>         }
-<a name="163" href="#163">163</a> 
-<a name="164" href="#164">164</a>         <strong class="jxr_keyword">final</strong> XmlReaderContext readerContext = parserContext.getReaderContext();
-<a name="165" href="#165">165</a>         <strong class="jxr_keyword">final</strong> String cacheAttributeSourceBeanName = readerContext.registerWithGeneratedName(cacheAttributeSource);
-<a name="166" href="#166">166</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(cacheAttributeSourceBeanName);
-<a name="167" href="#167">167</a>     }
-<a name="168" href="#168">168</a> 
-<a name="169" href="#169">169</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="170" href="#170">170</a> <em class="jxr_javadoccomment">     * Create the {@link Pointcut} used to apply the caching interceptor</em>
-<a name="171" href="#171">171</a> <em class="jxr_javadoccomment">     * </em>
-<a name="172" href="#172">172</a> <em class="jxr_javadoccomment">     * @return Reference to the {@link Pointcut}. Should never be null.</em>
-<a name="173" href="#173">173</a> <em class="jxr_javadoccomment">     */</em>
-<a name="174" href="#174">174</a>     <strong class="jxr_keyword">protected</strong> RuntimeBeanReference setupPointcut(Element element, ParserContext parserContext, Object elementSource, RuntimeBeanReference cacheAttributeSource) {
-<a name="175" href="#175">175</a>         <strong class="jxr_keyword">final</strong> RootBeanDefinition pointcut = <strong class="jxr_keyword">new</strong> RootBeanDefinition(CacheStaticMethodMatcherPointcut.<strong class="jxr_keyword">class</strong>);
-<a name="176" href="#176">176</a>         pointcut.setSource(elementSource);
-<a name="177" href="#177">177</a>         pointcut.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-<a name="178" href="#178">178</a>         
-<a name="179" href="#179">179</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues propertyValues = pointcut.getPropertyValues();
-<a name="180" href="#180">180</a>         propertyValues.add(<span class="jxr_string">"cacheAttributeSource"</span>, cacheAttributeSource);
-<a name="181" href="#181">181</a>         
-<a name="182" href="#182">182</a>         <strong class="jxr_keyword">final</strong> XmlReaderContext readerContext = parserContext.getReaderContext();
-<a name="183" href="#183">183</a>         <strong class="jxr_keyword">final</strong> String pointcutBeanName = readerContext.registerWithGeneratedName(pointcut);
-<a name="184" href="#184">184</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(pointcutBeanName);
-<a name="185" href="#185">185</a>     }
-<a name="186" href="#186">186</a> 
-<a name="187" href="#187">187</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="188" href="#188">188</a> <em class="jxr_javadoccomment">     * Create {@link MethodInterceptor} that is applies the caching logic to advised methods.</em>
-<a name="189" href="#189">189</a> <em class="jxr_javadoccomment">     * </em>
-<a name="190" href="#190">190</a> <em class="jxr_javadoccomment">     * @return Reference to the {@link MethodInterceptor}. Should never be null.</em>
-<a name="191" href="#191">191</a> <em class="jxr_javadoccomment">     */</em>
-<a name="192" href="#192">192</a>     <strong class="jxr_keyword">protected</strong> RuntimeBeanReference setupInterceptor(Element element, ParserContext parserContext, Object elementSource, RuntimeBeanReference cacheableAttributeSourceRuntimeReference) {
-<a name="193" href="#193">193</a>         <strong class="jxr_keyword">final</strong> RootBeanDefinition interceptor = <strong class="jxr_keyword">new</strong> RootBeanDefinition(EhCacheInterceptor.<strong class="jxr_keyword">class</strong>);
-<a name="194" href="#194">194</a>         interceptor.setSource(elementSource);
-<a name="195" href="#195">195</a>         interceptor.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-<a name="196" href="#196">196</a>         
-<a name="197" href="#197">197</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues propertyValues = interceptor.getPropertyValues();
-<a name="198" href="#198">198</a>         propertyValues.add(<span class="jxr_string">"cacheAttributeSource"</span>, cacheableAttributeSourceRuntimeReference);
-<a name="199" href="#199">199</a>         
-<a name="200" href="#200">200</a>         <strong class="jxr_keyword">final</strong> XmlReaderContext readerContext = parserContext.getReaderContext();
-<a name="201" href="#201">201</a>         <strong class="jxr_keyword">final</strong> String interceptorBeanName = readerContext.registerWithGeneratedName(interceptor);
-<a name="202" href="#202">202</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(interceptorBeanName);
-<a name="203" href="#203">203</a>     }
-<a name="204" href="#204">204</a> 
-<a name="205" href="#205">205</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="206" href="#206">206</a> <em class="jxr_javadoccomment">     * Create {@link PointcutAdvisor} that puts the {@link Pointcut} and {@link MethodInterceptor} together.</em>
-<a name="207" href="#207">207</a> <em class="jxr_javadoccomment">     * </em>
-<a name="208" href="#208">208</a> <em class="jxr_javadoccomment">     * @return Reference to the {@link PointcutAdvisor}. Should never be null.</em>
-<a name="209" href="#209">209</a> <em class="jxr_javadoccomment">     */</em>
-<a name="210" href="#210">210</a>     <strong class="jxr_keyword">protected</strong> RuntimeBeanReference setupPointcutAdvisor(Element element, ParserContext parserContext, Object elementSource, RuntimeBeanReference cacheablePointcutBeanReference,  RuntimeBeanReference cachingInterceptorBeanReference) {
-<a name="211" href="#211">211</a>         <strong class="jxr_keyword">final</strong> RootBeanDefinition pointcutAdvisor = <strong class="jxr_keyword">new</strong> RootBeanDefinition(DefaultBeanFactoryPointcutAdvisor.<strong class="jxr_keyword">class</strong>);
-<a name="212" href="#212">212</a>         pointcutAdvisor.setSource(elementSource);
-<a name="213" href="#213">213</a>         pointcutAdvisor.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-<a name="214" href="#214">214</a> 
-<a name="215" href="#215">215</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues propertyValues = pointcutAdvisor.getPropertyValues();
-<a name="216" href="#216">216</a>         propertyValues.add(<span class="jxr_string">"adviceBeanName"</span>, cachingInterceptorBeanReference.getBeanName());
-<a name="217" href="#217">217</a>         propertyValues.add(<span class="jxr_string">"pointcut"</span>, cacheablePointcutBeanReference);
-<a name="218" href="#218">218</a>         <strong class="jxr_keyword">if</strong> (element.hasAttribute(<span class="jxr_string">"order"</span>)) {
-<a name="219" href="#219">219</a>             propertyValues.addPropertyValue(<span class="jxr_string">"order"</span>, element.getAttribute(<span class="jxr_string">"order"</span>));
-<a name="220" href="#220">220</a>         }
-<a name="221" href="#221">221</a>         
-<a name="222" href="#222">222</a>         <strong class="jxr_keyword">final</strong> BeanDefinitionRegistry registry = parserContext.getRegistry();
-<a name="223" href="#223">223</a>         registry.registerBeanDefinition(EHCACHE_CACHING_ADVISOR_BEAN_NAME, pointcutAdvisor);
-<a name="224" href="#224">224</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(EHCACHE_CACHING_ADVISOR_BEAN_NAME);
-<a name="225" href="#225">225</a>     }
-<a name="226" href="#226">226</a> 
-<a name="227" href="#227">227</a> }
+<a name="156" href="#156">156</a>         RuntimeBeanReference cacheManagerReference = <strong class="jxr_keyword">new</strong> RuntimeBeanReference(element.getAttribute(XSD_ATTR__CACHE_MANAGER));
+<a name="157" href="#157">157</a>         propertyValues.addPropertyValue(<span class="jxr_string">"cacheManager"</span>, cacheManagerReference);
+<a name="158" href="#158">158</a>         propertyValues.addPropertyValue(<span class="jxr_string">"createCaches"</span>, Boolean.parseBoolean(element.getAttribute(XSD_ATTR__CREATE_MISSING_CACHES)));
+<a name="159" href="#159">159</a>         propertyValues.addPropertyValue(<span class="jxr_string">"defaultCacheKeyGenerator"</span>, defaultCacheKeyGenerator);
+<a name="160" href="#160">160</a>         <strong class="jxr_keyword">final</strong> String blockingCacheScope = element.getAttribute(XSD_ATTR__SELF_POPULATING_CACHE_SCOPE);
+<a name="161" href="#161">161</a>         <strong class="jxr_keyword">if</strong> (blockingCacheScope != <strong class="jxr_keyword">null</strong>) {
+<a name="162" href="#162">162</a>             propertyValues.addPropertyValue(<span class="jxr_string">"selfPopulatingCacheScope"</span>, SelfPopulatingCacheScope.valueOf(blockingCacheScope.toUpperCase()));
+<a name="163" href="#163">163</a>         }
+<a name="164" href="#164">164</a> 
+<a name="165" href="#165">165</a>         <strong class="jxr_keyword">final</strong> XmlReaderContext readerContext = parserContext.getReaderContext();
+<a name="166" href="#166">166</a>         <strong class="jxr_keyword">final</strong> String cacheAttributeSourceBeanName = readerContext.registerWithGeneratedName(cacheAttributeSource);
+<a name="167" href="#167">167</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(cacheAttributeSourceBeanName);
+<a name="168" href="#168">168</a>     }
+<a name="169" href="#169">169</a> 
+<a name="170" href="#170">170</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="171" href="#171">171</a> <em class="jxr_javadoccomment">     * Create the {@link Pointcut} used to apply the caching interceptor</em>
+<a name="172" href="#172">172</a> <em class="jxr_javadoccomment">     * </em>
+<a name="173" href="#173">173</a> <em class="jxr_javadoccomment">     * @return Reference to the {@link Pointcut}. Should never be null.</em>
+<a name="174" href="#174">174</a> <em class="jxr_javadoccomment">     */</em>
+<a name="175" href="#175">175</a>     <strong class="jxr_keyword">protected</strong> RuntimeBeanReference setupPointcut(Element element, ParserContext parserContext, Object elementSource, RuntimeBeanReference cacheAttributeSource) {
+<a name="176" href="#176">176</a>         <strong class="jxr_keyword">final</strong> RootBeanDefinition pointcut = <strong class="jxr_keyword">new</strong> RootBeanDefinition(CacheStaticMethodMatcherPointcut.<strong class="jxr_keyword">class</strong>);
+<a name="177" href="#177">177</a>         pointcut.setSource(elementSource);
+<a name="178" href="#178">178</a>         pointcut.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+<a name="179" href="#179">179</a>         
+<a name="180" href="#180">180</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues propertyValues = pointcut.getPropertyValues();
+<a name="181" href="#181">181</a>         propertyValues.addPropertyValue(<span class="jxr_string">"cacheAttributeSource"</span>, cacheAttributeSource);
+<a name="182" href="#182">182</a>         
+<a name="183" href="#183">183</a>         <strong class="jxr_keyword">final</strong> XmlReaderContext readerContext = parserContext.getReaderContext();
+<a name="184" href="#184">184</a>         <strong class="jxr_keyword">final</strong> String pointcutBeanName = readerContext.registerWithGeneratedName(pointcut);
+<a name="185" href="#185">185</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(pointcutBeanName);
+<a name="186" href="#186">186</a>     }
+<a name="187" href="#187">187</a> 
+<a name="188" href="#188">188</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="189" href="#189">189</a> <em class="jxr_javadoccomment">     * Create {@link MethodInterceptor} that is applies the caching logic to advised methods.</em>
+<a name="190" href="#190">190</a> <em class="jxr_javadoccomment">     * </em>
+<a name="191" href="#191">191</a> <em class="jxr_javadoccomment">     * @return Reference to the {@link MethodInterceptor}. Should never be null.</em>
+<a name="192" href="#192">192</a> <em class="jxr_javadoccomment">     */</em>
+<a name="193" href="#193">193</a>     <strong class="jxr_keyword">protected</strong> RuntimeBeanReference setupInterceptor(Element element, ParserContext parserContext, Object elementSource, RuntimeBeanReference cacheableAttributeSourceRuntimeReference) {
+<a name="194" href="#194">194</a>         <strong class="jxr_keyword">final</strong> RootBeanDefinition interceptor = <strong class="jxr_keyword">new</strong> RootBeanDefinition(EhCacheInterceptor.<strong class="jxr_keyword">class</strong>);
+<a name="195" href="#195">195</a>         interceptor.setSource(elementSource);
+<a name="196" href="#196">196</a>         interceptor.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+<a name="197" href="#197">197</a>         
+<a name="198" href="#198">198</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues propertyValues = interceptor.getPropertyValues();
+<a name="199" href="#199">199</a>         propertyValues.addPropertyValue(<span class="jxr_string">"cacheAttributeSource"</span>, cacheableAttributeSourceRuntimeReference);
+<a name="200" href="#200">200</a>         
+<a name="201" href="#201">201</a>         <strong class="jxr_keyword">final</strong> XmlReaderContext readerContext = parserContext.getReaderContext();
+<a name="202" href="#202">202</a>         <strong class="jxr_keyword">final</strong> String interceptorBeanName = readerContext.registerWithGeneratedName(interceptor);
+<a name="203" href="#203">203</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(interceptorBeanName);
+<a name="204" href="#204">204</a>     }
+<a name="205" href="#205">205</a> 
+<a name="206" href="#206">206</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="207" href="#207">207</a> <em class="jxr_javadoccomment">     * Create {@link PointcutAdvisor} that puts the {@link Pointcut} and {@link MethodInterceptor} together.</em>
+<a name="208" href="#208">208</a> <em class="jxr_javadoccomment">     * </em>
+<a name="209" href="#209">209</a> <em class="jxr_javadoccomment">     * @return Reference to the {@link PointcutAdvisor}. Should never be null.</em>
+<a name="210" href="#210">210</a> <em class="jxr_javadoccomment">     */</em>
+<a name="211" href="#211">211</a>     <strong class="jxr_keyword">protected</strong> RuntimeBeanReference setupPointcutAdvisor(Element element, ParserContext parserContext, Object elementSource, RuntimeBeanReference cacheablePointcutBeanReference,  RuntimeBeanReference cachingInterceptorBeanReference) {
+<a name="212" href="#212">212</a>         <strong class="jxr_keyword">final</strong> RootBeanDefinition pointcutAdvisor = <strong class="jxr_keyword">new</strong> RootBeanDefinition(DefaultBeanFactoryPointcutAdvisor.<strong class="jxr_keyword">class</strong>);
+<a name="213" href="#213">213</a>         pointcutAdvisor.setSource(elementSource);
+<a name="214" href="#214">214</a>         pointcutAdvisor.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+<a name="215" href="#215">215</a> 
+<a name="216" href="#216">216</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues propertyValues = pointcutAdvisor.getPropertyValues();
+<a name="217" href="#217">217</a>         propertyValues.addPropertyValue(<span class="jxr_string">"adviceBeanName"</span>, cachingInterceptorBeanReference.getBeanName());
+<a name="218" href="#218">218</a>         propertyValues.addPropertyValue(<span class="jxr_string">"pointcut"</span>, cacheablePointcutBeanReference);
+<a name="219" href="#219">219</a>         <strong class="jxr_keyword">if</strong> (element.hasAttribute(<span class="jxr_string">"order"</span>)) {
+<a name="220" href="#220">220</a>             propertyValues.addPropertyValue(<span class="jxr_string">"order"</span>, element.getAttribute(<span class="jxr_string">"order"</span>));
+<a name="221" href="#221">221</a>         }
+<a name="222" href="#222">222</a>         
+<a name="223" href="#223">223</a>         <strong class="jxr_keyword">final</strong> BeanDefinitionRegistry registry = parserContext.getRegistry();
+<a name="224" href="#224">224</a>         registry.registerBeanDefinition(EHCACHE_CACHING_ADVISOR_BEAN_NAME, pointcutAdvisor);
+<a name="225" href="#225">225</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RuntimeBeanReference(EHCACHE_CACHING_ADVISOR_BEAN_NAME);
+<a name="226" href="#226">226</a>     }
+<a name="227" href="#227">227</a> 
+<a name="228" href="#228">228</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
