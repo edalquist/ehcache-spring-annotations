@@ -24,24 +24,21 @@ import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator;
-
 /**
  * @author Eric Dalquist
  * @version $Revision$
  */
-public class HashCodeCacheKeyGeneratorTest {
-
+public class ReflectionHashCodeCacheKeyGeneratorTest {
     @Test
     public void testCircularReference() {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator(false, false);
+        final ReflectionHashCodeCacheKeyGenerator generator = new ReflectionHashCodeCacheKeyGenerator(false, false);
         generator.setCheckforCycles(true);
         
         final Object[] arg = new Object[2];
         final Object[] childArg = new Object[2];
         arg[0] = childArg;
         arg[1] = "argString";
-        childArg[0] = arg;
+        childArg[0] = new ReflectionKey(arg);
         childArg[1] = "childArgString";
         
         final MethodInvocation invocation = EasyMock.createMock(MethodInvocation.class);
@@ -50,34 +47,42 @@ public class HashCodeCacheKeyGeneratorTest {
         EasyMock.replay(invocation);
         
         final Long key = generator.generateKey(invocation);
-        Assert.assertEquals(Long.valueOf(55143651163l), key);
+        Assert.assertEquals(Long.valueOf(55143680954l), key);
         
         EasyMock.verify(invocation);
     }
 
     @Test
     public void testForDocs() throws SecurityException, NoSuchMethodException {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator();
+        final ReflectionHashCodeCacheKeyGenerator generator = new ReflectionHashCodeCacheKeyGenerator();
         generator.setCheckforCycles(true);
         
         final Method testMethod = MethodInvocationHelper.class.getMethod("testMethod1", Object.class);
         
         final MethodInvocation invocation = EasyMock.createMock(MethodInvocation.class);
         EasyMock.expect(invocation.getMethod()).andReturn(testMethod);
-        EasyMock.expect(invocation.getArguments()).andReturn(new Object[] { "49931" });
+        EasyMock.expect(invocation.getArguments()).andReturn(new Object[] { new WeatherId("49931") });
         
         EasyMock.replay(invocation);
         
         final Long key = generator.generateKey(invocation);
-        Assert.assertEquals(Long.valueOf(-78777307802699l), key);
+        Assert.assertEquals(Long.valueOf(-78777307802668l), key);
         
         EasyMock.verify(invocation);
+    }
+    
+    private static class WeatherId {
+        private final String id;
+    
+        public WeatherId(String id) {
+            this.id = id;
+        }
     }
     
     
     @Test
     public void testNegativeOne() {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator(false, false);
+        final ReflectionHashCodeCacheKeyGenerator generator = new ReflectionHashCodeCacheKeyGenerator(false, false);
         
         final MethodInvocation negOneCall = EasyMock.createMock(MethodInvocation.class);
         EasyMock.expect(negOneCall.getArguments()).andReturn(new Object[] { -1 });
@@ -91,53 +96,38 @@ public class HashCodeCacheKeyGeneratorTest {
     }
     
     @Test
-    public void testMinimumLong() {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator(false, false);
+    public void testMinimumInt() {
+        final ReflectionHashCodeCacheKeyGenerator generator = new ReflectionHashCodeCacheKeyGenerator(false, false);
         
         final MethodInvocation negOneCall = EasyMock.createMock(MethodInvocation.class);
-        EasyMock.expect(negOneCall.getArguments()).andReturn(new Object[] { Long.MIN_VALUE });
+        EasyMock.expect(negOneCall.getArguments()).andReturn(new Object[] { Integer.MIN_VALUE });
         
         EasyMock.replay(negOneCall);
         
         final Long key = generator.generateKey(negOneCall);
-        Assert.assertEquals(Long.valueOf(-9223372036854775777l), key);
+        Assert.assertEquals(Long.valueOf(-2147483617), key);
         
         EasyMock.verify(negOneCall);
     }
     
     @Test
-    public void testMaximumLong() {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator(false, false);
+    public void testMaximumInt() {
+        final ReflectionHashCodeCacheKeyGenerator generator = new ReflectionHashCodeCacheKeyGenerator(false, false);
         
         final MethodInvocation negOneCall = EasyMock.createMock(MethodInvocation.class);
-        EasyMock.expect(negOneCall.getArguments()).andReturn(new Object[] { Long.MAX_VALUE });
+        EasyMock.expect(negOneCall.getArguments()).andReturn(new Object[] { Integer.MAX_VALUE });
         
         EasyMock.replay(negOneCall);
         
         final Long key = generator.generateKey(negOneCall);
-        Assert.assertEquals(Long.valueOf(-9223372036854775778l), key);
+        Assert.assertEquals(Long.valueOf(2147483678l), key);
         
         EasyMock.verify(negOneCall);
-    }
-    
-    @Test
-    public void testEnumHashCode() {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator(false, false);
-        
-        final MethodInvocation invocation = EasyMock.createMock(MethodInvocation.class);
-        EasyMock.expect(invocation.getArguments()).andReturn(new Object[] { TimeUnit.DAYS });
-        
-        EasyMock.replay(invocation);
-        
-        final Long key = generator.generateKey(invocation);
-        Assert.assertEquals(Long.valueOf(-53035962820l), key);
-        
-        EasyMock.verify(invocation);
     }
     
     @Test
     public void testComplexHashCode() throws SecurityException, NoSuchMethodException {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator(true, true);
+        final ReflectionHashCodeCacheKeyGenerator generator = new ReflectionHashCodeCacheKeyGenerator(true, true);
         
         final Method testMethod = MethodInvocationHelper.class.getMethod("testMethod2", int[].class, String.class, boolean[].class, Object.class);
         
@@ -146,7 +136,7 @@ public class HashCodeCacheKeyGeneratorTest {
         EasyMock.expect(invocation.getArguments()).andReturn(new Object[] { 
                 new int[] {1, 2, 3, 4}, 
                 "foo", 
-                new boolean[] {false, true},
+                new ReflectionKey(new boolean[] {false, true}),
                 null
                 });
         
@@ -154,32 +144,33 @@ public class HashCodeCacheKeyGeneratorTest {
         
         final Long key = generator.generateKey(invocation);
         
-        Assert.assertEquals(Long.valueOf(-43138117840462l), key);
+        Assert.assertEquals(Long.valueOf(-43138117839501l), key);
         
         EasyMock.verify(invocation);
     }
     
     @Test
-    public void testPrimitiveHashCode() throws SecurityException, NoSuchMethodException {
-        final HashCodeCacheKeyGenerator generator = new HashCodeCacheKeyGenerator(true, true);
-        
-        final Method testMethod = MethodInvocationHelper.class.getMethod("testMethod3", int.class, long.class, boolean.class, Integer.class);
+    public void testEnumHashCode() {
+        final ReflectionHashCodeCacheKeyGenerator generator = new ReflectionHashCodeCacheKeyGenerator(false, false);
         
         final MethodInvocation invocation = EasyMock.createMock(MethodInvocation.class);
-        EasyMock.expect(invocation.getMethod()).andReturn(testMethod);
-        EasyMock.expect(invocation.getArguments()).andReturn(new Object[] { 
-                1, 
-                42, 
-                false,
-                1337
-                });
+        EasyMock.expect(invocation.getArguments()).andReturn(new Object[] { TimeUnit.DAYS });
         
         EasyMock.replay(invocation);
         
         final Long key = generator.generateKey(invocation);
         
-        Assert.assertEquals(Long.valueOf(-78616304309326l), key);
+        Assert.assertEquals(Long.valueOf(-53035962820l), key);
+        
         
         EasyMock.verify(invocation);
+    }
+    
+    private class ReflectionKey {
+        private final Object hiddenKey;
+
+        public ReflectionKey(Object hiddenKey) {
+            this.hiddenKey = hiddenKey;
+        }
     }
 }

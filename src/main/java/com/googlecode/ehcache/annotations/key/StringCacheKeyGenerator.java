@@ -16,12 +16,43 @@
 
 package com.googlecode.ehcache.annotations.key;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 /**
+ * Uses {@link Arrays#deepToString(Object[])} to generate a cache key. This is a decent compromise on using
+ * {@link ListCacheKeyGenerator} if all arguments implement toString well since hashCode and equals operations
+ * on the generated key are much faster than on the {@link List} returned by {@link ListCacheKeyGenerator} and
+ * the chance of key collision is very small for objects with a well implemented toString.
+ * 
+ * <table>
+ *  <tr>
+ *      <th>Pros</th>
+ *      <th>Cons</th>
+ *  </tr>
+ *  <tr>
+ *      <td>
+ *          Faster both for key generation and key comparison than {@link ListCacheKeyGenerator}.
+ *      </td>
+ *      <td>
+ *          Depends on all arguments implementing toString well enough to represent each argument's
+ *          identity.
+ *      </td>
+ *  </tr>
+ *  <tr>
+ *      <td>
+ *          Arguments do not have to implement {@link Serializable}
+ *      </td>
+ *      <td>
+ *      </td>
+ *  </tr>
+ * </table>
+ * 
  * @author Eric Dalquist
  * @version $Revision$
  */
-public class StringCacheKeyGenerator extends AbstractDeepCacheKeyGenerator<StringCacheKeyGenerator.StringGenerator, String> {
+public class StringCacheKeyGenerator extends AbstractCacheKeyGenerator<String> {
     /**
      * Name of the bean this generator is registered under using the default constructor.
      */
@@ -40,178 +71,21 @@ public class StringCacheKeyGenerator extends AbstractDeepCacheKeyGenerator<Strin
         super(includeMethod, includeParameterTypes);
     }
     
-    public static class StringGenerator {
-        private final StringBuilder builder = new StringBuilder();
-        private int depth = 0;
-        
-        private StringGenerator() {
-        }
-    }
-
-    @Override
-    protected StringCacheKeyGenerator.StringGenerator getGenerator(Object... data) {
-        return new StringGenerator();
-    }
-
-    @Override
-    protected String generateKey(StringCacheKeyGenerator.StringGenerator generator) {
-        return generator.builder.toString();
-    }
     
     @Override
-    protected void beginRecursion(StringCacheKeyGenerator.StringGenerator generator, Object e) {
-        generator.builder.append("[");
-        generator.depth++;
+    public boolean isCheckforCycles() {
+        return true;
     }
 
     @Override
-    protected void endRecursion(StringCacheKeyGenerator.StringGenerator generator, Object e) {
-        final int length = generator.builder.length();
-        if (generator.depth > 0 && length > 2) {
-            generator.builder.delete(length - 2, length);
+    public void setCheckforCycles(boolean checkforCycles) {
+        if (!checkforCycles) {
+            throw new UnsupportedOperationException("StringCacheKeyGenerator always checks for cycles");
         }
-        
-        if (generator.depth > 1) {
-            generator.builder.append("], ");
-        }
-        else {
-            generator.builder.append("]");
-        }
-        
-        generator.depth--;
-    }
-    
-
-    @Override
-    protected void append(StringGenerator generator, boolean[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
     }
 
     @Override
-    protected void append(StringGenerator generator, byte[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
+    public String generateKey(Object... data) {
+        return Arrays.deepToString(data);
     }
-
-    @Override
-    protected void append(StringGenerator generator, char[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
-    }
-
-    @Override
-    protected void append(StringGenerator generator, double[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
-    }
-
-    @Override
-    protected void append(StringGenerator generator, float[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
-    }
-
-    @Override
-    protected void append(StringGenerator generator, int[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
-    }
-
-    @Override
-    protected void append(StringGenerator generator, long[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
-    }
-
-    @Override
-    protected void append(StringGenerator generator, short[] a) {
-        generator.builder.append("[");
-        if (a.length > 0) {
-            int index = 0;
-            for (; index < a.length - 1; index++) {
-                generator.builder.append(a[index]).append(", ");
-            }
-        
-            generator.builder.append(a[a.length - 1]);
-        }
-        generator.builder.append("], ");
-    }
-
-    @Override
-    protected void append(StringCacheKeyGenerator.StringGenerator generator, Object e) {
-        generator.builder.append(e.toString()).append(", ");
-    }
-
-    @Override
-    protected void appendGraphCycle(StringCacheKeyGenerator.StringGenerator generator, Object o) {
-        generator.builder.append("[...], ");
-    }
-
-    @Override
-    protected void appendNull(StringCacheKeyGenerator.StringGenerator generator) {
-        generator.builder.append("null, ");
-    }
-
-    @Override
-    protected boolean shouldReflect(Object element) {
-        return !this.implementsToString(element);
-    }
-    
 }

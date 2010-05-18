@@ -3,7 +3,7 @@
 	<groupId>com.googlecode.ehcache-spring-annotations</groupId>
 	<artifactId>ehcache-spring-annotations</artifactId>
 	<name>Ehcache Spring Annotations</name>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<description>Provides a simple model for integrating Ehcache in a Spring project via annotations.</description>
     <url>http://code.google.com/p/ehcache-spring-annotations/</url>
 
@@ -29,9 +29,9 @@
 	</licenses>
     
     <scm>
-        <connection>scm:svn:http://ehcache-spring-annotations.googlecode.com/svn/trunk/</connection>
-        <developerConnection>scm:svn:https://ehcache-spring-annotations.googlecode.com/svn/trunk/</developerConnection>
-        <url>http://ehcache-spring-annotations.googlecode.com/svn/trunk/</url>
+        <connection>scm:svn:http://ehcache-spring-annotations.googlecode.com/svn/tags/ehcache-spring-annotations-1.0.4</connection>
+        <developerConnection>scm:svn:https://ehcache-spring-annotations.googlecode.com/svn/tags/ehcache-spring-annotations-1.0.4</developerConnection>
+        <url>http://ehcache-spring-annotations.googlecode.com/svn/tags/ehcache-spring-annotations-1.0.4</url>
     </scm>
     
     <issueManagement>
@@ -352,7 +352,6 @@
 					<excludes>
 						<exclude>LICENSE</exclude>
 						<exclude>NOTICE</exclude>
-                        <exclude>src/main/java/com/googlecode/ehcache/annotations/util/guice/*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -398,14 +397,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.4</version>
-                <configuration>
-                    <instrumentation>
-                        <ignores>
-                            <ignore>com.googlecode.ehcache.annotations.util.guice.*</ignore>
-                        </ignores>
-                    </instrumentation>
-                </configuration>
+				<version>2.3</version>
 			</plugin>
 		</plugins>
 	</reporting>
