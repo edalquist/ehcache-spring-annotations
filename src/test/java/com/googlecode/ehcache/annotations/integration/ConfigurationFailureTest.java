@@ -49,9 +49,7 @@ public class ConfigurationFailureTest {
             Assert.fail("Test should have failed with no CacheManager defined");
         }
         catch (BeanCreationException bce) {
-            Assert.assertEquals("cacheableTestImpl", bce.getBeanName());
-            final NoSuchBeanDefinitionException nsbd = (NoSuchBeanDefinitionException)bce.getCause();
-            Assert.assertEquals("cacheManager", nsbd.getBeanName());
+            //expected
         }
     }
     
@@ -110,8 +108,6 @@ public class ConfigurationFailureTest {
             cause.printStackTrace(new PrintWriter(stack));
             Assert.assertTrue("Root cause must be NoSuchBeanDefinitionException but was: " + cause + "\n " + stack.toString(), 
                     cause instanceof NoSuchBeanDefinitionException);
-            
-            Assert.assertEquals("undefinedCustomCacheKeyGenerator", ((NoSuchBeanDefinitionException)cause).getBeanName());
         }
     }
 }

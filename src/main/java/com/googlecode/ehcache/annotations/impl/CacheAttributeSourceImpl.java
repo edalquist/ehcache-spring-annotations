@@ -83,6 +83,10 @@ public class CacheAttributeSourceImpl implements CacheAttributeSource, BeanFacto
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
     }
+    /**
+     * @deprecated Use {@link #setCacheManager(CacheManager)} instead
+     */
+    @Deprecated
     public void setCacheManagerBeanName(String cacheManagerBeanName) {
         this.cacheManagerBeanName = cacheManagerBeanName;
     }
@@ -95,9 +99,10 @@ public class CacheAttributeSourceImpl implements CacheAttributeSource, BeanFacto
 	public void setSelfPopulatingCacheScope(SelfPopulatingCacheScope selfPopulatingCacheScope) {
         this.selfPopulatingCacheScope = selfPopulatingCacheScope;
     }
-	
-	
-    /* (non-Javadoc)
+	public void setCacheManager(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
+	}
+	/* (non-Javadoc)
      * @see com.googlecode.ehcache.annotations.CacheAttributeSource#getAdviceType(java.lang.reflect.Method, java.lang.Class)
      */
     public AdviceType getAdviceType(Method method, Class<?> targetClass) {
@@ -198,7 +203,7 @@ public class CacheAttributeSourceImpl implements CacheAttributeSource, BeanFacto
                 this.cacheManager = this.beanFactory.getBean(this.cacheManagerBeanName, CacheManager.class);
             }
             else {
-                this.cacheManager = this.beanFactory.getBean(CacheManager.class);
+                throw new IllegalStateException("No cacheManager or cacheManagerBeanName configured");
             }
         }
         
