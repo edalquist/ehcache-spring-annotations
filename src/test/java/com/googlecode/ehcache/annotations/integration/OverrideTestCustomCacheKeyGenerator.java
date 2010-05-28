@@ -26,7 +26,7 @@ import com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator;
 /**
  * Custom {@link CacheKeyGenerator} that delegates to a {@link HashCodeCacheKeyGenerator}
  * and counts invocations; used in {@link OverrideDefaultCacheKeyGeneratorTest}.
- * @author Nicholas Blair
+ * @author Nicholas Blair, nblair@doit.wisc.edu
  * @version $Id$
  */
 public class OverrideTestCustomCacheKeyGenerator implements CacheKeyGenerator<Serializable> {

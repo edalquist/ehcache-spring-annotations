@@ -22,7 +22,7 @@ package com.googlecode.ehcache.annotations.integration;
 import com.googlecode.ehcache.annotations.TriggersRemove;
 
 /**
- * @author Nicholas Blair
+ * @author Nicholas Blair, npblair@wisc.edu
  *
  */
 public class TriggersRemoveTestImpl implements TriggersRemoveTestInterface {

@@ -55,10 +55,9 @@ import com.googlecode.ehcache.annotations.key.StringCacheKeyGenerator;
  * instances to wrap {@link EhCacheInterceptor}s around {@link Cacheable}s and {@link TriggersRemove}
  * advised methods.
  * 
- * @author Nicholas Blair
+ * @author Nicholas Blair, nblair@doit.wisc.edu
  * @version $Id$
  */
-@SuppressWarnings("deprecation")
 public class AnnotationDrivenEhCacheBeanDefinitionParser implements BeanDefinitionParser {
     public static final String XSD_ATTR__CREATE_MISSING_CACHES = "create-missing-caches";
     public static final String XSD_ATTR__CACHE_MANAGER = "cache-manager";

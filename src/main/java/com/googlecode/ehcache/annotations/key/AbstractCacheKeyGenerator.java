@@ -49,7 +49,6 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
      * Default constructor, same as calling {@link #AbstractCacheKeyGenerator(boolean, boolean)} with (true, true) 
      */
     public AbstractCacheKeyGenerator() {
-        this(true, true);
     }
     
     /**
@@ -61,7 +60,7 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
         this.includeParameterTypes = includeParameterTypes;
     }
 
-    public final boolean isIncludeMethod() {
+    public boolean isIncludeMethod() {
         return includeMethod;
     }
     /**
@@ -72,24 +71,27 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
      * in the same class with the same name and return value you may want to enable {@link #setIncludeParameterTypes(boolean)}
      * for even more specific key generation.
      * 
-     * Note that including the method signature in key generation reduces key generation speed.
+     * Note that including the method signature in key generation reduces key generation speed between
+     * 14% and 197% depending on the key generator implementation. See the full documentation on more
+     * details on key generation approaches.
      * 
      * @param includeMethod true If the {@link Method} from the {@link MethodInvocation} should be
      *                      included in the generated key, defaults to true.
      * @see #setIncludeParameterTypes(boolean)
      */
-    public final void setIncludeMethod(boolean includeMethod) {
+    public void setIncludeMethod(boolean includeMethod) {
         this.includeMethod = includeMethod;
     }
     
-    public final boolean isIncludeParameterTypes() {
+    public boolean isIncludeParameterTypes() {
         return includeParameterTypes;
     }
     /**
      * Determines if the method parameter types returned by {@link Method#getParameterTypes()} should be
      * included in the generated key. This is broken out into a separate option because the call results
      * in a clone() call on the Class[] every time {@link Method#getParameterTypes()} which reduces key
-     * generation speed.
+     * generation speed by between 5% and 22% depending on the key generator implementation. See the full
+     * documentation on more details on key generation approaches.
      * 
      * This is option is only used if {@link #setIncludeMethod(boolean)} is true.
      * 
@@ -97,11 +99,11 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
      *                              the generated key, defaults to false.
      * @see #setIncludeMethod(boolean)
      */
-    public final void setIncludeParameterTypes(boolean includeParameterTypes) {
+    public void setIncludeParameterTypes(boolean includeParameterTypes) {
         this.includeParameterTypes = includeParameterTypes;
     }
     
-    public final boolean isCheckforCycles() {
+    public boolean isCheckforCycles() {
         return checkforCycles;
     }
     /**
@@ -111,7 +113,7 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
      * 
      * @param checkforCycles Defaults to false.
      */
-    public final void setCheckforCycles(boolean checkforCycles) {
+    public void setCheckforCycles(boolean checkforCycles) {
         this.checkforCycles = checkforCycles;
     }
 
@@ -124,16 +126,20 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
         if (this.includeMethod) {
             final Method method = methodInvocation.getMethod();
             
-            final Class<?> declaringClass = method.getDeclaringClass();
-            final String name = method.getName();
-            final Class<?> returnType = method.getReturnType();
-
             if (this.includeParameterTypes) {
-                final Class<?>[] parameterTypes = method.getParameterTypes();
-                return this.generateKey(declaringClass, name, returnType, parameterTypes, arguments);
+                return this.generateKey(
+                        method.getDeclaringClass(),
+                        method.getName(),
+                        method.getReturnType(),
+                        method.getParameterTypes(),
+                        arguments);
             }
             
-            return this.generateKey(declaringClass, name, returnType, arguments);
+            return this.generateKey(
+                    method.getDeclaringClass(),
+                    method.getName(),
+                    method.getReturnType(),
+                    arguments);
         }
         
         try {
@@ -154,7 +160,6 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
      * </p>
      * 
      * @param element The object to register.
-     * @return true if the object is not currently registered
      */
     protected final boolean register(Object element) {
         if (!this.checkforCycles) {
@@ -167,8 +172,11 @@ public abstract class AbstractCacheKeyGenerator<T extends Serializable> implemen
 
     /**
      * <p>
-     * Unregisters the given object. Used by the reflection methods to avoid infinite loops.
+     * Unregisters the given object.
      * </p>
+     * 
+     * <p>
+     * Used by the reflection methods to avoid infinite loops.
      */
     protected final void unregister(Object element) {
         if (!this.checkforCycles) {

@@ -20,7 +20,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
  *
- * @author Nicholas Blair
+ * @author Nicholas Blair, nblair@doit.wisc.edu
  * @version $Id$
  */
 public class AnnotationDrivenEhCacheNamespaceHandler extends NamespaceHandlerSupport {
@@ -30,7 +30,6 @@ public class AnnotationDrivenEhCacheNamespaceHandler extends NamespaceHandlerSup
 	 */
 	public void init() {
 		this.registerBeanDefinitionParser("annotation-driven", new AnnotationDrivenEhCacheBeanDefinitionParser());
-		this.registerBeanDefinitionParser("config", new EhCacheConfigBeanDefinitionParser());
 	}
 
 }

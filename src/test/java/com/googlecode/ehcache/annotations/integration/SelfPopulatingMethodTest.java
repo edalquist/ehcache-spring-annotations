@@ -30,7 +30,7 @@ import com.googlecode.ehcache.annotations.util.ThreadGroupRunner;
 
 /**
  *
- * @author Nicholas Blair
+ * @author Nicholas Blair, nblair@doit.wisc.edu
  * @version $Id$
  */
 @RunWith(SpringJUnit4ClassRunner.class)

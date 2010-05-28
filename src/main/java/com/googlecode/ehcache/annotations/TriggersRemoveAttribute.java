@@ -27,7 +27,7 @@ import net.sf.ehcache.Ehcache;
  * Represents the objects needed to intercept calls to methods annotated
  * with {@link TriggersRemove}
  * 
- * @author Nicholas Blair
+ * @author Nicholas Blair, npblair@wisc.edu
  *
  */
 public interface TriggersRemoveAttribute extends MethodAttribute {
@@ -36,10 +36,4 @@ public interface TriggersRemoveAttribute extends MethodAttribute {
      */
     public boolean isRemoveAll();
     
-    
-   /**
-    * 
-    * @return 'when' to run the removeall (before or after the method invocation)
-    */
-    public When when();
 }

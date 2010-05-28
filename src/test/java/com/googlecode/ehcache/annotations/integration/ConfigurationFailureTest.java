@@ -39,7 +39,6 @@ import com.googlecode.ehcache.annotations.key.CacheKeyGenerator;
  */
 public class ConfigurationFailureTest {
 
-	
 	/**
 	 * Test verifies behavior when no {@link CacheManager} is defined in the Spring configuration.
 	 */
@@ -50,6 +49,7 @@ public class ConfigurationFailureTest {
             Assert.fail("Test should have failed with no CacheManager defined");
         }
         catch (BeanCreationException bce) {
+            //expected
         }
     }
     
@@ -83,6 +83,8 @@ public class ConfigurationFailureTest {
         }
         catch (BeanCreationException bce) {
             Assert.assertEquals("cacheConfigurationTestImpl", bce.getBeanName());
+            final NoSuchBeanDefinitionException nsbd = (NoSuchBeanDefinitionException)bce.getCause();
+            Assert.assertEquals("customKeyGenerator", nsbd.getBeanName());
         }
     }
     

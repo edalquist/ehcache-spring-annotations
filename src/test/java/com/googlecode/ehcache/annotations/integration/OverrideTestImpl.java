@@ -20,7 +20,7 @@ import com.googlecode.ehcache.annotations.Cacheable;
 
 /**
  * Test impl for {@link OverrideDefaultCacheKeyGeneratorTest}.
- * @author Nicholas Blair
+ * @author Nicholas Blair, nblair@doit.wisc.edu
  * @version $Id$
  */
 public class OverrideTestImpl implements OverrideTestInterface {

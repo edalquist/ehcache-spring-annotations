@@ -36,7 +36,6 @@ import com.googlecode.ehcache.annotations.CacheableAttribute;
 import com.googlecode.ehcache.annotations.MethodAttribute;
 import com.googlecode.ehcache.annotations.TriggersRemove;
 import com.googlecode.ehcache.annotations.TriggersRemoveAttribute;
-import com.googlecode.ehcache.annotations.When;
 import com.googlecode.ehcache.annotations.key.CacheKeyGenerator;
 
 
@@ -176,6 +175,7 @@ public class EhCacheInterceptor implements MethodInterceptor {
     /**
      * Called if the {@link MethodInvocation} is annotated with {@link TriggersRemove}.
      * 
+     * 
      * @param methodInvocation Original method invocation
      * @param triggersRemoveAttribute Information about the {@link TriggersRemove} annotation
      * @return The result of the invocation
@@ -183,35 +183,16 @@ public class EhCacheInterceptor implements MethodInterceptor {
      */
     private Object invokeTriggersRemove(final MethodInvocation methodInvocation, final TriggersRemoveAttribute triggersRemoveAttribute) throws Throwable {
         final Ehcache cache = triggersRemoveAttribute.getCache();
-        
-        if(When.BEFORE_METHOD_INVOCATION.equals(triggersRemoveAttribute.when())) {
-        	invokeCacheRemove(methodInvocation, triggersRemoveAttribute, cache);
-        	return methodInvocation.proceed();
-        } else {
-        	Object methodInvocationResult =  methodInvocation.proceed();
-        	invokeCacheRemove(methodInvocation, triggersRemoveAttribute, cache);
-        	return methodInvocationResult;
+        if (triggersRemoveAttribute.isRemoveAll()) {
+            cache.removeAll();
         }
-    }
+        else {
+            final Serializable cacheKey = generateCacheKey(methodInvocation, triggersRemoveAttribute);
+            cache.remove(cacheKey);
+        }
 
-	/**
-	 * Call the ehcache remove function as prescribed by the {@link TriggersRemoveAttribute}.
-	 * 
-	 * @param methodInvocation
-	 * @param triggersRemoveAttribute
-	 * @param cache
-	 */
-	private void invokeCacheRemove(final MethodInvocation methodInvocation,
-			final TriggersRemoveAttribute triggersRemoveAttribute,
-			final Ehcache cache) {
-		if (triggersRemoveAttribute.isRemoveAll()) {
-			cache.removeAll();
-		}
-		else {
-			final Serializable cacheKey = generateCacheKey(methodInvocation, triggersRemoveAttribute);
-			cache.remove(cacheKey);
-		}
-	}
+        return methodInvocation.proceed();
+    }
 
     /**
      * Check if there is a cached exception for the key. If there is throw it.

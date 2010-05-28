@@ -23,7 +23,6 @@ import java.io.Serializable;
 
 import com.googlecode.ehcache.annotations.AdviceType;
 import com.googlecode.ehcache.annotations.TriggersRemoveAttribute;
-import com.googlecode.ehcache.annotations.When;
 import com.googlecode.ehcache.annotations.key.CacheKeyGenerator;
 
 import net.sf.ehcache.Ehcache;
@@ -31,20 +30,18 @@ import net.sf.ehcache.Ehcache;
 /**
  * Basic pojo style impl of {@link TriggersRemoveAttribute}
  * 
- * @author Nicholas Blair
+ * @author Nicholas Blair, npblair@wisc.edu
  * @version $Revision$
  */
 class TriggersRemoveAttributeImpl implements TriggersRemoveAttribute {
 	private final Ehcache cache;
 	private final CacheKeyGenerator<? extends Serializable> cacheKeyGenerator;
 	private final boolean removeAll;
-	private final When when;
 	
-	TriggersRemoveAttributeImpl(Ehcache cache, CacheKeyGenerator<? extends Serializable> cacheKeyGenerator, boolean removeAll, When when) {
+	TriggersRemoveAttributeImpl(Ehcache cache, CacheKeyGenerator<? extends Serializable> cacheKeyGenerator, boolean removeAll) {
 		this.cache = cache;
 		this.cacheKeyGenerator = cacheKeyGenerator;
 		this.removeAll = removeAll;
-		this.when = when;
 	}
     
     public AdviceType getAdviceType() {
@@ -63,13 +60,6 @@ class TriggersRemoveAttributeImpl implements TriggersRemoveAttribute {
 	 */
 	public boolean isRemoveAll() {
 		return this.removeAll;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.googlecode.ehcache.annotations.TriggersRemoveAttribute#when()
-	 */
-	public When when() {
-		return this.when;
 	}
 
 	/* (non-Javadoc)

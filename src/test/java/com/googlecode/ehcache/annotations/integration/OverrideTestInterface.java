@@ -19,7 +19,7 @@ package com.googlecode.ehcache.annotations.integration;
 /**
  * Test interface for {@link OverrideDefaultCacheKeyGeneratorTest}.
  * 
- * @author Nicholas Blair
+ * @author Nicholas Blair, nblair@doit.wisc.edu
  * @version $Id$
  */
 public interface OverrideTestInterface {

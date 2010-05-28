@@ -28,7 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Test to verify that the "default-cache-key-generator" attribute
  * in the ehcache config is properly triggered.
  * 
- * @author Nicholas Blair
+ * @author Nicholas Blair, nblair@doit.wisc.edu
  * @version $Id$
  */
 @RunWith(SpringJUnit4ClassRunner.class)
