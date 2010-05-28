@@ -50,8 +50,8 @@ public class HashCodeCacheKeyGenerator extends AbstractCacheKeyGenerator<Long> {
      */
     public static final String DEFAULT_BEAN_NAME = "com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME";
     
-    protected static final int INITIAL_HASH = 1;
-    protected static final int MULTIPLIER = 31;
+    protected static final long INITIAL_HASH = 1;
+    protected static final long MULTIPLIER = 31;
     
     /**
      * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator() 
@@ -264,8 +264,10 @@ public class HashCodeCacheKeyGenerator extends AbstractCacheKeyGenerator<Long> {
                 elementHash = hashCode((boolean[]) element);
             else if (element instanceof Class<?>)
                 elementHash = getHashCode((Class<?>)element);
-            else if (element instanceof Number)
-                elementHash = getHashCode((Number)element);
+            else if (element instanceof Double)
+                elementHash = getHashCode((Double)element);
+            else if (element instanceof Long)
+                elementHash = getHashCode((Long)element);
             else if (element instanceof Enum<?>)
                 elementHash = getHashCode((Enum<?>)element);
             else if (element instanceof Iterable<?>)
@@ -291,10 +293,17 @@ public class HashCodeCacheKeyGenerator extends AbstractCacheKeyGenerator<Long> {
     }
     
     /**
-     * Generate hash code for a Number, getting the more precise long value.
+     * Generate hash code for a Double, getting the more precise double as long bits value.
      */
-    protected long getHashCode(Number n) {
-        return n.longValue();
+    protected long getHashCode(Double n) {
+        return Double.doubleToLongBits(n);
+    }
+    
+    /**
+     * Generate hash code for a Long, getting the more precise long value.
+     */
+    protected long getHashCode(Long n) {
+        return n;
     }
     
     /**
