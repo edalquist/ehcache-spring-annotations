@@ -60,8 +60,8 @@
 <a name="50" href="#50">50</a>  <em class="jxr_javadoccomment">     */</em>
 <a name="51" href="#51">51</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_BEAN_NAME = <span class="jxr_string">"com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME"</span>;
 <a name="52" href="#52">52</a>      
-<a name="53" href="#53">53</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> INITIAL_HASH = 1;
-<a name="54" href="#54">54</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MULTIPLIER = 31;
+<a name="53" href="#53">53</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> INITIAL_HASH = 1;
+<a name="54" href="#54">54</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> MULTIPLIER = 31;
 <a name="55" href="#55">55</a>      
 <a name="56" href="#56">56</a>      <em class="jxr_javadoccomment">/**</em>
 <a name="57" href="#57">57</a>  <em class="jxr_javadoccomment">     * @see AbstractCacheKeyGenerator#AbstractCacheKeyGenerator() </em>
@@ -274,53 +274,62 @@
 <a name="264" href="#264">264</a>                 elementHash = hashCode((<strong class="jxr_keyword">boolean</strong>[]) element);
 <a name="265" href="#265">265</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Class&lt;?&gt;)
 <a name="266" href="#266">266</a>                 elementHash = getHashCode((Class&lt;?&gt;)element);
-<a name="267" href="#267">267</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Number)
-<a name="268" href="#268">268</a>                 elementHash = getHashCode((Number)element);
-<a name="269" href="#269">269</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Enum&lt;?&gt;)
-<a name="270" href="#270">270</a>                 elementHash = getHashCode((Enum&lt;?&gt;)element);
-<a name="271" href="#271">271</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Iterable&lt;?&gt;)
-<a name="272" href="#272">272</a>                 elementHash = deepHashCode((Iterable&lt;?&gt;)element);
-<a name="273" href="#273">273</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Map&lt;?, ?&gt;)
-<a name="274" href="#274">274</a>                 elementHash = deepHashCode(((Map&lt;?, ?&gt;)element).entrySet());
-<a name="275" href="#275">275</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Map.Entry&lt;?, ?&gt;)
-<a name="276" href="#276">276</a>                 elementHash = hashCode((Map.Entry&lt;?, ?&gt;)element);
-<a name="277" href="#277">277</a>             <strong class="jxr_keyword">else</strong>
-<a name="278" href="#278">278</a>                 elementHash = getHashCode(element);
-<a name="279" href="#279">279</a>             <strong class="jxr_keyword">return</strong> elementHash;
-<a name="280" href="#280">280</a>         }
-<a name="281" href="#281">281</a>         <strong class="jxr_keyword">finally</strong> {
-<a name="282" href="#282">282</a>             unregister(element);
-<a name="283" href="#283">283</a>         }
-<a name="284" href="#284">284</a>     }
-<a name="285" href="#285">285</a>     
-<a name="286" href="#286">286</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="287" href="#287">287</a> <em class="jxr_javadoccomment">     * Generate hash code for an Class which by default uses object identity hash codes</em>
-<a name="288" href="#288">288</a> <em class="jxr_javadoccomment">     */</em>
-<a name="289" href="#289">289</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Class&lt;?&gt; c) {
-<a name="290" href="#290">290</a>         <strong class="jxr_keyword">return</strong> c.getName().hashCode();
-<a name="291" href="#291">291</a>     }
-<a name="292" href="#292">292</a>     
-<a name="293" href="#293">293</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="294" href="#294">294</a> <em class="jxr_javadoccomment">     * Generate hash code for a Number, getting the more precise long value.</em>
-<a name="295" href="#295">295</a> <em class="jxr_javadoccomment">     */</em>
-<a name="296" href="#296">296</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Number n) {
-<a name="297" href="#297">297</a>         <strong class="jxr_keyword">return</strong> n.longValue();
-<a name="298" href="#298">298</a>     }
-<a name="299" href="#299">299</a>     
-<a name="300" href="#300">300</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="301" href="#301">301</a> <em class="jxr_javadoccomment">     * Generate hash code for an Enum, uses a combination of the Class and name to generate a consistent hash code</em>
-<a name="302" href="#302">302</a> <em class="jxr_javadoccomment">     */</em>
-<a name="303" href="#303">303</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Enum&lt;?&gt; e) {
-<a name="304" href="#304">304</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.hashCode(<strong class="jxr_keyword">new</strong> Object[] { e.getClass(), e.name() });
-<a name="305" href="#305">305</a>     }
-<a name="306" href="#306">306</a>     
-<a name="307" href="#307">307</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="308" href="#308">308</a> <em class="jxr_javadoccomment">     * Generate hash code for an object</em>
-<a name="309" href="#309">309</a> <em class="jxr_javadoccomment">     */</em>
-<a name="310" href="#310">310</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Object o) {
-<a name="311" href="#311">311</a>         <strong class="jxr_keyword">return</strong> o.hashCode();
-<a name="312" href="#312">312</a>     }
-<a name="313" href="#313">313</a> }
+<a name="267" href="#267">267</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Double)
+<a name="268" href="#268">268</a>                 elementHash = getHashCode((Double)element);
+<a name="269" href="#269">269</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Long)
+<a name="270" href="#270">270</a>                 elementHash = getHashCode((Long)element);
+<a name="271" href="#271">271</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Enum&lt;?&gt;)
+<a name="272" href="#272">272</a>                 elementHash = getHashCode((Enum&lt;?&gt;)element);
+<a name="273" href="#273">273</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Iterable&lt;?&gt;)
+<a name="274" href="#274">274</a>                 elementHash = deepHashCode((Iterable&lt;?&gt;)element);
+<a name="275" href="#275">275</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Map&lt;?, ?&gt;)
+<a name="276" href="#276">276</a>                 elementHash = deepHashCode(((Map&lt;?, ?&gt;)element).entrySet());
+<a name="277" href="#277">277</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (element instanceof Map.Entry&lt;?, ?&gt;)
+<a name="278" href="#278">278</a>                 elementHash = hashCode((Map.Entry&lt;?, ?&gt;)element);
+<a name="279" href="#279">279</a>             <strong class="jxr_keyword">else</strong>
+<a name="280" href="#280">280</a>                 elementHash = getHashCode(element);
+<a name="281" href="#281">281</a>             <strong class="jxr_keyword">return</strong> elementHash;
+<a name="282" href="#282">282</a>         }
+<a name="283" href="#283">283</a>         <strong class="jxr_keyword">finally</strong> {
+<a name="284" href="#284">284</a>             unregister(element);
+<a name="285" href="#285">285</a>         }
+<a name="286" href="#286">286</a>     }
+<a name="287" href="#287">287</a>     
+<a name="288" href="#288">288</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="289" href="#289">289</a> <em class="jxr_javadoccomment">     * Generate hash code for an Class which by default uses object identity hash codes</em>
+<a name="290" href="#290">290</a> <em class="jxr_javadoccomment">     */</em>
+<a name="291" href="#291">291</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Class&lt;?&gt; c) {
+<a name="292" href="#292">292</a>         <strong class="jxr_keyword">return</strong> c.getName().hashCode();
+<a name="293" href="#293">293</a>     }
+<a name="294" href="#294">294</a>     
+<a name="295" href="#295">295</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="296" href="#296">296</a> <em class="jxr_javadoccomment">     * Generate hash code for a Double, getting the more precise double as long bits value.</em>
+<a name="297" href="#297">297</a> <em class="jxr_javadoccomment">     */</em>
+<a name="298" href="#298">298</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Double n) {
+<a name="299" href="#299">299</a>         <strong class="jxr_keyword">return</strong> Double.doubleToLongBits(n);
+<a name="300" href="#300">300</a>     }
+<a name="301" href="#301">301</a>     
+<a name="302" href="#302">302</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="303" href="#303">303</a> <em class="jxr_javadoccomment">     * Generate hash code for a Long, getting the more precise long value.</em>
+<a name="304" href="#304">304</a> <em class="jxr_javadoccomment">     */</em>
+<a name="305" href="#305">305</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Long n) {
+<a name="306" href="#306">306</a>         <strong class="jxr_keyword">return</strong> n;
+<a name="307" href="#307">307</a>     }
+<a name="308" href="#308">308</a>     
+<a name="309" href="#309">309</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="310" href="#310">310</a> <em class="jxr_javadoccomment">     * Generate hash code for an Enum, uses a combination of the Class and name to generate a consistent hash code</em>
+<a name="311" href="#311">311</a> <em class="jxr_javadoccomment">     */</em>
+<a name="312" href="#312">312</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Enum&lt;?&gt; e) {
+<a name="313" href="#313">313</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.hashCode(<strong class="jxr_keyword">new</strong> Object[] { e.getClass(), e.name() });
+<a name="314" href="#314">314</a>     }
+<a name="315" href="#315">315</a>     
+<a name="316" href="#316">316</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="317" href="#317">317</a> <em class="jxr_javadoccomment">     * Generate hash code for an object</em>
+<a name="318" href="#318">318</a> <em class="jxr_javadoccomment">     */</em>
+<a name="319" href="#319">319</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">long</strong> getHashCode(Object o) {
+<a name="320" href="#320">320</a>         <strong class="jxr_keyword">return</strong> o.hashCode();
+<a name="321" href="#321">321</a>     }
+<a name="322" href="#322">322</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
