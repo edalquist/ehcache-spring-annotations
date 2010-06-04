@@ -13,7 +13,7 @@ This project is intended to help you weave Ehcache aspects at runtime around you
 The following steps are merely a suggestion. If you don't use Maven, you can certainly setup the project in another way, however you'll be responsible for sorting out all of the dependencies required for this project, Spring, and Ehcache. We highly suggest you use Maven in this regard.
 
   # Create a new [http://maven.apache.org/ Maven] project.
-  # Add this project as a dependency (see the Project Home page for the recommended version). This will in turn add Spring 3 and Ehcache 2 to your project's dependencies.
+  # Add this project as a dependency (see the Project Home page for the recommended version) in the maven pom.xml. This will in turn add Spring 3 and Ehcache 2 to your project's dependencies.
   # Write your Spring Application, including [UsingCacheAnnotations] and/or [UsingTriggersRemove].
   # Add the required configuration for this project to your Spring configuration (see [UsingCacheAnnotations]).
   # Create the Ehcache configuration and place it within the project classpath - http://ehcache.org/documentation/configuration.html 
