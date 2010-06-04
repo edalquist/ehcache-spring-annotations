@@ -8,7 +8,7 @@ The authors of this project both have extensive experience with Spring and Ehcac
 
 = Intended Usage =
 
-This project is intended to help you weave Ehcache aspects at runtime around your Data Access Objects within your Spring applications.
+This project is intended to help you weave Ehcache aspects at runtime around your Data Access Objects within your Spring applications. These annotations have no effect unless you create the appropriate configuration.
 
 The following steps are merely a suggestion. If you don't use Maven, you can certainly setup the project in another way, however you'll be responsible for sorting out all of the dependencies required for this project, Spring, and Ehcache. We highly suggest you use Maven in this regard.
 
