@@ -19,7 +19,9 @@ The following steps are merely a suggestion. If you don't use Maven, you can cer
 = Spring Reference Materials =
 
 [http://www.springsource.org/documentation Spring Documentation Home]
+
 [http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/ Spring 3 Reference]
+
 [http://static.springsource.org/spring/docs/3.0.x/javadoc-api/ Spring 3 Javadoc]
 
 = Ehcache Reference Materials =
