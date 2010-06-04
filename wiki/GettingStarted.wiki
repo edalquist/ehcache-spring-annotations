@@ -1,0 +1,14 @@
+#summary How to get started with Spring, Ehcache, and this project
+
+= Preface =
+
+This project is the spiritual successor to the support for Ehcache in the [https://springmodules.dev.java.net/ Spring Modules] project. When the authors of this project found out that Spring Modules was deprecated and no support for Spring 3 was planned, we decided it was time to create this project.
+
+The authors of this project both have extensive experience with Spring and Ehcache, so much of our documentation assumes you are already familiar with both.
+
+= Ehcache Reference Materials =
+
+[http://ehcache.org/documentation/getting_started.html Getting Started with Ehcache]
+
+[http://ehcache.org/documentation/configuration.html Ehcache Configuration]
+
