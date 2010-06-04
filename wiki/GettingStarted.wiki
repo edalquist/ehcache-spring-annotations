@@ -8,6 +8,8 @@ The authors of this project both have extensive experience with Spring and Ehcac
 
 = Intended Usage =
 
+This project is intended to help you weave Ehcache aspects at runtime around your Data Access Objects within your Spring applications.
+
 The following steps are merely a suggestion. If you don't use Maven, you can certainly setup the project in another way, however you'll be responsible for sorting out all of the dependencies required for this project, Spring, and Ehcache. We highly suggest you use Maven in this regard.
 
   # Create a new [http://maven.apache.org/ Maven] project.
@@ -15,6 +17,7 @@ The following steps are merely a suggestion. If you don't use Maven, you can cer
   # Write your Spring Application, including [UsingCacheAnnotations] and/or [UsingTriggersRemove].
   # Add the required configuration for this project to your Spring configuration (see [UsingCacheAnnotations]).
   # Create the Ehcache configuration and place it within the project classpath - http://ehcache.org/documentation/configuration.html 
+
 
 = Spring Reference Materials =
 
