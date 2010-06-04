@@ -14,7 +14,7 @@ The following steps are merely a suggestion. If you don't use Maven, you can cer
 
   # Create a new [http://maven.apache.org/ Maven] project.
   # Add this project as a dependency (see the Project Home page for the recommended version) in the maven pom.xml. This will in turn add Spring 3 and Ehcache 2 to your project's dependencies.
-  # Write your Spring Application, including [UsingCacheAnnotations] and/or [UsingTriggersRemove].
+  # Write your Spring Application, including `@Cacheable` and `@TriggersRemove` annotations around the methods in your DAOs that you would like caching applied (see [UsingCacheAnnotations] and/or [UsingTriggersRemove]).
   # Add the required configuration for this project to your Spring configuration (see [UsingCacheAnnotations]).
   # Create the Ehcache configuration and place it within the project classpath - http://ehcache.org/documentation/configuration.html 
 
