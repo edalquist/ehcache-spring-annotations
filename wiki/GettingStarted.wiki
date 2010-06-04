@@ -8,7 +8,7 @@ The authors of this project both have extensive experience with Spring and Ehcac
 
 = Intended Usage =
 
-The following steps are merely a suggestion, you don't have to follow them to the letter.
+The following steps are merely a suggestion. If you don't use Maven, you can certainly setup the project in another way, however you'll be responsible for sorting out all of the dependencies required for this project, Spring, and Ehcache. We highly suggest you use Maven in this regard.
 
   # Create a new [http://maven.apache.org/ Maven] project.
   # Add this project as a dependency (see the Project Home page for the recommended version). This will in turn add Spring 3 and Ehcache 2 to your project's dependencies.
