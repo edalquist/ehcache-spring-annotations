@@ -6,9 +6,24 @@ This project is the spiritual successor to the support for Ehcache in the [https
 
 The authors of this project both have extensive experience with Spring and Ehcache, so much of our documentation assumes you are already familiar with both.
 
+= Intended Usage =
+
+The following steps are merely a suggestion, you don't have to follow them to the letter.
+
+  # Create a new [http://maven.apache.org/ Maven] project.
+  # Add this project as a dependency (see the Project Home page for the recommended version). This will in turn add Spring 3 and Ehcache 2 to your project's dependencies.
+  # Write your Spring Application, including [UsingCacheAnnotations] and/or [UsingTriggersRemove].
+  # Add the required configuration for this project to your Spring configuration (see [UsingCacheAnnotations]).
+  # Create the Ehcache configuration and place it within the project classpath - http://ehcache.org/documentation/configuration.html 
+
+= Spring Reference Materials =
+
+[http://www.springsource.org/documentation Spring Documentation Home]
+[http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/ Spring 3 Reference]
+[http://static.springsource.org/spring/docs/3.0.x/javadoc-api/ Spring 3 Javadoc]
+
 = Ehcache Reference Materials =
 
 [http://ehcache.org/documentation/getting_started.html Getting Started with Ehcache]
 
 [http://ehcache.org/documentation/configuration.html Ehcache Configuration]
-
