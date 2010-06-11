@@ -1,4 +1,4 @@
-  * [UsingCacheAnnotations  Using @Cacheable]
+  * [UsingCacheable  Using @Cacheable]
   * [UsingTriggersRemove Using @TriggersRemove]
   * [CacheKeyGenerators Cache Key Generators]
     * [HashCodeCacheKeyGenerator]
