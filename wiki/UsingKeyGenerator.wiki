@@ -1,8 +1,8 @@
 #summary Using the @KeyGenerator for in-line key generation configuration
 
-= Using @KeyGenerator =
+= Using @!KeyGenerator =
 
-[UsingCacheable @Cacheable] and [UsingTriggersRemove @TriggersRemove]
+[UsingCacheable @Cacheable] and [UsingTriggersRemove @TriggersRemove] annotations support a `keyGenerator` property. This allows for the inline configuration of a [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator]. This approach is recommended over the `keyGeneratorName` annotation as more of the caching configuration is inline in the class.
 
 
 = Details =
