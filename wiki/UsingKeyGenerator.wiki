@@ -1,4 +1,5 @@
 #summary Using the @KeyGenerator for in-line key generation configuration
+#sidebar TableOfContents
 
 = Using @!KeyGenerator =
 
