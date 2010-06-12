@@ -16,12 +16,7 @@ Example inline key generator configuration:
 )
 }}}
 
-The *name* property specifies the !CacheKeyGenerator implementation to use.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Properties ==
+|| *Property* || *Type* || *Description* ||
+|| name || String || The name of the !CacheKeyGenerator class. If no package is specified the [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/package-summary.html com.googlecode.ehcache.annotations.key] package is assumed. ||
+|| properties || List<[http://ehcache-spring-annotations.googlecode.com/svn/site/1.1.0-RC1/apidocs/com/googlecode/ehcache/annotations/Property.html @Property]> || A list of properties to set on the key generator. ||
