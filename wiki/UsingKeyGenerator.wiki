@@ -1,8 +1,8 @@
 #summary Using the @KeyGenerator for in-line key generation configuration
 
-= Introduction =
+= Using @KeyGenerator =
 
-Add your content here.
+[UsingCacheable @Cacheable] and [UsingTriggersRemove @TriggersRemove]
 
 
 = Details =
