@@ -74,5 +74,6 @@ These default settings can be changed; the various properties of the `@Cacheable
 || *Property* || *Type* || *Description* ||
 || cacheName || String || Required name of the cache to use ||
 || selfPopulating || boolean || Optional if the method should have self-populating semantics. This results in calls to the annotated method to be made within a !EhCache !CacheEntryFactory. This is useful for expensive shared resources that should be retrieved a minimal number of times. ||
+|| keyGenerator || [UsingKeyGenerator @KeyGenerator] || Optional inline configuration of a !CacheKeyGenerator to use for generating cache keys for this method. ||
 || keyGeneratorName || String || Optional bean name of a !CacheKeyGenerator to use for generating cache keys for this method. ||
 || exceptionCacheName || String || Optional name of the cache to use for caching exceptions. If not specified exceptions result in nothing being cached. If specified the thrown exception is stored in the cache for the generated key and re-thrown for subsequent method calls as long as it remains in the exception cache. ||
