@@ -30,8 +30,8 @@ This example will result in a [http://ehcache-spring-annotations.googlecode.com/
 === @!Property Properties ===
 || *Property* || *Type* || *Description* ||
 || name || String || The name of the Java Bean property to set ||
-|| value || String || The value to set into the bean property, any String type conversion that Spring supports is supported here ||
-|| ref || String || The name of a bean in your application context, a reference to that bean is injected into the key generator ||
+|| value || String || The value to set into the bean property, any String type conversion that Spring supports is supported here, if specified `ref` may not be set. ||
+|| ref || String || The name of a bean in your application context, a reference to that bean is injected into the key generator, if specified `value` may not be set. ||
 
 === Lifecycle ===
 !CacheKeyGenerators configured in this manner are created as Spring beans in a child !ApplicationContext of the !ApplicationContext the `<ehcache:annotation-driven/>` element is in. There for !CacheKeyGenerators can implement Spring context lifecycle interfaces such as !InitializingBean, !DisposableBean, and !ApplicationContextAware.
