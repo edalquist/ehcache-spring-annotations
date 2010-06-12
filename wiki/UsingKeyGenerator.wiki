@@ -4,6 +4,20 @@
 
 [UsingCacheable @Cacheable] and [UsingTriggersRemove @TriggersRemove] annotations support a `keyGenerator` property. This allows for the inline configuration of a [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator]. This approach is recommended over the `keyGeneratorName` annotation as more of the caching configuration is inline in the class.
 
+Example inline key generator configuration:
+{{{
+@KeyGenerator (
+    name = "ListCacheKeyGenerator",
+    properties = {
+            @Property( name="useReflection", value="true" ),
+            @Property( name="checkforCycles", value="true" ),
+            @Property( name="includeMethod", value="false" )
+    }
+)
+}}}
+
+The *name* property specifies the !CacheKeyGenerator implementation to use.
+
 
 = Details =
 
