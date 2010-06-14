@@ -10,10 +10,8 @@ The ease-of-use afforded by the use of the `@Cacheable` annotation is best illus
 {{{
 public interface WeatherDao {
     
-    @Cacheable(cacheName="weatherCache")
     public Weather getWeather(String zipCode);
     
-    @Cacheable(cacheName="locationSearchCache")
     public List<Location> findLocations(String locationSearch);
 }
 
