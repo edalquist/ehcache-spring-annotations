@@ -6,15 +6,28 @@
 
 Declaring cache semantics directly in the Java source code puts the declarations much closer to the affected code. There is not much danger of undue coupling, because code that is meant to have its results cached is almost always deployed that way anyway.
 
-The ease-of-use afforded by the use of the `@Cacheable` annotation is best illustrated with an example, which is explained in the text that follows. Consider the following class definition:
+The ease-of-use afforded by the use of the `@Cacheable` annotation is best illustrated with an example, which is explained in the text that follows. Consider the following interface and class definition:
 {{{
-public class DefaultWeatherDao implements WeatherDao {
+public interface WeatherDao {
     
     @Cacheable(cacheName="weatherCache")
     public Weather getWeather(String zipCode);
     
     @Cacheable(cacheName="locationSearchCache")
     public List<Location> findLocations(String locationSearch);
+}
+
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode) {
+        //Some Code
+    }
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch) {
+        //Some Code
+    }
 }
 }}}
 
