@@ -221,7 +221,7 @@
 <a name="211" href="#211">211</a> 
 <a name="212" href="#212">212</a>     @Override
 <a name="213" href="#213">213</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> shouldReflect(Object element) {
-<a name="214" href="#214">214</a>         <strong class="jxr_keyword">return</strong> !<strong class="jxr_keyword">this</strong>.implementsToString(element);
+<a name="214" href="#214">214</a>         <strong class="jxr_keyword">return</strong> !<strong class="jxr_keyword">this</strong>.getReflectionHelper().implementsToString(element);
 <a name="215" href="#215">215</a>     }
 <a name="216" href="#216">216</a>     
 <a name="217" href="#217">217</a> }

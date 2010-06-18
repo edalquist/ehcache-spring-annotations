@@ -70,7 +70,7 @@
 <a name="60" href="#60">60</a>      
 <a name="61" href="#61">61</a>      @Override
 <a name="62" href="#62">62</a>      <strong class="jxr_keyword">public</strong> ReadOnlyList&lt;?&gt; generateKey(<a href="../../../../../com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.html">ListKeyGenerator</a> generator) {
-<a name="63" href="#63">63</a>          <strong class="jxr_keyword">final</strong> ArrayList&lt;Object&gt; key = generator.keyStack.peekFirst();
+<a name="63" href="#63">63</a>          <strong class="jxr_keyword">final</strong> ArrayList&lt;Object&gt; key = generator.keyStack.getFirst();
 <a name="64" href="#64">64</a>          <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ReadOnlyList&lt;Object&gt;(key);
 <a name="65" href="#65">65</a>      }
 <a name="66" href="#66">66</a>      
@@ -96,7 +96,7 @@
 <a name="86" href="#86">86</a>          }
 <a name="87" href="#87">87</a>          
 <a name="88" href="#88">88</a>          <em class="jxr_comment">//Stick the new list on the stack</em>
-<a name="89" href="#89">89</a>          generator.keyStack.push(generator.current);
+<a name="89" href="#89">89</a>          generator.keyStack.addFirst(generator.current);
 <a name="90" href="#90">90</a>          
 <a name="91" href="#91">91</a>          <em class="jxr_comment">//If there was a previous list add the new list to it</em>
 <a name="92" href="#92">92</a>          <strong class="jxr_keyword">if</strong> (previous != <strong class="jxr_keyword">null</strong>) {
@@ -107,7 +107,7 @@
 <a name="97" href="#97">97</a>      @Override
 <a name="98" href="#98">98</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> endRecursion(<a href="../../../../../com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.html">ListKeyGenerator</a> generator, Object e) {
 <a name="99" href="#99">99</a>          <strong class="jxr_keyword">if</strong> (generator.keyStack.size() &gt; 1) {
-<a name="100" href="#100">100</a>             generator.keyStack.pop();
+<a name="100" href="#100">100</a>             generator.keyStack.removeFirst();
 <a name="101" href="#101">101</a>             generator.current = generator.keyStack.peek();
 <a name="102" href="#102">102</a>         }
 <a name="103" href="#103">103</a>     }

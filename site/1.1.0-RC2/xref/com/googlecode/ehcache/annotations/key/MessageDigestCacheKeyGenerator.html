@@ -37,7 +37,7 @@
 <a name="27" href="#27">27</a>  <em class="jxr_javadoccomment"> * @author Eric Dalquist</em>
 <a name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> * @version $Revision$</em>
 <a name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> */</em>
-<a name="30" href="#30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/ehcache/annotations/key/MessageDigestCacheKeyGenerator.html">MessageDigestCacheKeyGenerator</a> <strong class="jxr_keyword">extends</strong> AbstractDeepCacheKeyGenerator&lt;MessageDigestOutputStream, String&gt; {
+<a name="30" href="#30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/ehcache/annotations/key/MessageDigestCacheKeyGenerator.html">MessageDigestCacheKeyGenerator</a> <strong class="jxr_keyword">extends</strong> AbstractHashingCacheKeyGenerator&lt;MessageDigestOutputStream, String&gt; {
 <a name="31" href="#31">31</a>      <em class="jxr_javadoccomment">/**</em>
 <a name="32" href="#32">32</a>  <em class="jxr_javadoccomment">     * Name of the bean this generator is registered under using the default constructor.</em>
 <a name="33" href="#33">33</a>  <em class="jxr_javadoccomment">     */</em>
@@ -184,7 +184,7 @@
 <a name="174" href="#174">174</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> append(<a href="../../../../../com/googlecode/ehcache/annotations/key/MessageDigestOutputStream.html">MessageDigestOutputStream</a> generator, <strong class="jxr_keyword">short</strong>[] a) {
 <a name="175" href="#175">175</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">short</strong> element : a) {
 <a name="176" href="#176">176</a>             generator.writeShort(element);
-<a name="177" href="#177">177</a>         }        
+<a name="177" href="#177">177</a>         }
 <a name="178" href="#178">178</a>     }
 <a name="179" href="#179">179</a> 
 <a name="180" href="#180">180</a>     @Override
@@ -198,51 +198,39 @@
 <a name="188" href="#188">188</a>     }
 <a name="189" href="#189">189</a> 
 <a name="190" href="#190">190</a>     @Override
-<a name="191" href="#191">191</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> shouldReflect(Object element) {
-<a name="192" href="#192">192</a>         <strong class="jxr_keyword">return</strong> !<strong class="jxr_keyword">super</strong>.implementsHashCode(element);
-<a name="193" href="#193">193</a>     }
-<a name="194" href="#194">194</a> 
-<a name="195" href="#195">195</a>     @Override
-<a name="196" href="#196">196</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> append(<a href="../../../../../com/googlecode/ehcache/annotations/key/MessageDigestOutputStream.html">MessageDigestOutputStream</a> generator, Object e) {
-<a name="197" href="#197">197</a>         <strong class="jxr_keyword">if</strong> (e instanceof Class&lt;?&gt;) {
-<a name="198" href="#198">198</a>             <strong class="jxr_keyword">this</strong>.append(generator, ((Class&lt;?&gt;)e).getName());
-<a name="199" href="#199">199</a>         }
-<a name="200" href="#200">200</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Enum&lt;?&gt;) {
-<a name="201" href="#201">201</a>             <strong class="jxr_keyword">this</strong>.append(generator, ((Enum&lt;?&gt;)e).getClass().getName());
-<a name="202" href="#202">202</a>             <strong class="jxr_keyword">this</strong>.append(generator, ((Enum&lt;?&gt;)e).name());
+<a name="191" href="#191">191</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> appendHash(<a href="../../../../../com/googlecode/ehcache/annotations/key/MessageDigestOutputStream.html">MessageDigestOutputStream</a> generator, Object e) {
+<a name="192" href="#192">192</a>         <strong class="jxr_keyword">if</strong> (e instanceof String) {
+<a name="193" href="#193">193</a>             generator.writeUTF((String)e);
+<a name="194" href="#194">194</a>         }
+<a name="195" href="#195">195</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Boolean) {
+<a name="196" href="#196">196</a>             generator.writeBoolean((Boolean)e);
+<a name="197" href="#197">197</a>         }
+<a name="198" href="#198">198</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Byte) {
+<a name="199" href="#199">199</a>             generator.writeByte((Byte)e);
+<a name="200" href="#200">200</a>         }
+<a name="201" href="#201">201</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Character) {
+<a name="202" href="#202">202</a>             generator.writeChar((Character)e);
 <a name="203" href="#203">203</a>         }
-<a name="204" href="#204">204</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof String) {
-<a name="205" href="#205">205</a>             generator.writeUTF((String)e);
+<a name="204" href="#204">204</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Double) {
+<a name="205" href="#205">205</a>             generator.writeDouble((Double)e);
 <a name="206" href="#206">206</a>         }
-<a name="207" href="#207">207</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Boolean) {
-<a name="208" href="#208">208</a>             generator.writeBoolean((Boolean)e);
+<a name="207" href="#207">207</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Float) {
+<a name="208" href="#208">208</a>             generator.writeFloat((Float)e);
 <a name="209" href="#209">209</a>         }
-<a name="210" href="#210">210</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Byte) {
-<a name="211" href="#211">211</a>             generator.writeByte((Byte)e);
+<a name="210" href="#210">210</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Integer) {
+<a name="211" href="#211">211</a>             generator.writeInt((Integer)e);
 <a name="212" href="#212">212</a>         }
-<a name="213" href="#213">213</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Character) {
-<a name="214" href="#214">214</a>             generator.writeChar((Character)e);
+<a name="213" href="#213">213</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Long) {
+<a name="214" href="#214">214</a>             generator.writeLong((Long)e);
 <a name="215" href="#215">215</a>         }
-<a name="216" href="#216">216</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Double) {
-<a name="217" href="#217">217</a>             generator.writeDouble((Double)e);
+<a name="216" href="#216">216</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Short) {
+<a name="217" href="#217">217</a>             generator.writeShort((Short)e);
 <a name="218" href="#218">218</a>         }
-<a name="219" href="#219">219</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Float) {
-<a name="220" href="#220">220</a>             generator.writeFloat((Float)e);
+<a name="219" href="#219">219</a>         <strong class="jxr_keyword">else</strong> {        
+<a name="220" href="#220">220</a>             generator.writeInt(e.hashCode());
 <a name="221" href="#221">221</a>         }
-<a name="222" href="#222">222</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Integer) {
-<a name="223" href="#223">223</a>             generator.writeInt((Integer)e);
-<a name="224" href="#224">224</a>         }
-<a name="225" href="#225">225</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Long) {
-<a name="226" href="#226">226</a>             generator.writeLong((Long)e);
-<a name="227" href="#227">227</a>         }
-<a name="228" href="#228">228</a>         <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (e instanceof Short) {
-<a name="229" href="#229">229</a>             generator.writeShort((Short)e);
-<a name="230" href="#230">230</a>         }
-<a name="231" href="#231">231</a>         <strong class="jxr_keyword">else</strong> {        
-<a name="232" href="#232">232</a>             generator.writeInt(e.hashCode());
-<a name="233" href="#233">233</a>         }
-<a name="234" href="#234">234</a>     }
-<a name="235" href="#235">235</a> }
+<a name="222" href="#222">222</a>     }
+<a name="223" href="#223">223</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

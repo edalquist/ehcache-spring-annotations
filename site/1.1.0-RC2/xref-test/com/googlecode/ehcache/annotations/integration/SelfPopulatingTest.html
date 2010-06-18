@@ -40,7 +40,7 @@
 <a name="30" href="#30">30</a>  
 <a name="31" href="#31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a name="32" href="#32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a name="33" href="#33">33</a>  <em class="jxr_javadoccomment"> * @author Nicholas Blair, nblair@doit.wisc.edu</em>
+<a name="33" href="#33">33</a>  <em class="jxr_javadoccomment"> * @author Nicholas Blair</em>
 <a name="34" href="#34">34</a>  <em class="jxr_javadoccomment"> * @version $Id$</em>
 <a name="35" href="#35">35</a>  <em class="jxr_javadoccomment"> */</em>
 <a name="36" href="#36">36</a>  @RunWith(SpringJUnit4ClassRunner.<strong class="jxr_keyword">class</strong>)
@@ -149,7 +149,7 @@
 <a name="139" href="#139">139</a> 		
 <a name="140" href="#140">140</a>         threadGroup.start();
 <a name="141" href="#141">141</a>         
-<a name="142" href="#142">142</a>         <em class="jxr_comment">// wait for both threads to get going</em>
+<a name="142" href="#142">142</a>         <em class="jxr_comment">// wait for all threads to get going</em>
 <a name="143" href="#143">143</a>         threadRunningLatch.await();
 <a name="144" href="#144">144</a>         Thread.sleep(100);
 <a name="145" href="#145">145</a>         
