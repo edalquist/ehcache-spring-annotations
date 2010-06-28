@@ -40,7 +40,7 @@
 <a name="30" href="#30">30</a>  
 <a name="31" href="#31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a name="32" href="#32">32</a>  <em class="jxr_javadoccomment"> *</em>
-<a name="33" href="#33">33</a>  <em class="jxr_javadoccomment"> * @author Nicholas Blair, nblair@doit.wisc.edu</em>
+<a name="33" href="#33">33</a>  <em class="jxr_javadoccomment"> * @author Nicholas Blair</em>
 <a name="34" href="#34">34</a>  <em class="jxr_javadoccomment"> * @version $Id$</em>
 <a name="35" href="#35">35</a>  <em class="jxr_javadoccomment"> */</em>
 <a name="36" href="#36">36</a>  @RunWith(SpringJUnit4ClassRunner.<strong class="jxr_keyword">class</strong>)
@@ -149,60 +149,59 @@
 <a name="139" href="#139">139</a> 		
 <a name="140" href="#140">140</a>         threadGroup.start();
 <a name="141" href="#141">141</a>         
-<a name="142" href="#142">142</a>         <em class="jxr_comment">// wait for both threads to get going</em>
+<a name="142" href="#142">142</a>         <em class="jxr_comment">// wait for all threads to get going</em>
 <a name="143" href="#143">143</a>         threadRunningLatch.await();
-<a name="144" href="#144">144</a>         
-<a name="145" href="#145">145</a>         <em class="jxr_comment">//TODO is a sleep needed here? The Latch doesn't guarantee that the second thread is actually waiting within the self populating ehcache decorator</em>
-<a name="146" href="#146">146</a>         
-<a name="147" href="#147">147</a>         <em class="jxr_comment">// Let both threads complete</em>
-<a name="148" href="#148">148</a>         proccedLatch.countDown();
-<a name="149" href="#149">149</a>         
-<a name="150" href="#150">150</a>         threadGroup.join();
-<a name="151" href="#151">151</a> 		
-<a name="152" href="#152">152</a> 		<em class="jxr_comment">// verify only 1 call between method A and method B</em>
-<a name="153" href="#153">153</a> 		Assert.assertEquals(1, <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.getBlockingAInvocationCount() + <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.getBlockingBInvocationCount());
-<a name="154" href="#154">154</a> 	}
-<a name="155" href="#155">155</a> 
-<a name="156" href="#156">156</a> 	
-<a name="157" href="#157">157</a>     @Test
-<a name="158" href="#158">158</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testExceptionCaching() {
-<a name="159" href="#159">159</a>         <strong class="jxr_keyword">final</strong> CountDownLatch threadRunningLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(0);
-<a name="160" href="#160">160</a>         <strong class="jxr_keyword">final</strong> CountDownLatch proccedLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(0);
-<a name="161" href="#161">161</a>         <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.setThreadRunningLatch(threadRunningLatch);
-<a name="162" href="#162">162</a>         <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.setProccedLatch(proccedLatch);
-<a name="163" href="#163">163</a> 
-<a name="164" href="#164">164</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
-<a name="165" href="#165">165</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
-<a name="166" href="#166">166</a>         
-<a name="167" href="#167">167</a>         Assert.assertEquals(<span class="jxr_string">"interfaceAnnotatedExceptionCached(false)"</span>, selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(false));
-<a name="168" href="#168">168</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
-<a name="169" href="#169">169</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
-<a name="170" href="#170">170</a>         
-<a name="171" href="#171">171</a>         Assert.assertEquals(<span class="jxr_string">"interfaceAnnotatedExceptionCached(false)"</span>, selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(false));
-<a name="172" href="#172">172</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
-<a name="173" href="#173">173</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
-<a name="174" href="#174">174</a>         
-<a name="175" href="#175">175</a>         <strong class="jxr_keyword">try</strong> {
-<a name="176" href="#176">176</a>             selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(<strong class="jxr_keyword">true</strong>);
-<a name="177" href="#177">177</a>             Assert.fail(<span class="jxr_string">"interfaceAnnotatedExceptionCached(true) should have thrown an exception"</span>);
-<a name="178" href="#178">178</a>         }
-<a name="179" href="#179">179</a>         <strong class="jxr_keyword">catch</strong> (RuntimeException re) {
-<a name="180" href="#180">180</a>             Assert.assertEquals(<span class="jxr_string">"throwsException was true"</span>, re.getMessage());
-<a name="181" href="#181">181</a>         }
-<a name="182" href="#182">182</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
-<a name="183" href="#183">183</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
-<a name="184" href="#184">184</a>         
-<a name="185" href="#185">185</a>         <strong class="jxr_keyword">try</strong> {
-<a name="186" href="#186">186</a>             selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(<strong class="jxr_keyword">true</strong>);
-<a name="187" href="#187">187</a>             Assert.fail(<span class="jxr_string">"interfaceAnnotatedExceptionCached(true) should have thrown an exception"</span>);
-<a name="188" href="#188">188</a>         }
-<a name="189" href="#189">189</a>         <strong class="jxr_keyword">catch</strong> (RuntimeException re) {
-<a name="190" href="#190">190</a>             Assert.assertEquals(<span class="jxr_string">"throwsException was true"</span>, re.getMessage());
-<a name="191" href="#191">191</a>         }
-<a name="192" href="#192">192</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
-<a name="193" href="#193">193</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
-<a name="194" href="#194">194</a>     }
-<a name="195" href="#195">195</a> }
+<a name="144" href="#144">144</a>         Thread.sleep(100);
+<a name="145" href="#145">145</a>         
+<a name="146" href="#146">146</a>         <em class="jxr_comment">// Let both threads complete</em>
+<a name="147" href="#147">147</a>         proccedLatch.countDown();
+<a name="148" href="#148">148</a>         
+<a name="149" href="#149">149</a>         threadGroup.join();
+<a name="150" href="#150">150</a> 		
+<a name="151" href="#151">151</a> 		<em class="jxr_comment">// verify only 1 call between method A and method B</em>
+<a name="152" href="#152">152</a> 		Assert.assertEquals(1, <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.getBlockingAInvocationCount() + <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.getBlockingBInvocationCount());
+<a name="153" href="#153">153</a> 	}
+<a name="154" href="#154">154</a> 
+<a name="155" href="#155">155</a> 	
+<a name="156" href="#156">156</a>     @Test
+<a name="157" href="#157">157</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testExceptionCaching() {
+<a name="158" href="#158">158</a>         <strong class="jxr_keyword">final</strong> CountDownLatch threadRunningLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(0);
+<a name="159" href="#159">159</a>         <strong class="jxr_keyword">final</strong> CountDownLatch proccedLatch = <strong class="jxr_keyword">new</strong> CountDownLatch(0);
+<a name="160" href="#160">160</a>         <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.setThreadRunningLatch(threadRunningLatch);
+<a name="161" href="#161">161</a>         <strong class="jxr_keyword">this</strong>.selfPopulatingTestInterface.setProccedLatch(proccedLatch);
+<a name="162" href="#162">162</a> 
+<a name="163" href="#163">163</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
+<a name="164" href="#164">164</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
+<a name="165" href="#165">165</a>         
+<a name="166" href="#166">166</a>         Assert.assertEquals(<span class="jxr_string">"interfaceAnnotatedExceptionCached(false)"</span>, selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(false));
+<a name="167" href="#167">167</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
+<a name="168" href="#168">168</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
+<a name="169" href="#169">169</a>         
+<a name="170" href="#170">170</a>         Assert.assertEquals(<span class="jxr_string">"interfaceAnnotatedExceptionCached(false)"</span>, selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(false));
+<a name="171" href="#171">171</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
+<a name="172" href="#172">172</a>         Assert.assertEquals(0, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
+<a name="173" href="#173">173</a>         
+<a name="174" href="#174">174</a>         <strong class="jxr_keyword">try</strong> {
+<a name="175" href="#175">175</a>             selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(<strong class="jxr_keyword">true</strong>);
+<a name="176" href="#176">176</a>             Assert.fail(<span class="jxr_string">"interfaceAnnotatedExceptionCached(true) should have thrown an exception"</span>);
+<a name="177" href="#177">177</a>         }
+<a name="178" href="#178">178</a>         <strong class="jxr_keyword">catch</strong> (RuntimeException re) {
+<a name="179" href="#179">179</a>             Assert.assertEquals(<span class="jxr_string">"throwsException was true"</span>, re.getMessage());
+<a name="180" href="#180">180</a>         }
+<a name="181" href="#181">181</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
+<a name="182" href="#182">182</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
+<a name="183" href="#183">183</a>         
+<a name="184" href="#184">184</a>         <strong class="jxr_keyword">try</strong> {
+<a name="185" href="#185">185</a>             selfPopulatingTestInterface.interfaceAnnotatedExceptionCached(<strong class="jxr_keyword">true</strong>);
+<a name="186" href="#186">186</a>             Assert.fail(<span class="jxr_string">"interfaceAnnotatedExceptionCached(true) should have thrown an exception"</span>);
+<a name="187" href="#187">187</a>         }
+<a name="188" href="#188">188</a>         <strong class="jxr_keyword">catch</strong> (RuntimeException re) {
+<a name="189" href="#189">189</a>             Assert.assertEquals(<span class="jxr_string">"throwsException was true"</span>, re.getMessage());
+<a name="190" href="#190">190</a>         }
+<a name="191" href="#191">191</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedCount());
+<a name="192" href="#192">192</a>         Assert.assertEquals(1, selfPopulatingTestInterface.interfaceAnnotatedExceptionCachedThrowsCount());
+<a name="193" href="#193">193</a>     }
+<a name="194" href="#194">194</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

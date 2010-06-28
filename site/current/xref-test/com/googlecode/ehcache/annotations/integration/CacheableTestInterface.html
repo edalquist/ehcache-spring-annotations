@@ -28,35 +28,43 @@
 <a name="18" href="#18">18</a>  
 <a name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.TimeUnit;
 <a name="20" href="#20">20</a>  
-<a name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.Cacheable;
+<a name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> net.sf.ehcache.CacheManager;
 <a name="22" href="#22">22</a>  
-<a name="23" href="#23">23</a>  <em class="jxr_javadoccomment">/**</em>
-<a name="24" href="#24">24</a>  <em class="jxr_javadoccomment"> * @author Eric Dalquist</em>
-<a name="25" href="#25">25</a>  <em class="jxr_javadoccomment"> * @version $Revision$</em>
-<a name="26" href="#26">26</a>  <em class="jxr_javadoccomment"> */</em>
-<a name="27" href="#27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../com/googlecode/ehcache/annotations/integration/CacheableTestInterface.html">CacheableTestInterface</a> {
-<a name="28" href="#28">28</a>      
-<a name="29" href="#29">29</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedCache"</span>, exceptionCacheName=<span class="jxr_string">"interfaceAnnotatedExceptionCache"</span>)
-<a name="30" href="#30">30</a>      <strong class="jxr_keyword">public</strong> String interfaceAnnotatedExceptionCached(<strong class="jxr_keyword">boolean</strong> throwsException);
-<a name="31" href="#31">31</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedExceptionCachedCount();
-<a name="32" href="#32">32</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedExceptionCachedThrowsCount();
-<a name="33" href="#33">33</a>      
-<a name="34" href="#34">34</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedCached"</span>)
-<a name="35" href="#35">35</a>      <strong class="jxr_keyword">public</strong> String interfaceAnnotatedCached(<strong class="jxr_keyword">int</strong> argument);
-<a name="36" href="#36">36</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedCachedCount();
-<a name="37" href="#37">37</a>      
-<a name="38" href="#38">38</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedNoArgCached"</span>)
-<a name="39" href="#39">39</a>      <strong class="jxr_keyword">public</strong> String interfaceAnnotatedNoArgCached();
-<a name="40" href="#40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedNoArgCachedCount();
-<a name="41" href="#41">41</a>      
-<a name="42" href="#42">42</a>      <strong class="jxr_keyword">public</strong> String interfaceDefined(String argument);
-<a name="43" href="#43">43</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceDefinedCount();
-<a name="44" href="#44">44</a>      
-<a name="45" href="#45">45</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedEnumArgCached"</span>)
-<a name="46" href="#46">46</a>      <strong class="jxr_keyword">public</strong> String enumParameter(TimeUnit timeUnit);
-<a name="47" href="#47">47</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> enumParameterCount();
-<a name="48" href="#48">48</a>      
-<a name="49" href="#49">49</a>  }
+<a name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.Cacheable;
+<a name="24" href="#24">24</a>  
+<a name="25" href="#25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a name="26" href="#26">26</a>  <em class="jxr_javadoccomment"> * @author Eric Dalquist</em>
+<a name="27" href="#27">27</a>  <em class="jxr_javadoccomment"> * @version $Revision$</em>
+<a name="28" href="#28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a name="29" href="#29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a href="../../../../../com/googlecode/ehcache/annotations/integration/CacheableTestInterface.html">CacheableTestInterface</a> {
+<a name="30" href="#30">30</a>      
+<a name="31" href="#31">31</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedCache"</span>, exceptionCacheName=<span class="jxr_string">"interfaceAnnotatedExceptionCache"</span>)
+<a name="32" href="#32">32</a>      <strong class="jxr_keyword">public</strong> String interfaceAnnotatedExceptionCached(<strong class="jxr_keyword">boolean</strong> throwsException);
+<a name="33" href="#33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedExceptionCachedCount();
+<a name="34" href="#34">34</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedExceptionCachedThrowsCount();
+<a name="35" href="#35">35</a>      
+<a name="36" href="#36">36</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedCached"</span>)
+<a name="37" href="#37">37</a>      <strong class="jxr_keyword">public</strong> String interfaceAnnotatedCached(<strong class="jxr_keyword">int</strong> argument);
+<a name="38" href="#38">38</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedCachedCount();
+<a name="39" href="#39">39</a>      
+<a name="40" href="#40">40</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedNoArgCached"</span>)
+<a name="41" href="#41">41</a>      <strong class="jxr_keyword">public</strong> String interfaceAnnotatedNoArgCached();
+<a name="42" href="#42">42</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceAnnotatedNoArgCachedCount();
+<a name="43" href="#43">43</a>      
+<a name="44" href="#44">44</a>      <strong class="jxr_keyword">public</strong> String interfaceDefined(String argument);
+<a name="45" href="#45">45</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> interfaceDefinedCount();
+<a name="46" href="#46">46</a>      
+<a name="47" href="#47">47</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedEnumArgCached"</span>)
+<a name="48" href="#48">48</a>      <strong class="jxr_keyword">public</strong> String enumParameter(TimeUnit timeUnit);
+<a name="49" href="#49">49</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> enumParameterCount();
+<a name="50" href="#50">50</a>      
+<a name="51" href="#51">51</a>      @Cacheable(cacheName=<span class="jxr_string">"interfaceAnnotatedArrayReturn"</span>)
+<a name="52" href="#52">52</a>      <strong class="jxr_keyword">public</strong> String[] arrayReturn(String a, String b);
+<a name="53" href="#53">53</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> arrayReturnCount();
+<a name="54" href="#54">54</a>      
+<a name="55" href="#55">55</a>      <strong class="jxr_keyword">public</strong> CacheManager getCacheManager();
+<a name="56" href="#56">56</a>      <strong class="jxr_keyword">public</strong> CacheManager getCacheManagerField();
+<a name="57" href="#57">57</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
