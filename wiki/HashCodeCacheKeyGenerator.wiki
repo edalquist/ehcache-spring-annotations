@@ -2,7 +2,6 @@
 #sidebar TableOfContents
 
 || *!JavaDoc* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/HashCodeCacheKeyGenerator.html HashCodeCacheKeyGenerator] ||
-|| *Default Bean Name* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/HashCodeCacheKeyGenerator.html#DEFAULT_BEAN_NAME HashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME] ||
 
 Generates a simple 64bit hash code based on the method arguments. The hash code generation algorithm is very close to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode]. The only major differences being the use of a long instead of an int and that Collections and Maps are recursed on the same way deepHashCode recurses on arrays.
 
