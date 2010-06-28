@@ -4,14 +4,13 @@
 
 = Introduction =
 
-Every method invocation advised by @Cacheable or @!TriggersRemove has to have a key generated for use when access the corresponding cache. The [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] interface defines the API for generating these keys.
+Every method invocation advised by [UsingCacheable @Cacheable] or [CacheableTriggersRemove @TriggersRemove] has to have a key generated for use when accessing the corresponding cache. The [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] interface defines the API for generating these keys.
 
 = Provided Cache Key Generators =
-||*HashCodeCacheKeyGenerator*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] ||
-||*StringCacheKeyGenerator*|| A nice human readable key generator. Simply uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
+||*HashCodeCacheKeyGenerator*|| The default key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepHashCode(java.lang.Object%5B%5D) Arrays.deepHashCode] except generates 64 bit keys instead of 32 bit ||
+||*StringCacheKeyGenerator*|| A nice human readable key generator. Very similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] ||
 ||*ListCacheKeyGenerator*|| Does a deep inspection converting arrays to Lists and returning an immutable List of the key arguments. Useful if complete assurance is required when doing key comparisons ||
-||*MessageDigestCacheKeyGenerator*|| Does the same object graph traversal that HashCodeCacheKeyGenerator does but instead of accumulating the hash code in a long a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] is used to provide a secure hash with a significantly larger key space. ||
-||*ReflectionHashCodeCacheKeyGenerator*|| Does the same object graph traversal than HashCodeCacheKeyGenerator does but uses reflection to generate a hash code for objects that don't implement hashCode ||
+||*MessageDigestCacheKeyGenerator*|| Similar to HashCodeCacheKeyGenerator does but generates the key using a [http://java.sun.com/j2se/1.5.0/docs/api/java/security/MessageDigest.html MessageDigest] which can provide a cryptographically secure hash code with a much larger key space. ||
 
 = Key Consistency =
 All of the included cache key generators will generate keys that are consistent between JVM executions and safe for distribution between JVMs in a distributed/clustered caching environment. The exception to this is if the method arguments don't fulfill the contract of the !CacheKeyGenerator being used as many require correct implementation of hashCode, equals, and/or toString. 
