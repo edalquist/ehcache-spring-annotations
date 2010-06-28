@@ -16,7 +16,7 @@ Every method invocation advised by [UsingCacheable @Cacheable] or [CacheableTrig
 All of the included cache key generators will generate keys that are consistent between JVM executions and safe for distribution between JVMs in a distributed/clustered caching environment. The exception to this is if the method arguments don't fulfill the contract of the !CacheKeyGenerator being used as many require correct implementation of hashCode, equals, and/or toString. 
 
 = Common !CacheKeyGenerator Configuration =
-All of the included [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] implementations extend [http://ehcache-spring-annotations.googlecode.com/svn/site/1.0.0/apidocs/com/googlecode/ehcache/annotations/key/AbstractCacheKeyGenerator.html AbstractCacheKeyGenerator] which provides the following common configuration options.
+All of the included [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/CacheKeyGenerator.html CacheKeyGenerator] implementations extend [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/AbstractDeepCacheKeyGenerator.html AbstractDeepCacheKeyGenerator] which provides the following common configuration options.
 
 ==== Check for Cycles ====
 Default *false*: If true the key generator will track visited objects during recursion and if a cycle is detected handle it correctly. If false the exact behavior is undefined but many of the key generators will fail with StackOverflowError due to infinite recursion.
@@ -45,12 +45,20 @@ public Weather getWeather(String zipCode);
 
 Even with *Include Method* true if both of these methods are called with `null` as the parameter the same cache key would be generated. By setting *Include Parameter Types* to true the parameter types will be included in the key and the collision will be avoided.
 
-= Performance =
-Included in the unit tests for the project is the `CacheKeyGeneratorPerformanceTest`. This does some very simple synthetic benchmarking of the included !CacheKeyGenerators. The following results are from running this test on a 2.6GHz Core 2 Duo machine. While the actual key generation rates will vary based on hardware and configurations the ratios between the various key generators should be a good guide for any system.
+==== Use Reflection ====
+Default *false*: If true reflection is used on objects that don't directly implement the identity method(s) required by the generator. For example HashCodeCacheKeyGenerator and MessageDigestCacheKeyGenerator both require objects implement hashCode to function correctly while StringCacheKeyGenerator requires toString be implemented. The reflection algorithm recurses on every non-transient member field applying the key generation algorithm to each.
 
-|| *Cache Key Generator* || *Keys/ms* || *% Increase* ||
-|| HashCodeCacheKeyGenerator || 4035.06 || 106.82% ||
-|| ListCacheKeyGenerator || 1951.05 || 60.90% ||
-|| StringCacheKeyGenerator || 1212.56 || 111.72% ||
-|| MessageDigestCacheKeyGenerator (MD5) || 572.73 || 1570.84% ||
-|| ReflectionHashCodeCacheKeyGenerator || 34.28 || ||
+This option is useful if a method invocation has arguments from an external library that do not implement hashCode, equals or toString. Using reflection results in a 50% decrease in key generation speed and should only be used when there is no other option. It is good practice to always implement hashCode, equals and toString.
+
+= Performance =
+Included in the unit tests for the project is the `CacheKeyGeneratorPerformanceTest`. This does some very simple synthetic benchmarking of the included !CacheKeyGenerators. The following ratios between key generation speed should be fairly consistent across hardware configurations. HashCodeCacheKeyGenerator is being used as the reference for the speed comparisons
+
+|| *Cache Key Generator* || *% Decrease* ||
+|| HashCodeCacheKeyGenerator ||  ||
+|| ListCacheKeyGenerator || 59.88% ||
+|| StringCacheKeyGenerator || 74.10% ||
+|| MessageDigestCacheKeyGenerator (MD5) || 89.00% ||
+
+Also the specific options used for key generation can have a significant effect on performance. All options disables is being used as the reference for this table.
+
+|| Include Method || Include Parameter Types || Use Reflection || *% Decrease* ||
