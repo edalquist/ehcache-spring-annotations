@@ -2,7 +2,6 @@
 #sidebar TableOfContents
 
 || *!JavaDoc* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.html ListCacheKeyGenerator] ||
-|| *Default Bean Name* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.html#DEFAULT_BEAN_NAME ListCacheKeyGenerator.DEFAULT_BEAN_NAME] ||
 
 Does a deep inspection converting arrays to Lists and returning an immutable, Serializable, List of the arguments as the key. Useful if complete equality assurance is required when doing key comparisons as the original arguments are used for every key comparison.
 
@@ -17,6 +16,8 @@ For use of the disk store or clustering options in EhCache all arguments must be
  * The hashCode result is cached by the immutable List that is returned.
  * The argument values must not change in a way that affects their hashCode or equals operations. If they change the cached value will likely be 'lost' in the cache.
  * Keys generated should be consistent across JVM restarts or between JVM instances as long as all objects used as method arguments implement toString such that the object's identity is included.
+ * If the *useReflection* property is set objects that don't implement hashCode or equals are reflected on. 
+
 
 === Example Key ===
 The key following example call with the default options:
@@ -28,7 +29,7 @@ dao.getWeather("49931");
 Example dao:
 {{{
 class WeatherDao {
-    @Cacheable(cacheName="weatherCache", keyGeneratorName=ListCacheKeyGenerator.DEFAULT_BEAN_NAME)
+    @Cacheable(cacheName="weatherCache", @KeyGenerator(name="ListCacheKeyGenerator"))
     Weather getWeather(String zip) {
         ...
     }
