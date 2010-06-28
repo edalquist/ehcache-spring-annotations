@@ -6,5 +6,4 @@
     * [StringCacheKeyGenerator]
     * [ListCacheKeyGenerator]
     * [MessageDigestCacheKeyGenerator]
-    * [ReflectionHashCodeCacheKeyGenerator]
   * [FrequentlyAskedQuestions Frequently Asked Questions]
