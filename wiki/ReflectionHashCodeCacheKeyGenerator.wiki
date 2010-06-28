@@ -1,6 +1,9 @@
 #summary Uses reflection for arguments that don't implement hashCode
 #sidebar TableOfContents
 
+=DEPRECATED=
+!ReflectionHashCodeCacheKeyGenerator is deprecated as of 1.1.0. All key generators support reflection in 1.1.0
+
 || *!JavaDoc* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/ReflectionHashCodeCacheKeyGenerator.html ReflectionHashCodeCacheKeyGenerator] ||
 || *Default Bean Name* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/ReflectionHashCodeCacheKeyGenerator.html#DEFAULT_BEAN_NAME ReflectionHashCodeCacheKeyGenerator.DEFAULT_BEAN_NAME] ||
 
