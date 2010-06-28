@@ -18,6 +18,6 @@ interface MyDao {
 }}}
 
 Technically no, however we strongly recommend that you do.
-If you do not wish to implement `hashCode` on beans like `MyBean`, you will need to enable the *useReflection* property on the CacheKeyGenerator you're using. Enabling *useReflection* uses reflection to generate a key from from the fields in your class. Enabling *useReflection* drops key generation performance by 50%.
+If you do not wish to implement `hashCode` on beans like `MyBean`, you will need to enable the *useReflection* property on the [CacheKeyGenerators CacheKeyGenerator] you're using. Enabling *useReflection* uses reflection to generate a key from from the fields in your class. Enabling *useReflection* drops key generation performance by 50%.
 
 *Many IDEs have the capability to automatically generate proper equals(), hashCode() and toString() implementations for your Java beans, we strongly recommend using this feature.*
