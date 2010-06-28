@@ -61,4 +61,7 @@ Included in the unit tests for the project is the `CacheKeyGeneratorPerformanceT
 
 Also the specific options used for key generation can have a significant effect on performance. All options disables is being used as the reference for this table.
 
-|| Include Method || Include Parameter Types || Use Reflection || *% Decrease* ||
+|| *Include Method* || *Include Parameter Types* || *Use Reflection* || *% Decrease* ||
+|| No || No || No || ||
+|| Yes || Yes || No || 64.91% ||
+|| Yes || Yes || Yes || 151.29% ||
