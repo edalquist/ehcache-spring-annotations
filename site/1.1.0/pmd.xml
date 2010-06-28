@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.2" timestamp="2010-06-18T13:23:24.330">
-<file name="/home/edalquist/JavaClasses/workspace/ehcache-spring-annotations/target/checkout/src/main/java/com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.java">
+<pmd version="4.2.2" timestamp="2010-06-28T16:40:19.247">
+<file name="/Users/edalquist/tmp/ehcache-spring-annotations-1.1.0/src/main/java/com/googlecode/ehcache/annotations/key/ListCacheKeyGenerator.java">
 <violation beginline="36" endline="36" begincolumn="53" endcolumn="60" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.ehcache.annotations.key" class="ListCacheKeyGenerator$ListKeyGenerator" variable="keyStack" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'keyStack'.
 </violation>
 </file>
-<file name="/home/edalquist/JavaClasses/workspace/ehcache-spring-annotations/target/checkout/src/main/java/com/googlecode/ehcache/annotations/key/MessageDigestOutputStream.java">
+<file name="/Users/edalquist/tmp/ehcache-spring-annotations-1.1.0/src/main/java/com/googlecode/ehcache/annotations/key/MessageDigestOutputStream.java">
 <violation beginline="48" endline="50" begincolumn="9" endcolumn="9" rule="EmptyCatchBlock" ruleset="Basic Rules" package="com.googlecode.ehcache.annotations.key" class="MessageDigestOutputStream" method="writeBoolean" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -34,12 +34,12 @@ Avoid empty catch blocks
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/home/edalquist/JavaClasses/workspace/ehcache-spring-annotations/target/checkout/src/main/java/com/googlecode/ehcache/annotations/key/StringCacheKeyGenerator.java">
+<file name="/Users/edalquist/tmp/ehcache-spring-annotations-1.1.0/src/main/java/com/googlecode/ehcache/annotations/key/StringCacheKeyGenerator.java">
 <violation beginline="44" endline="44" begincolumn="37" endcolumn="43" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="com.googlecode.ehcache.annotations.key" class="StringCacheKeyGenerator$StringGenerator" variable="builder" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'builder'.
 </violation>
 </file>
-<file name="/home/edalquist/JavaClasses/workspace/ehcache-spring-annotations/target/checkout/src/main/java/com/googlecode/ehcache/annotations/util/guice/ReferenceMap.java">
+<file name="/Users/edalquist/tmp/ehcache-spring-annotations-1.1.0/src/main/java/com/googlecode/ehcache/annotations/util/guice/ReferenceMap.java">
 <violation beginline="406" endline="408" begincolumn="12" endcolumn="5" rule="UselessOverridingMethod" ruleset="Basic Rules" package="com.googlecode.ehcache.annotations.util.guice" class="ReferenceMap$KeyReferenceAwareWrapper" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#UselessOverridingMethod" priority="3">
 Overriding method merely calls super
 </violation>

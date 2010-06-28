@@ -26,12 +26,12 @@
 <a name="16" href="#16">16</a>  
 <a name="17" href="#17">17</a>  <strong class="jxr_keyword">package</strong> com.googlecode.ehcache.annotations.key;
 <a name="18" href="#18">18</a>  
-<a name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
-<a name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> java.util.Date;
-<a name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> java.util.List;
-<a name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.TimeUnit;
-<a name="23" href="#23">23</a>  
-<a name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> junit.framework.Assert;
+<a name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertEquals;
+<a name="20" href="#20">20</a>  
+<a name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> java.util.Date;
+<a name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.TimeUnit;
 <a name="25" href="#25">25</a>  
 <a name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> org.aopalliance.intercept.MethodInvocation;
 <a name="27" href="#27">27</a>  
@@ -51,8 +51,8 @@
 <a name="41" href="#41">41</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> verifyClassHashCode(MethodInvocation invocation, ReadOnlyList&lt;?&gt; key) {
 <a name="42" href="#42">42</a>          <strong class="jxr_keyword">final</strong> List&lt;?&gt; expected = Arrays.asList(Integer.<strong class="jxr_keyword">class</strong>);
 <a name="43" href="#43">43</a>          
-<a name="44" href="#44">44</a>          Assert.assertEquals(expected, key);
-<a name="45" href="#45">45</a>          Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="44" href="#44">44</a>          assertEquals(expected, key);
+<a name="45" href="#45">45</a>          assertEquals(expected.hashCode(), key.hashCode());
 <a name="46" href="#46">46</a>      }
 <a name="47" href="#47">47</a>  
 <a name="48" href="#48">48</a>      @Override
@@ -63,8 +63,8 @@
 <a name="53" href="#53">53</a>                      <span class="jxr_string">"argString"</span>)
 <a name="54" href="#54">54</a>                  );
 <a name="55" href="#55">55</a>          
-<a name="56" href="#56">56</a>          Assert.assertEquals(expected, key);        
-<a name="57" href="#57">57</a>          Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="56" href="#56">56</a>          assertEquals(expected, key);        
+<a name="57" href="#57">57</a>          assertEquals(expected.hashCode(), key.hashCode());
 <a name="58" href="#58">58</a>      }
 <a name="59" href="#59">59</a>  
 <a name="60" href="#60">60</a>      @Override
@@ -77,8 +77,8 @@
 <a name="67" href="#67">67</a>                      <span class="jxr_string">"argString"</span>)
 <a name="68" href="#68">68</a>                  );
 <a name="69" href="#69">69</a>           
-<a name="70" href="#70">70</a>          Assert.assertEquals(expected, key); 
-<a name="71" href="#71">71</a>          Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="70" href="#70">70</a>          assertEquals(expected, key); 
+<a name="71" href="#71">71</a>          assertEquals(expected.hashCode(), key.hashCode());
 <a name="72" href="#72">72</a>      }
 <a name="73" href="#73">73</a>  
 <a name="74" href="#74">74</a>      @Override
@@ -94,16 +94,16 @@
 <a name="84" href="#84">84</a>                      Arrays.asList(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> Date(0))
 <a name="85" href="#85">85</a>                  ));
 <a name="86" href="#86">86</a>          
-<a name="87" href="#87">87</a>          Assert.assertEquals(expected, key);
-<a name="88" href="#88">88</a>          Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="87" href="#87">87</a>          assertEquals(expected, key);
+<a name="88" href="#88">88</a>          assertEquals(expected.hashCode(), key.hashCode());
 <a name="89" href="#89">89</a>      }
 <a name="90" href="#90">90</a>  
 <a name="91" href="#91">91</a>      @Override
 <a name="92" href="#92">92</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> verifyTestEnumHashCode(MethodInvocation invocation, ReadOnlyList&lt;?&gt; key) {
 <a name="93" href="#93">93</a>          <strong class="jxr_keyword">final</strong> List&lt;?&gt; expected = Arrays.asList(TimeUnit.SECONDS, TestEnum.TEST1);
 <a name="94" href="#94">94</a>          
-<a name="95" href="#95">95</a>          Assert.assertEquals(expected, key);
-<a name="96" href="#96">96</a>          Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="95" href="#95">95</a>          assertEquals(expected, key);
+<a name="96" href="#96">96</a>          assertEquals(expected.hashCode(), key.hashCode());
 <a name="97" href="#97">97</a>      }
 <a name="98" href="#98">98</a>  
 <a name="99" href="#99">99</a>      @Override
@@ -115,8 +115,8 @@
 <a name="105" href="#105">105</a>                 Arrays.asList(Object.<strong class="jxr_keyword">class</strong>),
 <a name="106" href="#106">106</a>                 Arrays.asList(<span class="jxr_string">"49931"</span>));
 <a name="107" href="#107">107</a>         
-<a name="108" href="#108">108</a>         Assert.assertEquals(expected, key);        
-<a name="109" href="#109">109</a>         Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="108" href="#108">108</a>         assertEquals(expected, key);        
+<a name="109" href="#109">109</a>         assertEquals(expected.hashCode(), key.hashCode());
 <a name="110" href="#110">110</a>     }
 <a name="111" href="#111">111</a> 
 <a name="112" href="#112">112</a>     @Override
@@ -157,8 +157,8 @@
 <a name="147" href="#147">147</a>                     )
 <a name="148" href="#148">148</a>                 ));
 <a name="149" href="#149">149</a>         
-<a name="150" href="#150">150</a>         Assert.assertEquals(expected, key);        
-<a name="151" href="#151">151</a>         Assert.assertEquals(expected.hashCode(), key.hashCode());        
+<a name="150" href="#150">150</a>         assertEquals(expected, key);        
+<a name="151" href="#151">151</a>         assertEquals(expected.hashCode(), key.hashCode());        
 <a name="152" href="#152">152</a>     }
 <a name="153" href="#153">153</a> 
 <a name="154" href="#154">154</a>     @Override
@@ -182,8 +182,8 @@
 <a name="172" href="#172">172</a>                     )
 <a name="173" href="#173">173</a>                 ));
 <a name="174" href="#174">174</a>         
-<a name="175" href="#175">175</a>         Assert.assertEquals(expected, key);        
-<a name="176" href="#176">176</a>         Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="175" href="#175">175</a>         assertEquals(expected, key);        
+<a name="176" href="#176">176</a>         assertEquals(expected.hashCode(), key.hashCode());
 <a name="177" href="#177">177</a>     }
 <a name="178" href="#178">178</a> 
 <a name="179" href="#179">179</a>     @Override
@@ -206,17 +206,43 @@
 <a name="196" href="#196">196</a>                     )
 <a name="197" href="#197">197</a>                 ));
 <a name="198" href="#198">198</a>         
-<a name="199" href="#199">199</a>         Assert.assertEquals(expected, key);        
-<a name="200" href="#200">200</a>         Assert.assertEquals(expected.hashCode(), key.hashCode());            
+<a name="199" href="#199">199</a>         assertEquals(expected, key);        
+<a name="200" href="#200">200</a>         assertEquals(expected.hashCode(), key.hashCode());            
 <a name="201" href="#201">201</a>     }
 <a name="202" href="#202">202</a> 
 <a name="203" href="#203">203</a>     @Override
 <a name="204" href="#204">204</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> verifyTestNoArguments(MethodInvocation invocation, ReadOnlyList&lt;?&gt; key) {
 <a name="205" href="#205">205</a>         <strong class="jxr_keyword">final</strong> List&lt;?&gt; expected = Arrays.asList();
-<a name="206" href="#206">206</a>         Assert.assertEquals(expected, key);        
-<a name="207" href="#207">207</a>         Assert.assertEquals(expected.hashCode(), key.hashCode());
+<a name="206" href="#206">206</a>         assertEquals(expected, key);        
+<a name="207" href="#207">207</a>         assertEquals(expected.hashCode(), key.hashCode());
 <a name="208" href="#208">208</a>     }
-<a name="209" href="#209">209</a> }
+<a name="209" href="#209">209</a> 
+<a name="210" href="#210">210</a>     @Override
+<a name="211" href="#211">211</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> verifyTestGeneratesDifferentKeysWithDifferentNonIntegerPartsOfDoubleParameter(
+<a name="212" href="#212">212</a>             MethodInvocation invocation, ReadOnlyList&lt;?&gt; firstKey, ReadOnlyList&lt;?&gt; secondKey) {
+<a name="213" href="#213">213</a>         
+<a name="214" href="#214">214</a>         <strong class="jxr_keyword">final</strong> List&lt;?&gt; firstExpected = Arrays.asList(1.5d);
+<a name="215" href="#215">215</a>         assertEquals(firstExpected, firstKey);
+<a name="216" href="#216">216</a>         assertEquals(firstExpected.hashCode(), firstKey.hashCode());
+<a name="217" href="#217">217</a>         
+<a name="218" href="#218">218</a>         <strong class="jxr_keyword">final</strong> List&lt;?&gt; secondExpected = Arrays.asList(1.7d);
+<a name="219" href="#219">219</a>         assertEquals(secondExpected, secondKey);
+<a name="220" href="#220">220</a>         assertEquals(secondExpected.hashCode(), secondKey.hashCode());
+<a name="221" href="#221">221</a>     }
+<a name="222" href="#222">222</a> 
+<a name="223" href="#223">223</a>     @Override
+<a name="224" href="#224">224</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> verifyTestGeneratesDifferentKeysWithDifferentNonIntegerPartsOfFloatParameter(
+<a name="225" href="#225">225</a>             MethodInvocation invocation, ReadOnlyList&lt;?&gt; firstKey, ReadOnlyList&lt;?&gt; secondKey) {
+<a name="226" href="#226">226</a>         
+<a name="227" href="#227">227</a>         <strong class="jxr_keyword">final</strong> List&lt;?&gt; firstExpected = Arrays.asList(1.5f);
+<a name="228" href="#228">228</a>         assertEquals(firstExpected, firstKey);
+<a name="229" href="#229">229</a>         assertEquals(firstExpected.hashCode(), firstKey.hashCode());
+<a name="230" href="#230">230</a>         
+<a name="231" href="#231">231</a>         <strong class="jxr_keyword">final</strong> List&lt;?&gt; secondExpected = Arrays.asList(1.7f);
+<a name="232" href="#232">232</a>         assertEquals(secondExpected, secondKey);
+<a name="233" href="#233">233</a>         assertEquals(secondExpected.hashCode(), secondKey.hashCode());        
+<a name="234" href="#234">234</a>     }
+<a name="235" href="#235">235</a> }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>
