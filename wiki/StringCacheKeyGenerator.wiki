@@ -3,7 +3,7 @@
 
 || *!JavaDoc* || [http://ehcache-spring-annotations.googlecode.com/svn/site/current/apidocs/com/googlecode/ehcache/annotations/key/StringCacheKeyGenerator.html StringCacheKeyGenerator] ||
 
-Uses [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] to generate a generally human readable key.
+Uses an algorithm similar to [http://java.sun.com/j2se/1.5.0/docs/api/java/util/Arrays.html#deepToString(java.lang.Object%5B%5D) Arrays.deepToString] to generate a generally human readable key.
 
 === The Importance of toString ===
 This key generator completely depends on all arguments implementing toString such that the object's identity is included. Most IDEs can auto-generate toString methods, for additional guidance on implementing toString reading [http://java.sun.com/developer/Books/effectivejava/Chapter3.pdf Chapter 3 of Effective Java].
