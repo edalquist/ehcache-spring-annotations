@@ -8,7 +8,9 @@
 == Forums Topics About ESA ==
  * http://forum.springsource.org/showthread.php?t=88678
 
-== Posts Advertising ESA ==
+== Comments on Articles About ESA ==
  * http://byteco.de/2010/01/26/integrating-spring-and-ehcache/
  * http://blog.inflinx.com/2009/02/26/spring-ehcache-integration/
  * http://onjavahell.blogspot.com/2009/09/annotation-driven-caching-with-ehcache.html
+ * http://dev.nirmalya.net/articles/java/spring-jpa-hibernate-tomcat-ehcache/
+ * http://blog.esofthead.com/object-caching-using-spring-ehcache/
