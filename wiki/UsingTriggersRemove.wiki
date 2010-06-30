@@ -86,39 +86,27 @@ Example:
 {{{
 public class DefaultWeatherDao implements WeatherDao {
     
-    @Cacheable(cacheName="weatherCache", keyGeneratorName="myKeyGenerator")
+    @Cacheable(cacheName="weatherCache", 
+        keyGenerator = @KeyGenerator (
+                name = "HashCodeCacheKeyGenerator",
+                properties = @Property( name="includeMethod", value="false" )
+            )
+        )
+    )
     public Weather getWeather(String zipCode);
     
     @Cacheable(cacheName="locationSearchCache")
     public List<Location> findLocations(String locationSearch);
 
-    @TriggersRemove(cacheName="weatherCache", keyGeneratorName="myKeyGenerator")
+    @TriggersRemove(cacheName="weatherCache", 
+        keyGenerator = @KeyGenerator (
+                name = "HashCodeCacheKeyGenerator",
+                properties = @Property( name="includeMethod", value="false" )
+            )
+        )
+    )
     public Weather updateWeather(String zipCode, Weather newWeather);
 }
-}}}
-
-Elsewhere in your Spring configuration you will configure a [CacheKeyGenerators CacheKeyGenerator]  named 'myKeyGenerator':
-{{{
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
-     xsi:schemaLocation="
-     http://www.springframework.org/schema/beans 
-     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
-     http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.0.xsd">
-
-    <ehcache:annotation-driven cache-manager="ehCacheManager" />
-    
-    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
-    
-    <bean id="weatherDao" class="x.y.service.DefaultWeatherDao"/>
-
-    <bean id="myKeyGenerator" class="com.googlecode.ehcache.annotations.key.HashCodeCacheKeyGenerator">
-        <property name="includeMethod" value="false"/>
-    </bean>
-</beans>
 }}}
 
 With the includeMethod property set to false on a `HashCodeCacheKeyGenerator` instance, the method name will be ignored when generating cache Element keys. This instance will only use the method arguments. In this case, the getWeather and deleteWeather methods have the same type and number of arguments (a single String). 
