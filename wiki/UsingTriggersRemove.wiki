@@ -6,41 +6,6 @@
 
 ehcache-spring-annotations includes another annotation - `@TriggersRemove` - which can be applied to methods in order to trigger removal of a single element or optionally of all elements from one or more caches.
 
-= removeAll Example  =
-
-The first example will demonstrate the removeAll option, which is *not* enabled by default. 
-
-Consider the original example from UsingCacheAnnotations:
-
-{{{
-public class DefaultWeatherDao implements WeatherDao {
-    
-    @Cacheable(cacheName="weatherCache")
-    public Weather getWeather(String zipCode);
-    
-    @Cacheable(cacheName="locationSearchCache")
-    public List<Location> findLocations(String locationSearch);
-}
-}}}
-
-We can add a method to this class that triggers invocation of [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#removeAll() Ehcache#removeAll()] each time it is executed:
-
-{{{
-public class DefaultWeatherDao implements WeatherDao {
-    
-    @Cacheable(cacheName="weatherCache")
-    public Weather getWeather(String zipCode);
-    
-    @Cacheable(cacheName="locationSearchCache")
-    public List<Location> findLocations(String locationSearch);
-
-    @TriggersRemove(cacheName="weatherCache", removeAll=true)
-    public void clearWeatherCache();
-}
-}}}
-
-The clearWeatherCache method doesn't have to have a single line of code. Upon invocation, all Elements inside the Ehcache named "weatherCache" will be removed. This example is sometimes useful in conjunction with a trigger for periodic execution.
-
 = Default Example =
 
 In the preceding example, the removeAll option is enabled and all Elements from the cache are removed.
@@ -110,3 +75,55 @@ public class DefaultWeatherDao implements WeatherDao {
 }}}
 
 With the includeMethod property set to false on a `HashCodeCacheKeyGenerator` instance, the method name will be ignored when generating cache Element keys. This instance will only use the method arguments. In this case, the getWeather and deleteWeather methods have the same type and number of arguments (a single String). 
+
+= removeAll Example  =
+
+The first example will demonstrate the removeAll option, which is *not* enabled by default. 
+
+Consider the original example from UsingCacheAnnotations:
+
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+}
+}}}
+
+We can add a method to this class that triggers invocation of [http://ehcache.org/apidocs/net/sf/ehcache/Ehcache.html#removeAll() Ehcache#removeAll()] each time it is executed:
+
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+
+    @TriggersRemove(cacheName="weatherCache", removeAll=true)
+    public void clearWeatherCache();
+}
+}}}
+
+The clearWeatherCache method doesn't have to have a single line of code. Upon invocation, all Elements inside the Ehcache named "weatherCache" will be removed. This example is sometimes useful in conjunction with a trigger for periodic execution.
+
+= Multiple Caches Example =
+The @TriggersRemove annotation can target multiple caches. Simply provide an array of cache names for the cacheName parameter and each will be affected. For *removeAll* each named cache will have all entries removed in order. If *removeAll* is not specified it is important to note that only a single [CacheKeyGenerators CacheKeyGenerator] is used for all caches so they must share a common key generation strategy and key components for targeting multiple caches to be useful.
+
+{{{
+public class DefaultWeatherDao implements WeatherDao {
+    
+    @Cacheable(cacheName="weatherCache")
+    public Weather getWeather(String zipCode);
+    
+    @Cacheable(cacheName="locationSearchCache")
+    public List<Location> findLocations(String locationSearch);
+
+    @TriggersRemove(cacheName={"weatherCache", "locationSearchCache"}, removeAll=true)
+    public void clearCaches();
+}
+}}}
