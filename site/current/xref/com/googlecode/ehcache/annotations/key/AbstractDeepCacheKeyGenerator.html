@@ -79,7 +79,7 @@
 <a name="69" href="#69">69</a>  <em class="jxr_javadoccomment">     * each object that is added to the key has {@link #shouldReflect(Object)} called on it. If that</em>
 <a name="70" href="#70">70</a>  <em class="jxr_javadoccomment">     * returns true reflection is used to recurse on all of the fields of the object.</em>
 <a name="71" href="#71">71</a>  <em class="jxr_javadoccomment">     * </em>
-<a name="72" href="#72">72</a>  <em class="jxr_javadoccomment">     * @param Defaults to false.</em>
+<a name="72" href="#72">72</a>  <em class="jxr_javadoccomment">     * @param useReflection Defaults to false.</em>
 <a name="73" href="#73">73</a>  <em class="jxr_javadoccomment">     */</em>
 <a name="74" href="#74">74</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setUseReflection(<strong class="jxr_keyword">boolean</strong> useReflection) {
 <a name="75" href="#75">75</a>          <strong class="jxr_keyword">this</strong>.useReflection = useReflection;
@@ -96,7 +96,7 @@
 <a name="86" href="#86">86</a>      }
 <a name="87" href="#87">87</a>      
 <a name="88" href="#88">88</a>      <em class="jxr_javadoccomment">/**</em>
-<a name="89" href="#89">89</a>  <em class="jxr_javadoccomment">     * Calls {@link #deepHashCode(KeyGenerationStream, Object)} on each element in the array.</em>
+<a name="89" href="#89">89</a>  <em class="jxr_javadoccomment">     * Calls {@link #deepHashCode(Object, Object)} on each element in the array.</em>
 <a name="90" href="#90">90</a>  <em class="jxr_javadoccomment">     * @param a will never be null</em>
 <a name="91" href="#91">91</a>  <em class="jxr_javadoccomment">     */</em>
 <a name="92" href="#92">92</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> deepHashCode(G generator, Object a[]) {
@@ -109,7 +109,7 @@
 <a name="99" href="#99">99</a>  
 <a name="100" href="#100">100</a> 
 <a name="101" href="#101">101</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="102" href="#102">102</a> <em class="jxr_javadoccomment">     * Calls {@link #deepHashCode(KeyGenerationStream, Object)} on each element in the {@link Iterable}</em>
+<a name="102" href="#102">102</a> <em class="jxr_javadoccomment">     * Calls {@link #deepHashCode(Object, Object)} on each element in the {@link Iterable}</em>
 <a name="103" href="#103">103</a> <em class="jxr_javadoccomment">     * @param a will never be null</em>
 <a name="104" href="#104">104</a> <em class="jxr_javadoccomment">     */</em>
 <a name="105" href="#105">105</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> deepHashCode(G generator, Iterable&lt;?&gt; a) {
@@ -121,8 +121,8 @@
 <a name="111" href="#111">111</a>     }
 <a name="112" href="#112">112</a>     
 <a name="113" href="#113">113</a>     <em class="jxr_javadoccomment">/**</em>
-<a name="114" href="#114">114</a> <em class="jxr_javadoccomment">     * Calls {@link #deepHashCode(KeyGenerationStream, Object)} on both the key and the value.</em>
-<a name="115" href="#115">115</a> <em class="jxr_javadoccomment">     * @param a will never be null</em>
+<a name="114" href="#114">114</a> <em class="jxr_javadoccomment">     * Calls {@link #deepHashCode(Object, Object)} on both the key and the value.</em>
+<a name="115" href="#115">115</a> <em class="jxr_javadoccomment">     * @param e will never be null</em>
 <a name="116" href="#116">116</a> <em class="jxr_javadoccomment">     */</em>
 <a name="117" href="#117">117</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> deepHashCode(G generator, Map.Entry&lt;?, ?&gt; e) {
 <a name="118" href="#118">118</a>         <strong class="jxr_keyword">this</strong>.beginRecursion(generator, e);
@@ -133,7 +133,7 @@
 <a name="123" href="#123">123</a> 
 <a name="124" href="#124">124</a>     <em class="jxr_javadoccomment">/**</em>
 <a name="125" href="#125">125</a> <em class="jxr_javadoccomment">     * Does instanceof checks to determine the correct {@link #deepHashCode} method to call or </em>
-<a name="126" href="#126">126</a> <em class="jxr_javadoccomment">     * {@link #write(KeyGenerationStream, Object)} is called if no other recursion is needed or</em>
+<a name="126" href="#126">126</a> <em class="jxr_javadoccomment">     * {@link #append(Object, Object)} is called if no other recursion is needed or</em>
 <a name="127" href="#127">127</a> <em class="jxr_javadoccomment">     * {@link #reflectionDeepHashCode(Object, Object)} is called if {@link #setUseReflection(boolean)}</em>
 <a name="128" href="#128">128</a> <em class="jxr_javadoccomment">     * is true.</em>
 <a name="129" href="#129">129</a> <em class="jxr_javadoccomment">     */</em>

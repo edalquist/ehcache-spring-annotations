@@ -39,40 +39,40 @@
 <a name="29" href="#29">29</a>  <em class="jxr_javadoccomment"> */</em>
 <a name="30" href="#30">30</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/ehcache/annotations/key/DelegateCacheKeyGeneratorTest.html">DelegateCacheKeyGeneratorTest</a> {
 <a name="31" href="#31">31</a>  
-<a name="32" href="#32">32</a>  	<em class="jxr_javadoccomment">/**</em>
-<a name="33" href="#33">33</a>  <em class="jxr_javadoccomment">	 * Verify expected behavior for a {@link DelegateCacheKeyGenerator} wrapping</em>
-<a name="34" href="#34">34</a>  <em class="jxr_javadoccomment">	 * a {@link StringCacheKeyGenerator}.</em>
-<a name="35" href="#35">35</a>  <em class="jxr_javadoccomment">	 * </em>
-<a name="36" href="#36">36</a>  <em class="jxr_javadoccomment">	 * @throws Exception</em>
-<a name="37" href="#37">37</a>  <em class="jxr_javadoccomment">	 */</em>
-<a name="38" href="#38">38</a>  	@Test
-<a name="39" href="#39">39</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testControl() <strong class="jxr_keyword">throws</strong> Exception {
-<a name="40" href="#40">40</a>  		StringCacheKeyGenerator delegate = <strong class="jxr_keyword">new</strong> StringCacheKeyGenerator();
-<a name="41" href="#41">41</a>  		DelegateCacheKeyGenerator impl = <strong class="jxr_keyword">new</strong> DelegateCacheKeyGenerator(delegate) {
-<a name="42" href="#42">42</a>  			@Override
-<a name="43" href="#43">43</a>  			<strong class="jxr_keyword">public</strong> Serializable getAdditionalDataForKeyGeneration() {
-<a name="44" href="#44">44</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"foo"</span>;
-<a name="45" href="#45">45</a>  			}
-<a name="46" href="#46">46</a>  		};
-<a name="47" href="#47">47</a>  		
-<a name="48" href="#48">48</a>  		<em class="jxr_comment">// set the impl's checkForCycles to the opposite of the delegate</em>
-<a name="49" href="#49">49</a>  		impl.setCheckforCycles(!delegate.isCheckforCycles());
-<a name="50" href="#50">50</a>  		
-<a name="51" href="#51">51</a>  		String data = <span class="jxr_string">"bar"</span>;
-<a name="52" href="#52">52</a>  		Object[] expected = <strong class="jxr_keyword">new</strong> Object[] {<span class="jxr_string">"foo"</span>, <strong class="jxr_keyword">new</strong> Object[] { data } };
-<a name="53" href="#53">53</a>  		
-<a name="54" href="#54">54</a>  		Serializable delegateValue = delegate.generateKey(data);
-<a name="55" href="#55">55</a>  		Serializable expectedValue = delegate.generateKey(expected);
-<a name="56" href="#56">56</a>  		Serializable implValue = impl.generateKey(data);
-<a name="57" href="#57">57</a>  		
-<a name="58" href="#58">58</a>  		Assert.assertNotSame(delegateValue, implValue);
-<a name="59" href="#59">59</a>  		
-<a name="60" href="#60">60</a>  		Assert.assertEquals(expectedValue, implValue);
-<a name="61" href="#61">61</a>  		
-<a name="62" href="#62">62</a>  		<em class="jxr_comment">// verify that the impl's checkForCycles field was updated to that of the delegate on first generateKey call</em>
-<a name="63" href="#63">63</a>  		Assert.assertEquals(delegate.isCheckforCycles(), impl.isCheckforCycles());
-<a name="64" href="#64">64</a>  		
-<a name="65" href="#65">65</a>  	}
+<a name="32" href="#32">32</a>      <em class="jxr_javadoccomment">/**</em>
+<a name="33" href="#33">33</a>  <em class="jxr_javadoccomment">     * Verify expected behavior for a {@link DelegateCacheKeyGenerator} wrapping</em>
+<a name="34" href="#34">34</a>  <em class="jxr_javadoccomment">     * a {@link StringCacheKeyGenerator}.</em>
+<a name="35" href="#35">35</a>  <em class="jxr_javadoccomment">     * </em>
+<a name="36" href="#36">36</a>  <em class="jxr_javadoccomment">     * @throws Exception</em>
+<a name="37" href="#37">37</a>  <em class="jxr_javadoccomment">     */</em>
+<a name="38" href="#38">38</a>      @Test
+<a name="39" href="#39">39</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testControl() <strong class="jxr_keyword">throws</strong> Exception {
+<a name="40" href="#40">40</a>          StringCacheKeyGenerator delegate = <strong class="jxr_keyword">new</strong> StringCacheKeyGenerator();
+<a name="41" href="#41">41</a>          DelegateCacheKeyGenerator impl = <strong class="jxr_keyword">new</strong> DelegateCacheKeyGenerator(delegate) {
+<a name="42" href="#42">42</a>              @Override
+<a name="43" href="#43">43</a>              <strong class="jxr_keyword">public</strong> Serializable getAdditionalDataForKeyGeneration() {
+<a name="44" href="#44">44</a>                  <strong class="jxr_keyword">return</strong> <span class="jxr_string">"foo"</span>;
+<a name="45" href="#45">45</a>              }
+<a name="46" href="#46">46</a>          };
+<a name="47" href="#47">47</a>          
+<a name="48" href="#48">48</a>          <em class="jxr_comment">// set the impl's checkForCycles to the opposite of the delegate</em>
+<a name="49" href="#49">49</a>          impl.setCheckforCycles(!delegate.isCheckforCycles());
+<a name="50" href="#50">50</a>          
+<a name="51" href="#51">51</a>          String data = <span class="jxr_string">"bar"</span>;
+<a name="52" href="#52">52</a>          Object[] expected = <strong class="jxr_keyword">new</strong> Object[] {<span class="jxr_string">"foo"</span>, <strong class="jxr_keyword">new</strong> Object[] { data } };
+<a name="53" href="#53">53</a>          
+<a name="54" href="#54">54</a>          Serializable delegateValue = delegate.generateKey(data);
+<a name="55" href="#55">55</a>          Serializable expectedValue = delegate.generateKey(expected);
+<a name="56" href="#56">56</a>          Serializable implValue = impl.generateKey(data);
+<a name="57" href="#57">57</a>          
+<a name="58" href="#58">58</a>          Assert.assertNotSame(delegateValue, implValue);
+<a name="59" href="#59">59</a>          
+<a name="60" href="#60">60</a>          Assert.assertEquals(expectedValue, implValue);
+<a name="61" href="#61">61</a>          
+<a name="62" href="#62">62</a>          <em class="jxr_comment">// verify that the impl's checkForCycles field was updated to that of the delegate on first generateKey call</em>
+<a name="63" href="#63">63</a>          Assert.assertEquals(delegate.isCheckforCycles(), impl.isCheckforCycles());
+<a name="64" href="#64">64</a>          
+<a name="65" href="#65">65</a>      }
 <a name="66" href="#66">66</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
