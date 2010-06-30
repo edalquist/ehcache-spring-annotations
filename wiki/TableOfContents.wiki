@@ -1,6 +1,7 @@
   * [UsingCacheable  Using @Cacheable]
   * [UsingTriggersRemove Using @TriggersRemove]
   * [UsingKeyGenerator Using @KeyGenerator]
+  * [UsingPartialCacheKey Using @PartialCacheKey]
   * [CacheKeyGenerators Cache Key Generators]
     * [HashCodeCacheKeyGenerator]
     * [StringCacheKeyGenerator]
