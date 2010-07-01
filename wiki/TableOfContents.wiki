@@ -7,4 +7,5 @@
     * [StringCacheKeyGenerator]
     * [ListCacheKeyGenerator]
     * [MessageDigestCacheKeyGenerator]
+  * [SwitchingFromSpringModules Switching from Spring Modules]
   * [FrequentlyAskedQuestions Frequently Asked Questions]
