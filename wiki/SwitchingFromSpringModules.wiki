@@ -1,4 +1,5 @@
 #summary Short recipes for users switching from Spring-Modules-Cache
+#sidebar TableOfContents
 
 = Basic Configuration =
 
