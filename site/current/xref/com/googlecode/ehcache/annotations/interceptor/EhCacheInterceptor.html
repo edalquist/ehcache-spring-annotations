@@ -46,10 +46,10 @@
 <a name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.Cacheable;
 <a name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.CacheableAttribute;
 <a name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.MethodAttribute;
-<a name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.TriggersRemove;
-<a name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.TriggersRemoveAttribute;
-<a name="41" href="#41">41</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.When;
-<a name="42" href="#42">42</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.impl.ParameterMask;
+<a name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.ParameterMask;
+<a name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.TriggersRemove;
+<a name="41" href="#41">41</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.TriggersRemoveAttribute;
+<a name="42" href="#42">42</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.When;
 <a name="43" href="#43">43</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.key.CacheKeyGenerator;
 <a name="44" href="#44">44</a>  
 <a name="45" href="#45">45</a>  
@@ -273,7 +273,7 @@
 <a name="263" href="#263">263</a>     <strong class="jxr_keyword">protected</strong> Serializable generateCacheKey(MethodInvocation methodInvocation, <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> methodAttribute) {
 <a name="264" href="#264">264</a>         <strong class="jxr_keyword">final</strong> CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; cacheKeyGenerator = methodAttribute.getCacheKeyGenerator();
 <a name="265" href="#265">265</a>         
-<a name="266" href="#266">266</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask = methodAttribute.getCacheKeyParameterMask();
+<a name="266" href="#266">266</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/ParameterMask.html">ParameterMask</a> parameterMask = methodAttribute.getCacheKeyParameterMask();
 <a name="267" href="#267">267</a>         <strong class="jxr_keyword">if</strong> (parameterMask.shouldMask()) {
 <a name="268" href="#268">268</a>             methodInvocation = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/googlecode/ehcache/annotations/interceptor/EhCacheInterceptor.html">ParameterFilteringMethodInvocation</a>(methodInvocation, parameterMask);
 <a name="269" href="#269">269</a>         }
@@ -285,10 +285,10 @@
 <a name="275" href="#275">275</a>     
 <a name="276" href="#276">276</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/ehcache/annotations/interceptor/EhCacheInterceptor.html">ParameterFilteringMethodInvocation</a> implements MethodInvocation {
 <a name="277" href="#277">277</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> MethodInvocation methodInvocation;
-<a name="278" href="#278">278</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask;
+<a name="278" href="#278">278</a>         <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/ParameterMask.html">ParameterMask</a> parameterMask;
 <a name="279" href="#279">279</a>         <strong class="jxr_keyword">private</strong> Object[] filteredArguments = <strong class="jxr_keyword">null</strong>;
 <a name="280" href="#280">280</a>         
-<a name="281" href="#281">281</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../../com/googlecode/ehcache/annotations/interceptor/EhCacheInterceptor.html">ParameterFilteringMethodInvocation</a>(MethodInvocation methodInvocation, <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask) {
+<a name="281" href="#281">281</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../../com/googlecode/ehcache/annotations/interceptor/EhCacheInterceptor.html">ParameterFilteringMethodInvocation</a>(MethodInvocation methodInvocation, <a href="../../../../../com/googlecode/ehcache/annotations/ParameterMask.html">ParameterMask</a> parameterMask) {
 <a name="282" href="#282">282</a>             <strong class="jxr_keyword">this</strong>.methodInvocation = methodInvocation;
 <a name="283" href="#283">283</a>             <strong class="jxr_keyword">this</strong>.parameterMask = parameterMask;
 <a name="284" href="#284">284</a>         }
