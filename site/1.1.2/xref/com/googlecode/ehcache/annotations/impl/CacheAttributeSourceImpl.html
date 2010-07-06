@@ -1,0 +1,546 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+<title>CacheAttributeSourceImpl xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">View Javadoc</a></div><pre>
+
+<a name="1" href="#1">1</a>   <em class="jxr_javadoccomment">/**</em>
+<a name="2" href="#2">2</a>   <em class="jxr_javadoccomment"> * Copyright 2010 Nicholas Blair, Eric Dalquist</em>
+<a name="3" href="#3">3</a>   <em class="jxr_javadoccomment"> *</em>
+<a name="4" href="#4">4</a>   <em class="jxr_javadoccomment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a name="5" href="#5">5</a>   <em class="jxr_javadoccomment"> * you may not use this file except in compliance with the License.</em>
+<a name="6" href="#6">6</a>   <em class="jxr_javadoccomment"> * You may obtain a copy of the License at</em>
+<a name="7" href="#7">7</a>   <em class="jxr_javadoccomment"> *</em>
+<a name="8" href="#8">8</a>   <em class="jxr_javadoccomment"> *   <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a name="9" href="#9">9</a>   <em class="jxr_javadoccomment"> *</em>
+<a name="10" href="#10">10</a>  <em class="jxr_javadoccomment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a name="11" href="#11">11</a>  <em class="jxr_javadoccomment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a name="12" href="#12">12</a>  <em class="jxr_javadoccomment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a name="13" href="#13">13</a>  <em class="jxr_javadoccomment"> * See the License for the specific language governing permissions and</em>
+<a name="14" href="#14">14</a>  <em class="jxr_javadoccomment"> * limitations under the License.</em>
+<a name="15" href="#15">15</a>  <em class="jxr_javadoccomment"> */</em>
+<a name="16" href="#16">16</a>  
+<a name="17" href="#17">17</a>  <strong class="jxr_keyword">package</strong> com.googlecode.ehcache.annotations.impl;
+<a name="18" href="#18">18</a>  
+<a name="19" href="#19">19</a>  <strong class="jxr_keyword">import</strong> java.io.Serializable;
+<a name="20" href="#20">20</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.Annotation;
+<a name="21" href="#21">21</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.AnnotatedElement;
+<a name="22" href="#22">22</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.Method;
+<a name="23" href="#23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.Modifier;
+<a name="24" href="#24">24</a>  <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a name="25" href="#25">25</a>  <strong class="jxr_keyword">import</strong> java.util.Arrays;
+<a name="26" href="#26">26</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a name="27" href="#27">27</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.ConcurrentHashMap;
+<a name="28" href="#28">28</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.ConcurrentMap;
+<a name="29" href="#29">29</a>  
+<a name="30" href="#30">30</a>  <strong class="jxr_keyword">import</strong> net.sf.ehcache.CacheManager;
+<a name="31" href="#31">31</a>  <strong class="jxr_keyword">import</strong> net.sf.ehcache.Ehcache;
+<a name="32" href="#32">32</a>  <strong class="jxr_keyword">import</strong> net.sf.ehcache.ObjectExistsException;
+<a name="33" href="#33">33</a>  <strong class="jxr_keyword">import</strong> net.sf.ehcache.constructs.blocking.CacheEntryFactory;
+<a name="34" href="#34">34</a>  <strong class="jxr_keyword">import</strong> net.sf.ehcache.constructs.blocking.SelfPopulatingCache;
+<a name="35" href="#35">35</a>  
+<a name="36" href="#36">36</a>  <strong class="jxr_keyword">import</strong> org.aopalliance.intercept.MethodInvocation;
+<a name="37" href="#37">37</a>  <strong class="jxr_keyword">import</strong> org.slf4j.Logger;
+<a name="38" href="#38">38</a>  <strong class="jxr_keyword">import</strong> org.slf4j.LoggerFactory;
+<a name="39" href="#39">39</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.BeansException;
+<a name="40" href="#40">40</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.MutablePropertyValues;
+<a name="41" href="#41">41</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.BeanCreationException;
+<a name="42" href="#42">42</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.BeanFactory;
+<a name="43" href="#43">43</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.BeanFactoryAware;
+<a name="44" href="#44">44</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.config.RuntimeBeanReference;
+<a name="45" href="#45">45</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.support.AbstractBeanDefinition;
+<a name="46" href="#46">46</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
+<a name="47" href="#47">47</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.support.DefaultListableBeanFactory;
+<a name="48" href="#48">48</a>  <strong class="jxr_keyword">import</strong> org.springframework.core.BridgeMethodResolver;
+<a name="49" href="#49">49</a>  <strong class="jxr_keyword">import</strong> org.springframework.util.ClassUtils;
+<a name="50" href="#50">50</a>  <strong class="jxr_keyword">import</strong> org.springframework.util.StringUtils;
+<a name="51" href="#51">51</a>  
+<a name="52" href="#52">52</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.AdviceType;
+<a name="53" href="#53">53</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.CacheAttributeSource;
+<a name="54" href="#54">54</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.CacheNotFoundException;
+<a name="55" href="#55">55</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.Cacheable;
+<a name="56" href="#56">56</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.CacheableAttribute;
+<a name="57" href="#57">57</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.KeyGenerator;
+<a name="58" href="#58">58</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.MethodAttribute;
+<a name="59" href="#59">59</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.PartialCacheKey;
+<a name="60" href="#60">60</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.Property;
+<a name="61" href="#61">61</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.SelfPopulatingCacheScope;
+<a name="62" href="#62">62</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.TriggersRemove;
+<a name="63" href="#63">63</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.TriggersRemoveAttribute;
+<a name="64" href="#64">64</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.config.AnnotationDrivenEhCacheBeanDefinitionParser;
+<a name="65" href="#65">65</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.key.CacheKeyGenerator;
+<a name="66" href="#66">66</a>  <strong class="jxr_keyword">import</strong> com.googlecode.ehcache.annotations.key.ReflectionHelperAware;
+<a name="67" href="#67">67</a>  
+<a name="68" href="#68">68</a>  
+<a name="69" href="#69">69</a>  <em class="jxr_javadoccomment">/**</em>
+<a name="70" href="#70">70</a>  <em class="jxr_javadoccomment"> * Provides logic for determining if a class + method are advised and to then setup the</em>
+<a name="71" href="#71">71</a>  <em class="jxr_javadoccomment"> * data needed for the advice.</em>
+<a name="72" href="#72">72</a>  <em class="jxr_javadoccomment"> * </em>
+<a name="73" href="#73">73</a>  <em class="jxr_javadoccomment"> * @author Eric Dalquist</em>
+<a name="74" href="#74">74</a>  <em class="jxr_javadoccomment"> * @version $Revision$</em>
+<a name="75" href="#75">75</a>  <em class="jxr_javadoccomment"> */</em>
+<a name="76" href="#76">76</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">CacheAttributeSourceImpl</a> implements CacheAttributeSource, BeanFactoryAware {
+<a name="77" href="#77">77</a>      <em class="jxr_javadoccomment">/**</em>
+<a name="78" href="#78">78</a>  <em class="jxr_javadoccomment">     * Logger available to subclasses.</em>
+<a name="79" href="#79">79</a>  <em class="jxr_javadoccomment">     */</em>
+<a name="80" href="#80">80</a>      <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(<strong class="jxr_keyword">this</strong>.getClass());
+<a name="81" href="#81">81</a>      
+<a name="82" href="#82">82</a>      <em class="jxr_javadoccomment">/**</em>
+<a name="83" href="#83">83</a>  <em class="jxr_javadoccomment">     * Caches for advice data</em>
+<a name="84" href="#84">84</a>  <em class="jxr_javadoccomment">     */</em>
+<a name="85" href="#85">85</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> MultiKeyConcurrentMap&lt;Class&lt;?&gt;, Method, Boolean&gt; ingoredMethods = <strong class="jxr_keyword">new</strong> MultiKeyConcurrentMap&lt;Class&lt;?&gt;, Method, Boolean&gt;();
+<a name="86" href="#86">86</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> MultiKeyConcurrentMap&lt;Class&lt;?&gt;, Method, MethodAttribute&gt; attributesCache = <strong class="jxr_keyword">new</strong> MultiKeyConcurrentMap&lt;Class&lt;?&gt;, Method, MethodAttribute&gt;();
+<a name="87" href="#87">87</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentMap&lt;String, SelfPopulatingCacheTracker&gt; selfPopulatingCaches = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;String, SelfPopulatingCacheTracker&gt;(); 
+<a name="88" href="#88">88</a>      
+<a name="89" href="#89">89</a>      <strong class="jxr_keyword">private</strong> DefaultListableBeanFactory cacheKeyBeanFactory;
+<a name="90" href="#90">90</a>      
+<a name="91" href="#91">91</a>      <strong class="jxr_keyword">private</strong> CacheManager cacheManager;
+<a name="92" href="#92">92</a>      <strong class="jxr_keyword">private</strong> BeanFactory beanFactory;
+<a name="93" href="#93">93</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> createCaches = false;
+<a name="94" href="#94">94</a>      <strong class="jxr_keyword">private</strong> CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; defaultCacheKeyGenerator;
+<a name="95" href="#95">95</a>      <strong class="jxr_keyword">private</strong> <a href="../../../../../com/googlecode/ehcache/annotations/SelfPopulatingCacheScope.html">SelfPopulatingCacheScope</a> selfPopulatingCacheScope = SelfPopulatingCacheScope.SHARED;
+<a name="96" href="#96">96</a>  
+<a name="97" href="#97">97</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setBeanFactory(BeanFactory beanFactory) <strong class="jxr_keyword">throws</strong> BeansException {
+<a name="98" href="#98">98</a>          <strong class="jxr_keyword">this</strong>.beanFactory = beanFactory;
+<a name="99" href="#99">99</a>          <strong class="jxr_keyword">this</strong>.cacheKeyBeanFactory = <strong class="jxr_keyword">new</strong> DefaultListableBeanFactory(<strong class="jxr_keyword">this</strong>.beanFactory);
+<a name="100" href="#100">100</a>     }
+<a name="101" href="#101">101</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCreateCaches(<strong class="jxr_keyword">boolean</strong> createCaches) {
+<a name="102" href="#102">102</a>         <strong class="jxr_keyword">this</strong>.createCaches = createCaches;
+<a name="103" href="#103">103</a>     }
+<a name="104" href="#104">104</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setDefaultCacheKeyGenerator(CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; defaultCacheKeyGenerator) {
+<a name="105" href="#105">105</a>         <strong class="jxr_keyword">this</strong>.defaultCacheKeyGenerator = defaultCacheKeyGenerator;
+<a name="106" href="#106">106</a>     }
+<a name="107" href="#107">107</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSelfPopulatingCacheScope(<a href="../../../../../com/googlecode/ehcache/annotations/SelfPopulatingCacheScope.html">SelfPopulatingCacheScope</a> selfPopulatingCacheScope) {
+<a name="108" href="#108">108</a>         <strong class="jxr_keyword">this</strong>.selfPopulatingCacheScope = selfPopulatingCacheScope;
+<a name="109" href="#109">109</a>     }
+<a name="110" href="#110">110</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setCacheManager(CacheManager cacheManager) {
+<a name="111" href="#111">111</a>         <strong class="jxr_keyword">this</strong>.cacheManager = cacheManager;
+<a name="112" href="#112">112</a>     }
+<a name="113" href="#113">113</a>     <em class="jxr_comment">/*<em class="jxr_comment"> (non-Javadoc)</em></em>
+<a name="114" href="#114">114</a> <em class="jxr_comment">     * @see com.googlecode.ehcache.annotations.CacheAttributeSource#getAdviceType(java.lang.reflect.Method, java.lang.Class)</em>
+<a name="115" href="#115">115</a> <em class="jxr_comment">     */</em>
+<a name="116" href="#116">116</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../com/googlecode/ehcache/annotations/AdviceType.html">AdviceType</a> getAdviceType(Method method, Class&lt;?&gt; targetClass) {
+<a name="117" href="#117">117</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> methodAttribute = <strong class="jxr_keyword">this</strong>.getMethodAttribute(method, targetClass);
+<a name="118" href="#118">118</a>         <strong class="jxr_keyword">if</strong> (methodAttribute != <strong class="jxr_keyword">null</strong>) {
+<a name="119" href="#119">119</a>             <strong class="jxr_keyword">return</strong> methodAttribute.getAdviceType();
+<a name="120" href="#120">120</a>         }
+<a name="121" href="#121">121</a>         
+<a name="122" href="#122">122</a>         <strong class="jxr_keyword">return</strong> AdviceType.NONE;
+<a name="123" href="#123">123</a>     }
+<a name="124" href="#124">124</a> 
+<a name="125" href="#125">125</a>     <em class="jxr_comment">/*<em class="jxr_comment"> (non-Javadoc)</em></em>
+<a name="126" href="#126">126</a> <em class="jxr_comment">     * @see com.googlecode.ehcache.annotations.CacheAttributeSource#getCacheableAttribute(java.lang.reflect.Method, java.lang.Class)</em>
+<a name="127" href="#127">127</a> <em class="jxr_comment">     */</em>
+<a name="128" href="#128">128</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../com/googlecode/ehcache/annotations/CacheableAttribute.html">CacheableAttribute</a> getCacheableAttribute(Method method, Class&lt;?&gt; targetClass) {
+<a name="129" href="#129">129</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> methodAttribute = <strong class="jxr_keyword">this</strong>.getMethodAttribute(method, targetClass);
+<a name="130" href="#130">130</a>         <strong class="jxr_keyword">if</strong> (methodAttribute != <strong class="jxr_keyword">null</strong> &amp;&amp; AdviceType.CACHE == methodAttribute.getAdviceType()) {
+<a name="131" href="#131">131</a>             <strong class="jxr_keyword">return</strong> (CacheableAttribute)methodAttribute;
+<a name="132" href="#132">132</a>         }
+<a name="133" href="#133">133</a>         
+<a name="134" href="#134">134</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a name="135" href="#135">135</a>     }
+<a name="136" href="#136">136</a> 
+<a name="137" href="#137">137</a>     <em class="jxr_comment">/*<em class="jxr_comment"> (non-Javadoc)</em></em>
+<a name="138" href="#138">138</a> <em class="jxr_comment">     * @see com.googlecode.ehcache.annotations.CacheAttributeSource#getTriggersRemoveAttribute(java.lang.reflect.Method, java.lang.Class)</em>
+<a name="139" href="#139">139</a> <em class="jxr_comment">     */</em>
+<a name="140" href="#140">140</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../../com/googlecode/ehcache/annotations/TriggersRemoveAttribute.html">TriggersRemoveAttribute</a> getTriggersRemoveAttribute(Method method, Class&lt;?&gt; targetClass) {
+<a name="141" href="#141">141</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> methodAttribute = <strong class="jxr_keyword">this</strong>.getMethodAttribute(method, targetClass);
+<a name="142" href="#142">142</a>         <strong class="jxr_keyword">if</strong> (methodAttribute != <strong class="jxr_keyword">null</strong> &amp;&amp; AdviceType.REMOVE == methodAttribute.getAdviceType()) {
+<a name="143" href="#143">143</a>             <strong class="jxr_keyword">return</strong> (TriggersRemoveAttribute)methodAttribute;
+<a name="144" href="#144">144</a>         }
+<a name="145" href="#145">145</a>         
+<a name="146" href="#146">146</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a name="147" href="#147">147</a>     }
+<a name="148" href="#148">148</a>     
+<a name="149" href="#149">149</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> getMethodAttribute(<strong class="jxr_keyword">final</strong> Method method, <strong class="jxr_keyword">final</strong> Class&lt;?&gt; targetClass) {
+<a name="150" href="#150">150</a>         <em class="jxr_comment">//Check if the method has already been inspected and should be ignored</em>
+<a name="151" href="#151">151</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.ingoredMethods.containsKey(targetClass, method)) {
+<a name="152" href="#152">152</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a name="153" href="#153">153</a>         }
+<a name="154" href="#154">154</a>         
+<a name="155" href="#155">155</a>         <em class="jxr_comment">//Check the cache if the method has already had its advise attributes created</em>
+<a name="156" href="#156">156</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> attributes = <strong class="jxr_keyword">this</strong>.attributesCache.get(targetClass, method);
+<a name="157" href="#157">157</a>         <strong class="jxr_keyword">if</strong> (attributes != <strong class="jxr_keyword">null</strong>) {
+<a name="158" href="#158">158</a>             <strong class="jxr_keyword">return</strong> attributes;
+<a name="159" href="#159">159</a>         }
+<a name="160" href="#160">160</a>         
+<a name="161" href="#161">161</a>         <em class="jxr_comment">// We need to work it out.</em>
+<a name="162" href="#162">162</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> att = <strong class="jxr_keyword">this</strong>.computeMethodAttribute(method, targetClass);
+<a name="163" href="#163">163</a>         
+<a name="164" href="#164">164</a>         <em class="jxr_comment">// Put it in the cache.</em>
+<a name="165" href="#165">165</a>         <strong class="jxr_keyword">if</strong> (att == <strong class="jxr_keyword">null</strong>) {
+<a name="166" href="#166">166</a>             <strong class="jxr_keyword">this</strong>.ingoredMethods.put(targetClass, method, Boolean.TRUE);
+<a name="167" href="#167">167</a>         }
+<a name="168" href="#168">168</a>         <strong class="jxr_keyword">else</strong>  {
+<a name="169" href="#169">169</a>             <strong class="jxr_keyword">this</strong>.logger.debug(<span class="jxr_string">"Adding {} advised method '{}' with attribute: {}"</span>, <strong class="jxr_keyword">new</strong> Object[] { att.getAdviceType(), method.getName(), att });
+<a name="170" href="#170">170</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> existing = <strong class="jxr_keyword">this</strong>.attributesCache.putIfAbsent(targetClass, method, att);
+<a name="171" href="#171">171</a>             <strong class="jxr_keyword">if</strong> (existing != <strong class="jxr_keyword">null</strong>) {
+<a name="172" href="#172">172</a>                 <strong class="jxr_keyword">return</strong> existing;
+<a name="173" href="#173">173</a>             }
+<a name="174" href="#174">174</a>         }
+<a name="175" href="#175">175</a>         
+<a name="176" href="#176">176</a>         <strong class="jxr_keyword">return</strong> att;
+<a name="177" href="#177">177</a>     }
+<a name="178" href="#178">178</a> 
+<a name="179" href="#179">179</a> 
+<a name="180" href="#180">180</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="181" href="#181">181</a> <em class="jxr_javadoccomment">     * Should only public methods be allowed to be advised?</em>
+<a name="182" href="#182">182</a> <em class="jxr_javadoccomment">     * &lt;p&gt;The default implementation returns &lt;code&gt;false&lt;/code&gt;.</em>
+<a name="183" href="#183">183</a> <em class="jxr_javadoccomment">     */</em>
+<a name="184" href="#184">184</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> allowPublicMethodsOnly() {
+<a name="185" href="#185">185</a>         <strong class="jxr_keyword">return</strong> false;
+<a name="186" href="#186">186</a>     }
+<a name="187" href="#187">187</a>     
+<a name="188" href="#188">188</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="189" href="#189">189</a> <em class="jxr_javadoccomment">     * @return The injected CacheManager.</em>
+<a name="190" href="#190">190</a> <em class="jxr_javadoccomment">     */</em>
+<a name="191" href="#191">191</a>     <strong class="jxr_keyword">protected</strong> CacheManager getCacheManager() {
+<a name="192" href="#192">192</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.cacheManager;
+<a name="193" href="#193">193</a>     }
+<a name="194" href="#194">194</a> 
+<a name="195" href="#195">195</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="196" href="#196">196</a> <em class="jxr_javadoccomment">     * Get or create the specified cache if it does not exist and createCaches is set to true. </em>
+<a name="197" href="#197">197</a> <em class="jxr_javadoccomment">     * </em>
+<a name="198" href="#198">198</a> <em class="jxr_javadoccomment">     * @param cacheName The name of the cache to retrieve</em>
+<a name="199" href="#199">199</a> <em class="jxr_javadoccomment">     * @return The cache</em>
+<a name="200" href="#200">200</a> <em class="jxr_javadoccomment">     * @throws CacheNotFoundException if the cache does not exist and createCaches is false.</em>
+<a name="201" href="#201">201</a> <em class="jxr_javadoccomment">     */</em>
+<a name="202" href="#202">202</a>     <strong class="jxr_keyword">protected</strong> Ehcache getCache(String cacheName) {
+<a name="203" href="#203">203</a>         <strong class="jxr_keyword">final</strong> CacheManager cacheManager = <strong class="jxr_keyword">this</strong>.getCacheManager();
+<a name="204" href="#204">204</a>         
+<a name="205" href="#205">205</a>         Ehcache cache = cacheManager.getEhcache(cacheName);
+<a name="206" href="#206">206</a>         <strong class="jxr_keyword">if</strong> (cache == <strong class="jxr_keyword">null</strong>) {
+<a name="207" href="#207">207</a>             <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.createCaches) {
+<a name="208" href="#208">208</a>                 <strong class="jxr_keyword">this</strong>.logger.warn(<span class="jxr_string">"No cache named '{}' exists, it will be created from the defaultCache"</span>, cacheName);
+<a name="209" href="#209">209</a>                 <strong class="jxr_keyword">try</strong> {
+<a name="210" href="#210">210</a>                     cacheManager.addCache(cacheName);
+<a name="211" href="#211">211</a>                 }
+<a name="212" href="#212">212</a>                 <strong class="jxr_keyword">catch</strong> (ObjectExistsException oee) {
+<a name="213" href="#213">213</a>                     <strong class="jxr_keyword">this</strong>.logger.trace(<span class="jxr_string">"Race condition creating missing cache '{}', ignoring and retrieving existing cache"</span>, cacheName);
+<a name="214" href="#214">214</a>                 }
+<a name="215" href="#215">215</a>                 cache = cacheManager.getEhcache(cacheName);
+<a name="216" href="#216">216</a>             }
+<a name="217" href="#217">217</a>             <strong class="jxr_keyword">else</strong> {
+<a name="218" href="#218">218</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/googlecode/ehcache/annotations/CacheNotFoundException.html">CacheNotFoundException</a>(cacheName);
+<a name="219" href="#219">219</a>             }
+<a name="220" href="#220">220</a>         }
+<a name="221" href="#221">221</a>         <strong class="jxr_keyword">return</strong> cache;
+<a name="222" href="#222">222</a>     }
+<a name="223" href="#223">223</a>     
+<a name="224" href="#224">224</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> computeMethodAttribute(Method method, Class&lt;?&gt; targetClass) {
+<a name="225" href="#225">225</a>         <em class="jxr_comment">// Don't allow no-public methods as required.</em>
+<a name="226" href="#226">226</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.allowPublicMethodsOnly() &amp;&amp; !Modifier.isPublic(method.getModifiers())) {
+<a name="227" href="#227">227</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a name="228" href="#228">228</a>         }
+<a name="229" href="#229">229</a> 
+<a name="230" href="#230">230</a>         <em class="jxr_comment">// The method may be on an interface, but we need attributes from the target class.</em>
+<a name="231" href="#231">231</a>         <em class="jxr_comment">// If the target class is null, the method will be unchanged.</em>
+<a name="232" href="#232">232</a>         Method specificMethod = ClassUtils.getMostSpecificMethod(method, targetClass);
+<a name="233" href="#233">233</a>         <em class="jxr_comment">// If we are dealing with method with generic parameters, find the original method.</em>
+<a name="234" href="#234">234</a>         specificMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
+<a name="235" href="#235">235</a> 
+<a name="236" href="#236">236</a>         <em class="jxr_comment">// First try is the method in the target class.</em>
+<a name="237" href="#237">237</a>         <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> att = <strong class="jxr_keyword">this</strong>.findMethodAttribute(specificMethod);
+<a name="238" href="#238">238</a>         <strong class="jxr_keyword">if</strong> (att != <strong class="jxr_keyword">null</strong>) {
+<a name="239" href="#239">239</a>             <strong class="jxr_keyword">return</strong> att;
+<a name="240" href="#240">240</a>         }
+<a name="241" href="#241">241</a> 
+<a name="242" href="#242">242</a>         <strong class="jxr_keyword">if</strong> (specificMethod != method) {
+<a name="243" href="#243">243</a>             <em class="jxr_comment">// Fallback is to look at the original method.</em>
+<a name="244" href="#244">244</a>             att = <strong class="jxr_keyword">this</strong>.findMethodAttribute(method);
+<a name="245" href="#245">245</a>             <strong class="jxr_keyword">if</strong> (att != <strong class="jxr_keyword">null</strong>) {
+<a name="246" href="#246">246</a>                 <strong class="jxr_keyword">return</strong> att;
+<a name="247" href="#247">247</a>             }
+<a name="248" href="#248">248</a>         }
+<a name="249" href="#249">249</a>         
+<a name="250" href="#250">250</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a name="251" href="#251">251</a>     }
+<a name="252" href="#252">252</a> 
+<a name="253" href="#253">253</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="254" href="#254">254</a> <em class="jxr_javadoccomment">     * Determine if the specified {@link AnnotatedElement} is annotated with either {@link Cacheable} or {@link TriggersRemove}</em>
+<a name="255" href="#255">255</a> <em class="jxr_javadoccomment">     * </em>
+<a name="256" href="#256">256</a> <em class="jxr_javadoccomment">     * @param method The element to inspect</em>
+<a name="257" href="#257">257</a> <em class="jxr_javadoccomment">     * @return The advice attributes about the element, null if the element is not advised</em>
+<a name="258" href="#258">258</a> <em class="jxr_javadoccomment">     */</em>
+<a name="259" href="#259">259</a>     <strong class="jxr_keyword">private</strong> <a href="../../../../../com/googlecode/ehcache/annotations/MethodAttribute.html">MethodAttribute</a> findMethodAttribute(Method method) {
+<a name="260" href="#260">260</a>         <a href="../../../../../com/googlecode/ehcache/annotations/Cacheable.html">Cacheable</a> cacheableAnnotation = method.getAnnotation(Cacheable.<strong class="jxr_keyword">class</strong>);
+<a name="261" href="#261">261</a>         <strong class="jxr_keyword">if</strong> (cacheableAnnotation != <strong class="jxr_keyword">null</strong>) {
+<a name="262" href="#262">262</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask = <strong class="jxr_keyword">this</strong>.parsePartialCacheKeyAnnotations(method);
+<a name="263" href="#263">263</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.parseCacheableAnnotation(cacheableAnnotation, parameterMask);
+<a name="264" href="#264">264</a>         }
+<a name="265" href="#265">265</a>         
+<a name="266" href="#266">266</a>         <a href="../../../../../com/googlecode/ehcache/annotations/TriggersRemove.html">TriggersRemove</a> triggersRemove = method.getAnnotation(TriggersRemove.<strong class="jxr_keyword">class</strong>);
+<a name="267" href="#267">267</a>         <strong class="jxr_keyword">if</strong> (triggersRemove != <strong class="jxr_keyword">null</strong>) {
+<a name="268" href="#268">268</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask = <strong class="jxr_keyword">this</strong>.parsePartialCacheKeyAnnotations(method);
+<a name="269" href="#269">269</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.parseTriggersRemoveAnnotation(triggersRemove, parameterMask);
+<a name="270" href="#270">270</a>         }
+<a name="271" href="#271">271</a>         
+<a name="272" href="#272">272</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Annotation metaAnn : method.getAnnotations()) {
+<a name="273" href="#273">273</a>             <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; annotationType = metaAnn.annotationType();
+<a name="274" href="#274">274</a>             cacheableAnnotation = annotationType.getAnnotation(Cacheable.<strong class="jxr_keyword">class</strong>);
+<a name="275" href="#275">275</a>             <strong class="jxr_keyword">if</strong> (cacheableAnnotation != <strong class="jxr_keyword">null</strong>) {
+<a name="276" href="#276">276</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask = <strong class="jxr_keyword">this</strong>.parsePartialCacheKeyAnnotations(method);
+<a name="277" href="#277">277</a>                 <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.parseCacheableAnnotation(cacheableAnnotation, parameterMask);
+<a name="278" href="#278">278</a>             }
+<a name="279" href="#279">279</a>             
+<a name="280" href="#280">280</a>             triggersRemove = annotationType.getAnnotation(TriggersRemove.<strong class="jxr_keyword">class</strong>);
+<a name="281" href="#281">281</a>             <strong class="jxr_keyword">if</strong> (triggersRemove != <strong class="jxr_keyword">null</strong>) {
+<a name="282" href="#282">282</a>                 <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask = <strong class="jxr_keyword">this</strong>.parsePartialCacheKeyAnnotations(method);
+<a name="283" href="#283">283</a>                 <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.parseTriggersRemoveAnnotation(triggersRemove, parameterMask);
+<a name="284" href="#284">284</a>             }
+<a name="285" href="#285">285</a>         }
+<a name="286" href="#286">286</a> 
+<a name="287" href="#287">287</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a name="288" href="#288">288</a>     }
+<a name="289" href="#289">289</a>     
+<a name="290" href="#290">290</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="291" href="#291">291</a> <em class="jxr_javadoccomment">     * Parse the parameters annotated with {@link PartialCacheKey}.</em>
+<a name="292" href="#292">292</a> <em class="jxr_javadoccomment">     * </em>
+<a name="293" href="#293">293</a> <em class="jxr_javadoccomment">     * @param method The method who's parameters should be checked.</em>
+<a name="294" href="#294">294</a> <em class="jxr_javadoccomment">     * @return The parameter mask for the annotated parameters.</em>
+<a name="295" href="#295">295</a> <em class="jxr_javadoccomment">     */</em>
+<a name="296" href="#296">296</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parsePartialCacheKeyAnnotations(Method method) {
+<a name="297" href="#297">297</a>         <strong class="jxr_keyword">final</strong> Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+<a name="298" href="#298">298</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong>[] mask = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[parameterAnnotations.length];
+<a name="299" href="#299">299</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; parameterAnnotations.length; i++) {
+<a name="300" href="#300">300</a>             <strong class="jxr_keyword">final</strong> Annotation[] annotations = parameterAnnotations[i];
+<a name="301" href="#301">301</a>             <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> Annotation annotation : annotations) {
+<a name="302" href="#302">302</a>                 <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> Annotation&gt; annotationType = annotation.annotationType();
+<a name="303" href="#303">303</a>                 <strong class="jxr_keyword">if</strong> (PartialCacheKey.<strong class="jxr_keyword">class</strong>.equals(annotationType)) {
+<a name="304" href="#304">304</a>                     mask[i] = <strong class="jxr_keyword">true</strong>;
+<a name="305" href="#305">305</a>                     <strong class="jxr_keyword">break</strong>;
+<a name="306" href="#306">306</a>                 }
+<a name="307" href="#307">307</a>             }
+<a name="308" href="#308">308</a>         }
+<a name="309" href="#309">309</a>         
+<a name="310" href="#310">310</a>         <strong class="jxr_keyword">return</strong> ParameterMask.create(mask);
+<a name="311" href="#311">311</a>     }
+<a name="312" href="#312">312</a> 
+<a name="313" href="#313">313</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="314" href="#314">314</a> <em class="jxr_javadoccomment">     * Construct a {@link CacheableAttribute} from a {@link Cacheable} annotation.</em>
+<a name="315" href="#315">315</a> <em class="jxr_javadoccomment">     * </em>
+<a name="316" href="#316">316</a> <em class="jxr_javadoccomment">     * @param ann The annotation to build the attributes from</em>
+<a name="317" href="#317">317</a> <em class="jxr_javadoccomment">     * @return The constructed cacheable advise attributes</em>
+<a name="318" href="#318">318</a> <em class="jxr_javadoccomment">     */</em>
+<a name="319" href="#319">319</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../../com/googlecode/ehcache/annotations/CacheableAttribute.html">CacheableAttribute</a> parseCacheableAnnotation(<a href="../../../../../com/googlecode/ehcache/annotations/Cacheable.html">Cacheable</a> ann, <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask) {
+<a name="320" href="#320">320</a>         Ehcache cache = <strong class="jxr_keyword">this</strong>.getCache(ann.cacheName());
+<a name="321" href="#321">321</a>         ThreadLocal&lt;MethodInvocation&gt; entryFactory = <strong class="jxr_keyword">null</strong>;
+<a name="322" href="#322">322</a>         <strong class="jxr_keyword">if</strong> (ann.selfPopulating()) {
+<a name="323" href="#323">323</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a> selfPopulatingCacheTracker = <strong class="jxr_keyword">this</strong>.createSelfPopulatingCacheInternal(cache);
+<a name="324" href="#324">324</a>             cache = selfPopulatingCacheTracker.selfPopulatingCache;
+<a name="325" href="#325">325</a>             entryFactory = selfPopulatingCacheTracker.cacheEntryFactory;
+<a name="326" href="#326">326</a>         }
+<a name="327" href="#327">327</a>         
+<a name="328" href="#328">328</a>         <strong class="jxr_keyword">final</strong> Ehcache exceptionCache;
+<a name="329" href="#329">329</a>         <strong class="jxr_keyword">if</strong> (StringUtils.hasLength(ann.exceptionCacheName())) {
+<a name="330" href="#330">330</a>             exceptionCache = <strong class="jxr_keyword">this</strong>.getCache(ann.exceptionCacheName());
+<a name="331" href="#331">331</a>         }
+<a name="332" href="#332">332</a>         <strong class="jxr_keyword">else</strong> {
+<a name="333" href="#333">333</a>             exceptionCache = <strong class="jxr_keyword">null</strong>;
+<a name="334" href="#334">334</a>         }
+<a name="335" href="#335">335</a>         
+<a name="336" href="#336">336</a>         <strong class="jxr_keyword">final</strong> String keyGeneratorName = ann.keyGeneratorName();
+<a name="337" href="#337">337</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/KeyGenerator.html">KeyGenerator</a> keyGenerator = ann.keyGenerator();
+<a name="338" href="#338">338</a>         <strong class="jxr_keyword">final</strong> CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; cacheKeyGenerator = <strong class="jxr_keyword">this</strong>.getCacheKeyGenerator(keyGeneratorName, keyGenerator);
+<a name="339" href="#339">339</a>         
+<a name="340" href="#340">340</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheableAttributeImpl.html">CacheableAttributeImpl</a>(cache, exceptionCache, cacheKeyGenerator, parameterMask, entryFactory);
+<a name="341" href="#341">341</a>     }
+<a name="342" href="#342">342</a>     
+<a name="343" href="#343">343</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="344" href="#344">344</a> <em class="jxr_javadoccomment">     * Creates or retrieves a SelfPopulatingCacheTracker for the specified cache depending on the</em>
+<a name="345" href="#345">345</a> <em class="jxr_javadoccomment">     * configured {@link SelfPopulatingCacheScope}</em>
+<a name="346" href="#346">346</a> <em class="jxr_javadoccomment">     * </em>
+<a name="347" href="#347">347</a> <em class="jxr_javadoccomment">     * @param cache The cache to create a self populating instance of</em>
+<a name="348" href="#348">348</a> <em class="jxr_javadoccomment">     * @return The SelfPopulatingCache and corresponding factory object to use</em>
+<a name="349" href="#349">349</a> <em class="jxr_javadoccomment">     */</em>
+<a name="350" href="#350">350</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a> createSelfPopulatingCacheInternal(Ehcache cache) {
+<a name="351" href="#351">351</a>         <em class="jxr_comment">//If method scoped just create a new instance </em>
+<a name="352" href="#352">352</a>         <strong class="jxr_keyword">if</strong> (SelfPopulatingCacheScope.METHOD == <strong class="jxr_keyword">this</strong>.selfPopulatingCacheScope) {
+<a name="353" href="#353">353</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.createSelfPopulatingCache(cache);
+<a name="354" href="#354">354</a>         }
+<a name="355" href="#355">355</a> 
+<a name="356" href="#356">356</a>         <em class="jxr_comment">//Shared scope, try loading the instance from local Map</em>
+<a name="357" href="#357">357</a>         
+<a name="358" href="#358">358</a>         <em class="jxr_comment">//See if there is a cached SelfPopulatingCache for the name</em>
+<a name="359" href="#359">359</a>         <strong class="jxr_keyword">final</strong> String cacheName = cache.getName();
+<a name="360" href="#360">360</a>         <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a> selfPopulatingCacheTracker = <strong class="jxr_keyword">this</strong>.selfPopulatingCaches.get(cacheName);
+<a name="361" href="#361">361</a>         <strong class="jxr_keyword">if</strong> (selfPopulatingCacheTracker == <strong class="jxr_keyword">null</strong>) {
+<a name="362" href="#362">362</a>             selfPopulatingCacheTracker = <strong class="jxr_keyword">this</strong>.createSelfPopulatingCache(cache);
+<a name="363" href="#363">363</a>             
+<a name="364" href="#364">364</a>             <em class="jxr_comment">//do putIfAbsent to handle concurrent creation. If a value is returned it was already put and that</em>
+<a name="365" href="#365">365</a>             <em class="jxr_comment">//value should be used. If no value was returned the newly created selfPopulatingCache should be used</em>
+<a name="366" href="#366">366</a>             <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a> existing = <strong class="jxr_keyword">this</strong>.selfPopulatingCaches.putIfAbsent(cacheName, selfPopulatingCacheTracker);
+<a name="367" href="#367">367</a>             <strong class="jxr_keyword">if</strong> (existing != <strong class="jxr_keyword">null</strong>) {
+<a name="368" href="#368">368</a>                 selfPopulatingCacheTracker = existing;
+<a name="369" href="#369">369</a>             }
+<a name="370" href="#370">370</a>         }
+<a name="371" href="#371">371</a>         
+<a name="372" href="#372">372</a>         <strong class="jxr_keyword">return</strong> selfPopulatingCacheTracker;
+<a name="373" href="#373">373</a>     }
+<a name="374" href="#374">374</a> 
+<a name="375" href="#375">375</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="376" href="#376">376</a> <em class="jxr_javadoccomment">     * Create a new {@link SelfPopulatingCache} and corresponding {@link CacheEntryFactory}</em>
+<a name="377" href="#377">377</a> <em class="jxr_javadoccomment">     */</em>
+<a name="378" href="#378">378</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a> createSelfPopulatingCache(Ehcache cache) {
+<a name="379" href="#379">379</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">ThreadLocalCacheEntryFactory</a> cacheEntryFactory = <strong class="jxr_keyword">new</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">ThreadLocalCacheEntryFactory</a>();
+<a name="380" href="#380">380</a>         <strong class="jxr_keyword">final</strong> SelfPopulatingCache selfPopulatingCache = <strong class="jxr_keyword">new</strong> SelfPopulatingCache(cache, cacheEntryFactory);
+<a name="381" href="#381">381</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a>(selfPopulatingCache, cacheEntryFactory.entryFactory);
+<a name="382" href="#382">382</a>     }
+<a name="383" href="#383">383</a> 
+<a name="384" href="#384">384</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="385" href="#385">385</a> <em class="jxr_javadoccomment">     * Construct a {@link TriggersRemoveAttribute} from a {@link TriggersRemove} annotation.</em>
+<a name="386" href="#386">386</a> <em class="jxr_javadoccomment">     * </em>
+<a name="387" href="#387">387</a> <em class="jxr_javadoccomment">     * @param ann The annotation to build the attributes from</em>
+<a name="388" href="#388">388</a> <em class="jxr_javadoccomment">     * @return The constructed triggers remove advise attributes</em>
+<a name="389" href="#389">389</a> <em class="jxr_javadoccomment">     */</em>
+<a name="390" href="#390">390</a>     <strong class="jxr_keyword">protected</strong> <a href="../../../../../com/googlecode/ehcache/annotations/TriggersRemoveAttribute.html">TriggersRemoveAttribute</a> parseTriggersRemoveAnnotation(<a href="../../../../../com/googlecode/ehcache/annotations/TriggersRemove.html">TriggersRemove</a> ann, <a href="../../../../../com/googlecode/ehcache/annotations/impl/ParameterMask.html">ParameterMask</a> parameterMask) {
+<a name="391" href="#391">391</a>         <strong class="jxr_keyword">final</strong> String[] cacheNames = ann.cacheName();
+<a name="392" href="#392">392</a>         <strong class="jxr_keyword">final</strong> List&lt;Ehcache&gt; caches = <strong class="jxr_keyword">new</strong> ArrayList&lt;Ehcache&gt;(cacheNames.length);
+<a name="393" href="#393">393</a>         <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">final</strong> String cacheName : cacheNames) {
+<a name="394" href="#394">394</a>             <strong class="jxr_keyword">final</strong> Ehcache cache = <strong class="jxr_keyword">this</strong>.getCache(cacheName);
+<a name="395" href="#395">395</a>             caches.add(cache);
+<a name="396" href="#396">396</a>         }
+<a name="397" href="#397">397</a> 
+<a name="398" href="#398">398</a>         <strong class="jxr_keyword">final</strong> String keyGeneratorName = ann.keyGeneratorName();
+<a name="399" href="#399">399</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/KeyGenerator.html">KeyGenerator</a> keyGenerator = ann.keyGenerator();
+<a name="400" href="#400">400</a>         <strong class="jxr_keyword">final</strong> CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; cacheKeyGenerator = <strong class="jxr_keyword">this</strong>.getCacheKeyGenerator(keyGeneratorName, keyGenerator);
+<a name="401" href="#401">401</a>         
+<a name="402" href="#402">402</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/TriggersRemoveAttributeImpl.html">TriggersRemoveAttributeImpl</a>(caches, cacheKeyGenerator, parameterMask, ann.removeAll(), ann.when());
+<a name="403" href="#403">403</a>     }
+<a name="404" href="#404">404</a>     
+<a name="405" href="#405">405</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="406" href="#406">406</a> <em class="jxr_javadoccomment">     * Get the {@link CacheKeyGenerator} by name. Returning a default generator if the name is empty or null</em>
+<a name="407" href="#407">407</a> <em class="jxr_javadoccomment">     * </em>
+<a name="408" href="#408">408</a> <em class="jxr_javadoccomment">     * @param keyGeneratorName Name of the generator to retrieve</em>
+<a name="409" href="#409">409</a> <em class="jxr_javadoccomment">     * @return The named generator or the default generator if the name was empty or null</em>
+<a name="410" href="#410">410</a> <em class="jxr_javadoccomment">     */</em>
+<a name="411" href="#411">411</a>     @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a name="412" href="#412">412</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; getCacheKeyGenerator(String keyGeneratorName, <a href="../../../../../com/googlecode/ehcache/annotations/KeyGenerator.html">KeyGenerator</a> keyGenerator) {
+<a name="413" href="#413">413</a>         String keyGeneratorClassName = keyGenerator.name();
+<a name="414" href="#414">414</a>         <strong class="jxr_keyword">if</strong> (keyGeneratorClassName.length() &gt; 0) {
+<a name="415" href="#415">415</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.getOrCreateCacheKeyGenerator(keyGenerator);
+<a name="416" href="#416">416</a>         }
+<a name="417" href="#417">417</a> 
+<a name="418" href="#418">418</a>         <strong class="jxr_keyword">final</strong> CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; cacheKeyGenerator;
+<a name="419" href="#419">419</a>         <strong class="jxr_keyword">if</strong> (StringUtils.hasLength(keyGeneratorName)) {
+<a name="420" href="#420">420</a>             cacheKeyGenerator = <strong class="jxr_keyword">this</strong>.beanFactory.getBean(keyGeneratorName, CacheKeyGenerator.<strong class="jxr_keyword">class</strong>);
+<a name="421" href="#421">421</a>         } <strong class="jxr_keyword">else</strong> {
+<a name="422" href="#422">422</a>             cacheKeyGenerator = <strong class="jxr_keyword">this</strong>.defaultCacheKeyGenerator;
+<a name="423" href="#423">423</a>         }
+<a name="424" href="#424">424</a>         <strong class="jxr_keyword">return</strong> cacheKeyGenerator;
+<a name="425" href="#425">425</a>     }
+<a name="426" href="#426">426</a>     
+<a name="427" href="#427">427</a>     @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a name="428" href="#428">428</a>     <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> CacheKeyGenerator&lt;? <strong class="jxr_keyword">extends</strong> Serializable&gt; getOrCreateCacheKeyGenerator(<a href="../../../../../com/googlecode/ehcache/annotations/KeyGenerator.html">KeyGenerator</a> keyGenerator) {
+<a name="429" href="#429">429</a>         <strong class="jxr_keyword">final</strong> StringBuilder beanNameBuilder = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a name="430" href="#430">430</a>         
+<a name="431" href="#431">431</a>         String keyGeneratorClassName = keyGenerator.name();
+<a name="432" href="#432">432</a>         <strong class="jxr_keyword">if</strong> (!keyGeneratorClassName.contains(<span class="jxr_string">"."</span>)) {
+<a name="433" href="#433">433</a>             keyGeneratorClassName  = <span class="jxr_string">"com.googlecode.ehcache.annotations.key."</span> + keyGeneratorClassName;
+<a name="434" href="#434">434</a>         }
+<a name="435" href="#435">435</a>         
+<a name="436" href="#436">436</a>         beanNameBuilder.append(keyGeneratorClassName);
+<a name="437" href="#437">437</a>         
+<a name="438" href="#438">438</a>         <strong class="jxr_keyword">final</strong> MutablePropertyValues mutablePropertyValues = <strong class="jxr_keyword">new</strong> MutablePropertyValues();
+<a name="439" href="#439">439</a>         
+<a name="440" href="#440">440</a>         <em class="jxr_comment">//Sort the properties array first so bean name generation is always consistent</em>
+<a name="441" href="#441">441</a>         <strong class="jxr_keyword">final</strong> <a href="../../../../../com/googlecode/ehcache/annotations/Property.html">Property</a>[] properties = keyGenerator.properties();
+<a name="442" href="#442">442</a>         Arrays.sort(properties, PropertyComparator.INSTANCE);
+<a name="443" href="#443">443</a>         
+<a name="444" href="#444">444</a>         <strong class="jxr_keyword">for</strong> (Property property : properties) {
+<a name="445" href="#445">445</a>             <strong class="jxr_keyword">final</strong> String name = property.name();
+<a name="446" href="#446">446</a>             <strong class="jxr_keyword">final</strong> String value = property.value();
+<a name="447" href="#447">447</a>             <strong class="jxr_keyword">final</strong> String ref = property.ref();
+<a name="448" href="#448">448</a>             
+<a name="449" href="#449">449</a>             beanNameBuilder.append(<span class="jxr_string">"["</span>).append(name).append(<span class="jxr_string">","</span>).append(value).append(<span class="jxr_string">","</span>).append(ref).append(<span class="jxr_string">"]"</span>);
+<a name="450" href="#450">450</a>             
+<a name="451" href="#451">451</a>             <strong class="jxr_keyword">if</strong> (value.length() &gt; 0) {
+<a name="452" href="#452">452</a>                 <strong class="jxr_keyword">if</strong> (ref.length() &gt; 0) {
+<a name="453" href="#453">453</a>                     <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Only one of value or ref must be specified no both on Property with name: "</span> + name);
+<a name="454" href="#454">454</a>                 }
+<a name="455" href="#455">455</a>                 
+<a name="456" href="#456">456</a>                 mutablePropertyValues.addPropertyValue(name, value);
+<a name="457" href="#457">457</a>             }
+<a name="458" href="#458">458</a>             <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ref.length() &gt; 0) {
+<a name="459" href="#459">459</a>                 mutablePropertyValues.addPropertyValue(name, <strong class="jxr_keyword">new</strong> RuntimeBeanReference(ref));
+<a name="460" href="#460">460</a>             }
+<a name="461" href="#461">461</a>             <strong class="jxr_keyword">else</strong> {
+<a name="462" href="#462">462</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Either value or ref must be specified on Property with name: "</span> + name);
+<a name="463" href="#463">463</a>             }
+<a name="464" href="#464">464</a>         }
+<a name="465" href="#465">465</a>         
+<a name="466" href="#466">466</a>         <strong class="jxr_keyword">final</strong> String beanName = beanNameBuilder.toString();
+<a name="467" href="#467">467</a>         
+<a name="468" href="#468">468</a>         <em class="jxr_comment">//See if the generator is already registered using the compiled bean name, if so just use that instance</em>
+<a name="469" href="#469">469</a>         <strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong>.cacheKeyBeanFactory.containsBean(beanName)) {
+<a name="470" href="#470">470</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.cacheKeyBeanFactory.getBean(beanName, CacheKeyGenerator.<strong class="jxr_keyword">class</strong>);
+<a name="471" href="#471">471</a>         }
+<a name="472" href="#472">472</a> 
+<a name="473" href="#473">473</a>         <em class="jxr_comment">//Create and register the bean if it didn't already exist</em>
+<a name="474" href="#474">474</a>         <strong class="jxr_keyword">final</strong> AbstractBeanDefinition beanDefinition;
+<a name="475" href="#475">475</a>         <strong class="jxr_keyword">try</strong> {
+<a name="476" href="#476">476</a>             beanDefinition = BeanDefinitionReaderUtils.createBeanDefinition(<strong class="jxr_keyword">null</strong>, keyGeneratorClassName, ClassUtils.getDefaultClassLoader());
+<a name="477" href="#477">477</a>         }
+<a name="478" href="#478">478</a>         <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
+<a name="479" href="#479">479</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BeanCreationException(<span class="jxr_string">"Could not find class '"</span> + keyGeneratorClassName + <span class="jxr_string">"' to create CacheKeyGenerator from"</span>, e);
+<a name="480" href="#480">480</a>         }
+<a name="481" href="#481">481</a>         
+<a name="482" href="#482">482</a>         <strong class="jxr_keyword">if</strong> (ReflectionHelperAware.<strong class="jxr_keyword">class</strong>.isAssignableFrom(beanDefinition.getBeanClass())) {
+<a name="483" href="#483">483</a>             <strong class="jxr_keyword">final</strong> RuntimeBeanReference cacheManagerReference = <strong class="jxr_keyword">new</strong> RuntimeBeanReference(AnnotationDrivenEhCacheBeanDefinitionParser.CACHING_REFLECTION_HELPER_BEAN_NAME);
+<a name="484" href="#484">484</a>             mutablePropertyValues.addPropertyValue(<span class="jxr_string">"reflectionHelper"</span>, cacheManagerReference);
+<a name="485" href="#485">485</a>         }
+<a name="486" href="#486">486</a>         
+<a name="487" href="#487">487</a>         beanDefinition.setPropertyValues(mutablePropertyValues);
+<a name="488" href="#488">488</a>         <strong class="jxr_keyword">this</strong>.cacheKeyBeanFactory.registerBeanDefinition(beanName, beanDefinition);
+<a name="489" href="#489">489</a>         
+<a name="490" href="#490">490</a>         <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.cacheKeyBeanFactory.getBean(beanName, CacheKeyGenerator.<strong class="jxr_keyword">class</strong>);
+<a name="491" href="#491">491</a>     }
+<a name="492" href="#492">492</a>     
+<a name="493" href="#493">493</a>     <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a> {
+<a name="494" href="#494">494</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> SelfPopulatingCache selfPopulatingCache;
+<a name="495" href="#495">495</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;MethodInvocation&gt; cacheEntryFactory;
+<a name="496" href="#496">496</a>         
+<a name="497" href="#497">497</a>         <strong class="jxr_keyword">public</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">SelfPopulatingCacheTracker</a>(SelfPopulatingCache selfPopulatingCache, ThreadLocal&lt;MethodInvocation&gt; cacheEntryFactory) {
+<a name="498" href="#498">498</a>             <strong class="jxr_keyword">this</strong>.selfPopulatingCache = selfPopulatingCache;
+<a name="499" href="#499">499</a>             <strong class="jxr_keyword">this</strong>.cacheEntryFactory = cacheEntryFactory;
+<a name="500" href="#500">500</a>         }
+<a name="501" href="#501">501</a>     }
+<a name="502" href="#502">502</a> 
+<a name="503" href="#503">503</a>     <em class="jxr_javadoccomment">/**</em>
+<a name="504" href="#504">504</a> <em class="jxr_javadoccomment">     * EhCache entry factory that uses a ThreadLocal to pass a MethodInvocation into the factory</em>
+<a name="505" href="#505">505</a> <em class="jxr_javadoccomment">     * for object creation.</em>
+<a name="506" href="#506">506</a> <em class="jxr_javadoccomment">     */</em>
+<a name="507" href="#507">507</a>     <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/googlecode/ehcache/annotations/impl/CacheAttributeSourceImpl.html">ThreadLocalCacheEntryFactory</a> implements CacheEntryFactory {
+<a name="508" href="#508">508</a>         <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;MethodInvocation&gt; entryFactory = <strong class="jxr_keyword">new</strong> ThreadLocal&lt;MethodInvocation&gt;();
+<a name="509" href="#509">509</a> 
+<a name="510" href="#510">510</a>         <strong class="jxr_keyword">public</strong> Object createEntry(Object arg0) <strong class="jxr_keyword">throws</strong> Exception {
+<a name="511" href="#511">511</a>             <strong class="jxr_keyword">final</strong> MethodInvocation methodInvocation = <strong class="jxr_keyword">this</strong>.entryFactory.get();
+<a name="512" href="#512">512</a>             <strong class="jxr_keyword">if</strong> (methodInvocation == <strong class="jxr_keyword">null</strong>) {
+<a name="513" href="#513">513</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"No MethodInvocation specified in the ThreadLocal"</span>);
+<a name="514" href="#514">514</a>             }
+<a name="515" href="#515">515</a>             
+<a name="516" href="#516">516</a>             <strong class="jxr_keyword">try</strong> {
+<a name="517" href="#517">517</a>                 <strong class="jxr_keyword">return</strong> methodInvocation.proceed();
+<a name="518" href="#518">518</a>             }
+<a name="519" href="#519">519</a>             <strong class="jxr_keyword">catch</strong> (Throwable t) {
+<a name="520" href="#520">520</a>                 <strong class="jxr_keyword">if</strong> (t instanceof Exception) {
+<a name="521" href="#521">521</a>                     <strong class="jxr_keyword">throw</strong> (Exception)t;
+<a name="522" href="#522">522</a>                 }
+<a name="523" href="#523">523</a>                 <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (t instanceof Error) {
+<a name="524" href="#524">524</a>                     <strong class="jxr_keyword">throw</strong> (Error)t;
+<a name="525" href="#525">525</a>                 }
+<a name="526" href="#526">526</a>                 
+<a name="527" href="#527">527</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Exception(t);
+<a name="528" href="#528">528</a>             }
+<a name="529" href="#529">529</a>         }
+<a name="530" href="#530">530</a>         
+<a name="531" href="#531">531</a>     }
+<a name="532" href="#532">532</a> }
+</pre>
+<hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
+</html>
+
