@@ -23,7 +23,7 @@ ehcache-spring-annotations contains a feature in version 1.1 and later that allo
      http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
     <ehcache:annotation-driven cache-manager="ehCacheManager" />
-    <ehcache:config>
+    <ehcache:config cache-manager="ehCacheManager">
       <!-- interval is in minutes -->
       <ehcache:evict-expired-elements interval="20"/>
     </ehcache:config>
@@ -52,7 +52,7 @@ The following example will only call evictExpiredElements on the cache named "fo
      http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
     <ehcache:annotation-driven cache-manager="ehCacheManager" />
-    <ehcache:config>
+    <ehcache:config cache-manager="ehCacheManager">
       <ehcache:evict-expired-elements interval="20">
         <ehcache:include name="foo"/>
         <ehcache:include name="bar"/>
@@ -78,7 +78,7 @@ The next example will include all caches except the cache named "bucky" and the 
      http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
     <ehcache:annotation-driven cache-manager="ehCacheManager" />
-    <ehcache:config>
+    <ehcache:config cache-manager="ehCacheManager">
       <ehcache:evict-expired-elements interval="20">
         <ehcache:exclude name="bucky"/>
         <ehcache:exclude pattern=".*badger$"/>
