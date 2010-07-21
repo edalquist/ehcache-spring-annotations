@@ -50,7 +50,7 @@ When the above POJO is defined as a bean in a Spring IoC container, the bean ins
 </beans>
 }}}
 
-Also the following ehcache.xml configuration file must be present on the classpath to declare and configure the two caches
+Also the following ehcache.xml configuration file must be present on the classpath to declare and configure the two caches.
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
