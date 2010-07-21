@@ -50,6 +50,34 @@ When the above POJO is defined as a bean in a Spring IoC container, the bean ins
 </beans>
 }}}
 
+Also the following ehcache.xml configuration file must be present on the classpath to declare and configure the two caches
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
+    <!--
+     | Please see http://ehcache.sourceforge.net/documentation/configuration.html for
+     | detailed information on how to configurigure caches in this file
+     +-->
+    <!-- Location of persistent caches on disk -->
+    <diskStore path="java.io.tmpdir/EhCacheSpringAnnotationsExampleApp" />
+
+    <defaultCache eternal="false" maxElementsInMemory="1000"
+        overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+        timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
+
+    <cache name="weatherCache" eternal="false"
+        maxElementsInMemory="100" overflowToDisk="false" diskPersistent="false"
+        timeToIdleSeconds="0" timeToLiveSeconds="300"
+        memoryStoreEvictionPolicy="LRU" />
+
+    <cache name="locationSearchCache" eternal="false"
+        maxElementsInMemory="100" overflowToDisk="false" diskPersistent="false"
+        timeToIdleSeconds="0" timeToLiveSeconds="300"
+        memoryStoreEvictionPolicy="LRU" />
+</ehcache>
+}}}
+
 ===!CacheManager Reference===
 You can omit the `cache-manager` attribute in the `<ehcache:annotation-driven/>` tag if the bean name of the `CacheManager` that you want to wire in has the name `cacheManager`. If the `CacheManager` bean that you want to dependency-inject has any other name, then you have to use the `cache-manager` attribute explicitly, as in the preceding example.
 
