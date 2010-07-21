@@ -4,7 +4,7 @@
 
 = Using `@TriggersRemove` =
 
-ehcache-spring-annotations includes another annotation - `@TriggersRemove` - which can be applied to methods in order to trigger removal of a single element or optionally of all elements from one or more caches.
+ehcache-spring-annotations includes another annotation - `@TriggersRemove` - which can be applied to methods in order to trigger removal of a single element or optionally of all elements from one or more caches. Please read the documentation for [UsingCacheable @Cacheable] before reading this page.
 
 = Default Example =
 
