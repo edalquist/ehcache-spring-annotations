@@ -24,7 +24,7 @@ dao.getWeather("49931");
 Example dao:
 {{{
 class WeatherDao {
-    @Cacheable(cacheName="weatherCache", @KeyGenerator(name="StringCacheKeyGenerator"))
+    @Cacheable(cacheName="weatherCache", keyGenerator=@KeyGenerator(name="StringCacheKeyGenerator"))
     Weather getWeather(String zip) {
         ...
     }
