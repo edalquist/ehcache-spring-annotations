@@ -26,7 +26,7 @@ If you do not wish to implement `hashCode` on beans like `MyBean`, you will need
 == 2. How can I generate a cache key that isn't based on the arguments? ==
 This example generates a cache key that is a formatted string of the current date.
 
-The CacheKeyGenerator implementation
+The !CacheKeyGenerator implementation
 {{{
 package com.example;
 
