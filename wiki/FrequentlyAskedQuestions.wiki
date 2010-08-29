@@ -21,3 +21,49 @@ Technically no, however we strongly recommend that you do.
 If you do not wish to implement `hashCode` on beans like `MyBean`, you will need to enable the *useReflection* property on the [CacheKeyGenerators CacheKeyGenerator] you're using. Enabling *useReflection* uses reflection to generate a key from from the fields in your class. Enabling *useReflection* drops key generation performance by 50%.
 
 *Many IDEs have the capability to automatically generate proper equals(), hashCode() and toString() implementations for your Java beans, we strongly recommend using this feature.*
+
+
+== 2. How can I generate a cache key that isn't based on the arguments? ==
+This example generates a cache key that is a formatted string of the current date.
+
+The CacheKeyGenerator implementation
+{{{
+package com.example;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.aopalliance.intercept.MethodInvocation;
+
+import com.googlecode.ehcache.annotations.key.CacheKeyGenerator;
+
+public class DateCacheKeyGenerator implements CacheKeyGenerator<Serializable> {
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
+
+    @Override
+    public Serializable generateKey(MethodInvocation methodInvocation) {
+        return this.generateKey((Object)methodInvocation);
+    }
+
+    @Override
+    public Serializable generateKey(Object... data) {
+        
+        final Date now = new Date();
+        
+        synchronized (this.dateFormat) {
+            return dateFormat.format(now);
+        }
+    }
+}
+[/code]
+
+Referring to the custom CacheKeyGenerator in the @Cacheable annotation
+[code]
+@Cacheable(cacheName="exampleCache", 
+    keyGenerator = @KeyGenerator (name = "com.example.DateCacheKeyGenerator")
+    )
+public ExampleData getData(String arg1, Object arg2)
+[/code]
+
+Now while this example provides a functional key generator it could be improved on a by doing things like using a Timer to generate the date string once per minute and storing it in a volatile field instead of generating the date string every time the cached method is requested. 
