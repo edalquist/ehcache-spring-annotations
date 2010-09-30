@@ -70,7 +70,7 @@ public class DefaultWeatherDao implements WeatherDao {
             )
         )
     )
-    public Weather updateWeather(String zipCode, Weather newWeather);
+    public Weather deleteWeather(String zipCode);
 }
 }}}
 
