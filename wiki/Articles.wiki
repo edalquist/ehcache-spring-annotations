@@ -4,6 +4,7 @@
  * http://ehcache.org/recipes/spring-annotations.html
  * http://www.jeviathon.com/2010/04/caching-java-methods-with-spring-3.html
  * http://developers-blog.org/blog/default/2010/06/07/Caching-Example-with-Spring-Annotations-and-Ehcache
+ * http://blog.goyello.com/2010/07/29/quick-start-with-ehcache-annotations-for-spring/
 
 == Forums Topics About ESA ==
  * http://forum.springsource.org/showthread.php?t=88678
