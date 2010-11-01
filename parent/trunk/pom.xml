@@ -1,0 +1,115 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>oss-parent</artifactId>
+        <groupId>org.sonatype.oss</groupId>
+        <version>5</version>
+    </parent>
+    
+    <groupId>com.googlecode.ehcache-spring-annotations</groupId>
+    <artifactId>ehcache-spring-annotations-parent</artifactId>
+    <version>1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <name>Ehcache Spring Annotations Parent</name>
+    <description>Common POM configuration for Ehcache Spring Annotaitons projects.</description>
+    <url>http://code.google.com/p/ehcache-spring-annotations/</url>
+
+    <developers>
+        <developer>
+            <name>Nicholas Blair</name>
+            <email>nblair@doit.wisc.edu</email>
+            <organization>University of Wisconsin-Madison, Division of Information Technology</organization>
+        </developer>
+        <developer>
+            <name>Eric Dalquist</name>
+            <email>eric.dalquist@doit.wisc.edu</email>
+            <organization>University of Wisconsin-Madison, Division of Information Technology</organization>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <scm>
+        <connection>scm:svn:http://ehcache-spring-annotations.googlecode.com/svn/parent/trunk/</connection>
+        <developerConnection>scm:svn:https://ehcache-spring-annotations.googlecode.com/svn/parent/trunk/</developerConnection>
+        <url>http://ehcache-spring-annotations.googlecode.com/svn/parent/trunk/</url>
+    </scm>
+    
+    <issueManagement>
+        <url>http://code.google.com/p/ehcache-spring-annotations/issues</url>
+        <system>Google Code</system>
+    </issueManagement>
+    
+    <mailingLists>
+        <mailingList>
+            <name>ehcache-spring-annotations</name>
+            <post>ehcache-spring-annotations@googlegroups.com</post>
+            <archive>http://groups.google.com/group/ehcache-spring-annotations</archive>
+            <subscribe>http://groups.google.com/group/ehcache-spring-annotations/subscribe</subscribe>
+            <unsubscribe>http://groups.google.com/group/ehcache-spring-annotations/subscribe</unsubscribe>
+        </mailingList>
+    </mailingLists>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.mycila.maven-license-plugin</groupId>
+                    <artifactId>maven-license-plugin</artifactId>
+                    <version>1.8.0</version>
+                    <configuration>
+                        <basedir>${basedir}</basedir>
+                        <header>${basedir}/src/etc/header.txt</header>
+                        <aggregate>true</aggregate>
+                        <excludes>
+                            <exclude>LICENSE</exclude>
+                            <exclude>NOTICE</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.0</version>
+                    <configuration>
+                        <mavenExecutorId>forked-path</mavenExecutorId>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <arguments>-Pesa-release</arguments>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>esa-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila.maven-license-plugin</groupId>
+                        <artifactId>maven-license-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>check-license</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>license:check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
