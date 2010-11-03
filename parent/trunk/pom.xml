@@ -67,7 +67,7 @@
                     <version>1.8.0</version>
                     <configuration>
                         <basedir>${basedir}</basedir>
-                        <header>${basedir}/src/etc/header.txt</header>
+                        <header>https://ehcache-spring-annotations.googlecode.com/svn/license/header.txt</header>
                         <aggregate>true</aggregate>
                         <excludes>
                             <exclude>LICENSE</exclude>
@@ -102,7 +102,7 @@
                                 <id>check-license</id>
                                 <phase>process-sources</phase>
                                 <goals>
-                                    <goal>license:check</goal>
+                                    <goal>check</goal>
                                 </goals>
                             </execution>
                         </executions>
