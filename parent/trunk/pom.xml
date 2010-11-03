@@ -83,7 +83,7 @@
                     <configuration>
                         <mavenExecutorId>forked-path</mavenExecutorId>
                         <useReleaseProfile>false</useReleaseProfile>
-                        <arguments>-Pesa-release</arguments>
+                        <arguments>-Psonatype-oss-release,esa-release</arguments>
                     </configuration>
                 </plugin>
             </plugins>
