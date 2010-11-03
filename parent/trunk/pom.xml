@@ -69,6 +69,7 @@
                         <basedir>${basedir}</basedir>
                         <header>https://ehcache-spring-annotations.googlecode.com/svn/license/header.txt</header>
                         <aggregate>true</aggregate>
+                        <strictCheck>true</strictCheck>
                         <excludes>
                             <exclude>LICENSE</exclude>
                             <exclude>NOTICE</exclude>
