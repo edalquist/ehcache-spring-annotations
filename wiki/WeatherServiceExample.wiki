@@ -46,11 +46,20 @@ There are 3 simple implementations of `WeatherService` interface in the 'impl' p
 https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgooglecode%2Fehcache%2Fannotations%2Fexamples%2Fimpl
 
 All three of these examples have @[UsingCacheable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations. 
+The Simple and `SpringJdbc` implementations are very similar, with the former using simply a Map and the latter depending on Spring's `SimpleJdbcTemplate` and an in-memory HSQLDB `DataSource.`
 The 'Slow' variant is implemented slightly differently to simulate an 'expensive' implementation (each method calls Thread.sleep()) and has the "selfPopulating" option enabled.
 
 The 'web' package is a simple Spring 3 @Controller that interacts with the `WeatherService` implementation:
 
 https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgooglecode%2Fehcache%2Fannotations%2Fexamples%2Fweb
+
+To switch between the 3 `WeatherService` implementations, simply edit the line in the `WeatherServiceController` that looks like the following:
+
+{{{
+public void setWeatherService(@Qualifier("jdbc") WeatherService weatherService) {
+}}}
+
+Change the value of the @Qualifier annotation from "jdbc" to the value of the @Qualifier annotation on the desired `WeatherService` annotation (e.g. "simple" or "slow").
 
 ehcache-spring-annotations is configured in the Spring applicationContext found in:
 
@@ -62,3 +71,11 @@ The critical line to activate ehcache-spring-annotations in that file looks like
 }}}
  
 With that line in place, ehcache-spring-annotations integration in the Spring applicationContext will wrap beans that you have annotated with @[UsingCacheable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations with Proxies that provide the desired `EhCache` integration.
+
+= Enabling caching for JUnit tests =
+
+This example also demonstrates how to enable ehcache-spring-annotations for JUnit tests:
+
+https://code.google.com/p/ehcache-spring-annotations/source/browse/examples/ehcache-spring-example-1/trunk/src/test/java/com/googlecode/ehcache/annotations/examples/impl/SimpleWeatherServiceImplTest.java
+
+This tests depends on the Spring applicationContext found in src/main/resources.
