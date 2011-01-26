@@ -37,7 +37,7 @@ mvn package
 
 This example is a basic web application that allows the visitor to create, update, retrieve and delete "Weather" data.
 
-There is a simple JavaBean to represent a piece of Weather data and a CRUD-style interface for working with Weather beans:
+There is a simple Java Bean to represent a piece of Weather data and a CRUD-style interface for working with Weather beans:
 
 https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgooglecode%2Fehcache%2Fannotations%2Fexamples
 
