@@ -61,4 +61,4 @@ The critical line to activate ehcache-spring-annotations in that file looks like
 <ehcache:annotation-driven/>
 }}}
  
-With that line in place, ehcache-spring-annotations integration in the Spring applicationContext will wrap beans that you have annotated with @[UsingCacheable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations with Proxies that provide the desired EhCache integration.
+With that line in place, ehcache-spring-annotations integration in the Spring applicationContext will wrap beans that you have annotated with @[UsingCacheable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations with Proxies that provide the desired `EhCache` integration.
