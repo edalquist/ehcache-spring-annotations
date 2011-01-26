@@ -20,6 +20,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import com.googlecode.ehcache.annotations.Cacheable;
 import com.googlecode.ehcache.annotations.KeyGenerator;
 import com.googlecode.ehcache.annotations.PartialCacheKey;
@@ -36,7 +39,8 @@ import com.googlecode.ehcache.annotations.examples.WeatherService;
  * @author Nicholas Blair
  * @version $Id$
  */
-//@Service
+@Service
+@Qualifier("slow")
 public class SlowWeatherServiceImpl implements WeatherService {
 
 	private final Map<String, Weather> storage = Collections.synchronizedMap(new HashMap<String, Weather>());
