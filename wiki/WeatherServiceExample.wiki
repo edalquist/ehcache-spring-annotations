@@ -33,6 +33,17 @@ mvn package
   # Copy the file named ehcache-spring-example-1.war under neath the target sub directory to the webapps directory in your Tomcat 6 install.
   # Start tomcat, and navigate to http://localhost:8080/ehcache-spring-example-1/
 
+= Using the Example =
+
+On http://localhost:8080/ehcache-spring-example-1/ you will find a simple web interface for creating, manipulating, and deleting Weather objects.
+Enter a zip code and current temperature in the form at the top and click Submit. This triggers a call to `WeatherService#createNewWeather()` which has no caching annotations.
+The weatherCache statistics will be unchanged.
+
+If you click on the details link for your new weather object, you'll trigger a call to `WeatherService#getWeather` which has the @[UsingCacheable Cacheable] annotation. After the first click of the details link for a zip code, when you return to the main view you'll see the cache statistics now shows 1 object in memory, 0 hits, and 1 miss. Clicking that same zip code's details link afterwards will result in cache hits.
+
+If you update the temperature for an existing weather object, you'll trigger a call to `WeatherService#updateWeather`, which is annotated with @[UsingTriggersRemove TriggersRemove]. Returning to the main you'll see that the weather object previously in memory is now gone from the cache statistics (memory store object count will show 1 less).
+Clicking the zip code's details link will result in a get, which will result in a miss; clicking again afterwards will result in cache hits.
+
 = Example Details =
 
 This example is a basic web application that allows the visitor to create, update, retrieve and delete "Weather" data.
