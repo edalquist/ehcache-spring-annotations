@@ -1,0 +1,33 @@
+#summary This page documents the WeatherService Example found under the examples tree.
+
+= Introduction =
+
+The WeatherService example project can be found in the source repository under:
+
+https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk
+
+This project is a Spring 3 web application that includes a few example applications of the @Cacheable and @TriggersRemove annotations.
+
+= Requirements = 
+
+# Subversion client to check out the source tree
+# Maven to build the project
+# Tomcat 6 instance to deploy and run.
+
+The authors use [http://eclipse.org Eclipse] to develop the software along with the following plugins:
+* [http://subclipse.tigris.org/ Subclipse Subversion integration]
+* [http://m2eclipse.sonatype.org/ m2eclipse Maven Integration]
+* [http://www.eclipsetotale.com/tomcatPlugin.html Sysdeo Eclipse Tomcat Launcher]
+
+= Setup =
+
+# Download and unzip a Tomcat 6 distribution
+# Check out the project with:
+{{{svn co https://ehcache-spring-annotations.googlecode.com/svn/examples/ehcache-spring-example-1/trunk ehcache-spring-example-1}}}
+# Navigate to the ehcache-spring-example-1 directory, and build the project with:
+{{{mvn package}}}
+# Copy the file named ehcache-spring-example-1.war under neath the target sub directory to the webapps directory in your Tomcat 6 install.
+# Start tomcat, and navigate to http://localhost:8080/ehcache-spring-example-1/
+
+= Example Details =
+
