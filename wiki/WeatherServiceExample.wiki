@@ -6,7 +6,7 @@ The `WeatherService` example project can be found in the source repository under
 
 https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk
 
-This project is a Spring 3 web application that includes a few example applications of the @[UsingCachable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations.
+This project is a Spring 3 web application that includes a few example applications of the @[UsingCacheable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations.
 
 = Requirements = 
 
@@ -34,3 +34,31 @@ mvn package
   # Start tomcat, and navigate to http://localhost:8080/ehcache-spring-example-1/
 
 = Example Details =
+
+This example is a basic web application that allows the visitor to create, update, retrieve and delete "Weather" data.
+
+There is a simple JavaBean to represent a piece of Weather data and a CRUD-style interface for working with Weather beans:
+
+https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgooglecode%2Fehcache%2Fannotations%2Fexamples
+
+There are 3 simple implementations of `WeatherService` interface in the 'impl' package:
+
+https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgooglecode%2Fehcache%2Fannotations%2Fexamples%2Fimpl
+
+All three of these examples have @[UsingCacheable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations. 
+The 'Slow' variant is implemented slightly differently to simulate an 'expensive' implementation (each method calls Thread.sleep()) and has the "selfPopulating" option enabled.
+
+The 'web' package is a simple Spring 3 @Controller that interacts with the `WeatherService` implementation:
+
+https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgooglecode%2Fehcache%2Fannotations%2Fexamples%2Fweb
+
+ehcache-spring-annotations is configured in the Spring applicationContext found in:
+
+https://code.google.com/p/ehcache-spring-annotations/source/browse/examples/ehcache-spring-example-1/trunk/src/main/resources/contexts/applicationContext.xml
+
+The critical line to activate ehcache-spring-annotations in that file looks like:
+{{{
+<ehcache:annotation-driven/>
+}}}
+ 
+With that line in place, ehcache-spring-annotations integration in the Spring applicationContext will wrap beans that you have annotated with @[UsingCacheable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations with Proxies that provide the desired EhCache integration.
