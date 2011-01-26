@@ -2,11 +2,11 @@
 
 = Introduction =
 
-The WeatherService example project can be found in the source repository under:
+The `WeatherService` example project can be found in the source repository under:
 
 https://code.google.com/p/ehcache-spring-annotations/source/browse/#svn%2Fexamples%2Fehcache-spring-example-1%2Ftrunk
 
-This project is a Spring 3 web application that includes a few example applications of the @Cacheable and @TriggersRemove annotations.
+This project is a Spring 3 web application that includes a few example applications of the @[UsingCachable Cacheable] and @[UsingTriggersRemove TriggersRemove] annotations.
 
 = Requirements = 
 
