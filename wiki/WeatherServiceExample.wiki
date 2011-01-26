@@ -10,14 +10,14 @@ This project is a Spring 3 web application that includes a few example applicati
 
 = Requirements = 
 
-# Subversion client to check out the source tree
-# Maven to build the project
-# Tomcat 6 instance to deploy and run.
+  # Subversion client to check out the source tree
+  # Maven to build the project
+  # Tomcat 6 instance to deploy and run.
 
 The authors use [http://eclipse.org Eclipse] to develop the software along with the following plugins:
-* [http://subclipse.tigris.org/ Subclipse Subversion integration]
-* [http://m2eclipse.sonatype.org/ m2eclipse Maven Integration]
-* [http://www.eclipsetotale.com/tomcatPlugin.html Sysdeo Eclipse Tomcat Launcher]
+  * [http://subclipse.tigris.org/ Subclipse Subversion integration]
+  * [http://m2eclipse.sonatype.org/ m2eclipse Maven Integration]
+  * [http://www.eclipsetotale.com/tomcatPlugin.html Sysdeo Eclipse Tomcat Launcher]
 
 = Setup =
 
@@ -30,4 +30,3 @@ The authors use [http://eclipse.org Eclipse] to develop the software along with 
 # Start tomcat, and navigate to http://localhost:8080/ehcache-spring-example-1/
 
 = Example Details =
-
