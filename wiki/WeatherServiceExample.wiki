@@ -21,12 +21,16 @@ The authors use [http://eclipse.org Eclipse] to develop the software along with 
 
 = Setup =
 
-# Download and unzip a Tomcat 6 distribution
-# Check out the project with:
-{{{svn co https://ehcache-spring-annotations.googlecode.com/svn/examples/ehcache-spring-example-1/trunk ehcache-spring-example-1}}}
-# Navigate to the ehcache-spring-example-1 directory, and build the project with:
-{{{mvn package}}}
-# Copy the file named ehcache-spring-example-1.war under neath the target sub directory to the webapps directory in your Tomcat 6 install.
-# Start tomcat, and navigate to http://localhost:8080/ehcache-spring-example-1/
+  # Download and unzip a Tomcat 6 distribution
+  # Check out the project with:
+{{{
+svn co https://ehcache-spring-annotations.googlecode.com/svn/examples/ehcache-spring-example-1/trunk ehcache-spring-example-1
+}}}
+  # Navigate to the ehcache-spring-example-1 directory, and build the project with:
+{{{
+mvn package
+}}}
+  # Copy the file named ehcache-spring-example-1.war under neath the target sub directory to the webapps directory in your Tomcat 6 install.
+  # Start tomcat, and navigate to http://localhost:8080/ehcache-spring-example-1/
 
 = Example Details =
