@@ -45,6 +45,10 @@ public class WeatherServiceController {
 	private CacheManager cacheManager;
 	private String cacheName = "weatherCache";
 	/**
+	 * To switch between the different {@link WeatherService} implementations,
+	 * change the value of '@Qualifier("jdbc")' to the value of the '@Qualifier' annotation
+	 * on the desired implementation (e.g. "simple" or "slow").
+	 * 
 	 * @param weatherService the weatherService to set
 	 */
 	@Autowired
