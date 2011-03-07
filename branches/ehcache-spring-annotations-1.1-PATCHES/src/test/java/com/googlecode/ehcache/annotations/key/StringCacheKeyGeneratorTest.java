@@ -18,18 +18,16 @@ package com.googlecode.ehcache.annotations.key;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
-
 import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * @author Eric Dalquist
  * @version $Revision$
  */
-public class StringCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest<String> {
+public class StringCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest<StringCacheKeyGenerator, String> {
 
     @Override
-    protected AbstractDeepCacheKeyGenerator<?, String> getCacheKeyGenerator() {
+    protected StringCacheKeyGenerator getCacheKeyGenerator() {
         return new StringCacheKeyGenerator();
     }
 
@@ -42,21 +40,21 @@ public class StringCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTe
     @Override
     protected void verifyTestCircularReference(MethodInvocation invocation, String key) {
         assertEquals(
-                "[[[[...], childArgString], argString]]",
+                "[class com.googlecode.ehcache.annotations.key.MethodInvocationHelper, testMethod1, class java.lang.Object, [class java.lang.Object], [[[[...], childArgString], argString]]]",
                 key);
     }
 
     @Override
     protected void verifyTestCircularReferenceWithReflection(MethodInvocation invocation, String key) {
         assertEquals(
-                "[[[[class com.googlecode.ehcache.annotations.key.RequiresReflectionKey, [...]], childArgString], argString]]", 
+                "[class com.googlecode.ehcache.annotations.key.MethodInvocationHelper, testMethod1, class java.lang.Object, [class java.lang.Object], [[[[class com.googlecode.ehcache.annotations.key.RequiresReflectionKey, [...]], childArgString], argString]]]", 
                 key);
     }
 
     @Override
     protected void verifyTestComplexHashCode(MethodInvocation invocation, String key) {
         assertEquals(
-                "[class com.googlecode.ehcache.annotations.key.MethodInvocationHelper, testMethod2, class java.lang.Object, [[1, 2, 3, 4], foo, [false, true], [null, " + new Date(0) + "]]]",
+                "[class com.googlecode.ehcache.annotations.key.MethodInvocationHelper, testMethod2, class java.lang.Object, [[1, 2, 3, 4], foo, [false, true], [null, java.util.GregorianCalendar[time=0,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id=\"GMT\",offset=0,dstSavings=0,useDaylight=false,transitions=0,lastRule=null],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=1970,MONTH=0,WEEK_OF_YEAR=1,WEEK_OF_MONTH=1,DAY_OF_MONTH=1,DAY_OF_YEAR=1,DAY_OF_WEEK=5,DAY_OF_WEEK_IN_MONTH=1,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=0,ZONE_OFFSET=0,DST_OFFSET=0]]]]",
                 key);
     }
 
