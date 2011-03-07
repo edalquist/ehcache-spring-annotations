@@ -19,8 +19,10 @@ package com.googlecode.ehcache.annotations.key;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import org.aopalliance.intercept.MethodInvocation;
@@ -30,7 +32,7 @@ import org.aopalliance.intercept.MethodInvocation;
  * @version $Revision$
  */
 @SuppressWarnings("unchecked")
-public class ListCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest<ReadOnlyList<?>> {
+public class ListCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest<AbstractDeepCacheKeyGenerator<?, ReadOnlyList<?>>, ReadOnlyList<?>> {
 
     @Override
     protected AbstractDeepCacheKeyGenerator<?, ReadOnlyList<?>> getCacheKeyGenerator() {
@@ -48,9 +50,15 @@ public class ListCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest
     @Override
     protected void verifyTestCircularReference(MethodInvocation invocation, ReadOnlyList<?> key) {
         final List<?> expected = Arrays.asList(
+                MethodInvocationHelper.class,
+                "testMethod1",
+                Object.class,
+                Arrays.asList(Object.class),
                 Arrays.asList(
-                    Arrays.asList(null, "childArgString"),
-                    "argString")
+                    Arrays.asList(
+                        Arrays.asList(null, "childArgString"),
+                        "argString")
+                    )
                 );
         
         assertEquals(expected, key);        
@@ -60,11 +68,17 @@ public class ListCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest
     @Override
     protected void verifyTestCircularReferenceWithReflection(MethodInvocation invocation, ReadOnlyList<?> key) {
         final List<?> expected = Arrays.asList(
+                MethodInvocationHelper.class,
+                "testMethod1",
+                Object.class,
+                Arrays.asList(Object.class),
                 Arrays.asList(
                     Arrays.asList(
-                            Arrays.asList(RequiresReflectionKey.class, null), 
-                            "childArgString"),
-                    "argString")
+                        Arrays.asList(
+                                Arrays.asList(RequiresReflectionKey.class, null), 
+                                "childArgString"),
+                        "argString")
+                    )
                 );
          
         assertEquals(expected, key); 
@@ -73,6 +87,9 @@ public class ListCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest
 
     @Override
     protected void verifyTestComplexHashCode(MethodInvocation invocation, ReadOnlyList<?> key) {
+        final Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
+        cal.setTimeInMillis(0);
+        
         final List<Object> expected = Arrays.asList(
                 MethodInvocationHelper.class,
                 "testMethod2",
@@ -81,7 +98,7 @@ public class ListCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest
                     Arrays.asList(1, 2, 3, 4),
                     "foo",
                     Arrays.asList(false, true),
-                    Arrays.asList(null, new Date(0))
+                    Arrays.asList(null, cal)
                 ));
         
         assertEquals(expected, key);
@@ -90,7 +107,7 @@ public class ListCacheKeyGeneratorTest extends AbstractDeepCacheKeyGeneratorTest
 
     @Override
     protected void verifyTestEnumHashCode(MethodInvocation invocation, ReadOnlyList<?> key) {
-        final List<?> expected = Arrays.asList(TimeUnit.SECONDS, TestEnum.TEST1);
+        final List<?> expected = Arrays.asList(TimeUnit.SECONDS, SimpleEnum.TEST1);
         
         assertEquals(expected, key);
         assertEquals(expected.hashCode(), key.hashCode());

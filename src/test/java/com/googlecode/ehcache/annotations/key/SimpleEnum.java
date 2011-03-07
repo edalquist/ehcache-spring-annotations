@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package com.googlecode.ehcache.annotations;
+package com.googlecode.ehcache.annotations.key;
 
-import com.googlecode.ehcache.annotations.resolver.CacheableCacheResolver;
-
-/**
- * Represents the objects needed to intercept calls to methods annotated
- * with {@link com.googlecode.ehcache.annotations.Cacheable}
- * 
- * @author Eric Dalquist
- * @version $Revision$
- */
-public interface CacheableAttribute extends MethodAttribute {
-    /**
-     * @return The {@link CacheableCacheResolver} used to determine the Cache and ExceptionCache to use.
-     */
-    public CacheableCacheResolver getCacheResolver();
+enum SimpleEnum {
+    TEST1,
+    TEST2;
 }
