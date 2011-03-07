@@ -461,7 +461,7 @@
                                     </ignores>
                                 </instrumentation>
                             </configuration>
-                        </plugin>\
+                        </plugin>
                         <plugin>
                             <groupId>org.codehaus.mojo</groupId>
                             <artifactId>jdepend-maven-plugin</artifactId>
