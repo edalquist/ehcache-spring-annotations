@@ -4,7 +4,7 @@
     <parent>
         <artifactId>oss-parent</artifactId>
         <groupId>org.sonatype.oss</groupId>
-        <version>5</version>
+        <version>7</version>
     </parent>
     
     <groupId>com.googlecode.ehcache-spring-annotations</groupId>
@@ -58,16 +58,27 @@
         </mailingList>
     </mailingLists>
     
+    <properties>
+        <esa-scm-base>http://ehcache-spring-annotations.googlecode.com/svn</esa-scm-base>
+
+        <esa-short-license-url>${esa-scm-base}/license/header.txt</esa-short-license-url>
+        <esa-license-lookup-url>${esa-scm-base}/license/license-mappings.xml</esa-license-lookup-url>
+        <esa-notice-template-url>${esa-scm-base}/license/NOTICE.template</esa-notice-template-url>
+        
+        <m2st-gatc-id>UA-15487466-1</m2st-gatc-id>
+        <m2st-gatc-config>_setDetectFlash(true),_setDetectTitle(false)</m2st-gatc-config>
+    </properties>
+    
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>com.mycila.maven-license-plugin</groupId>
                     <artifactId>maven-license-plugin</artifactId>
-                    <version>1.8.0</version>
+                    <version>1.9.0</version>
                     <configuration>
                         <basedir>${basedir}</basedir>
-                        <header>https://ehcache-spring-annotations.googlecode.com/svn/license/header.txt</header>
+                        <header>${esa-short-license-url}</header>
                         <aggregate>true</aggregate>
                         <strictCheck>true</strictCheck>
                         <excludes>
@@ -77,9 +88,34 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <groupId>org.jasig.maven</groupId>
+                    <artifactId>maven-jasig-legal-plugin</artifactId>
+                    <version>1.0.2</version>
+                    <executions>
+                        <execution>
+                            <id>copy-files</id>
+                            <goals>
+                                <goal>copy-files</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.jasig.maven</groupId>
+                    <artifactId>maven-notice-plugin</artifactId>
+                    <version>1.0.4</version>
+                    <configuration>
+                        <noticeTemplate>${esa-notice-template-url}</noticeTemplate>
+                        <licenseMapping>
+                            <param>https://source.jasig.org/licenses/license-mappings.xml</param>
+                            <param>${esa-license-lookup-url}</param>
+                        </licenseMapping>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.0</version>
+                    <version>2.1</version>
                     <configuration>
                         <mavenExecutorId>forked-path</mavenExecutorId>
                         <useReleaseProfile>false</useReleaseProfile>
