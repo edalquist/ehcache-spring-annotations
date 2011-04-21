@@ -9,7 +9,7 @@
     
     <groupId>com.googlecode.ehcache-spring-annotations</groupId>
     <artifactId>ehcache-spring-annotations-parent</artifactId>
-    <version>3</version>
+    <version>4-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <name>Ehcache Spring Annotations Parent</name>
@@ -38,9 +38,9 @@
     </licenses>
     
     <scm>
-        <connection>scm:svn:http://ehcache-spring-annotations.googlecode.com/svn/parent/tags/ehcache-spring-annotations-parent-3</connection>
-        <developerConnection>scm:svn:https://ehcache-spring-annotations.googlecode.com/svn/parent/tags/ehcache-spring-annotations-parent-3</developerConnection>
-        <url>http://ehcache-spring-annotations.googlecode.com/svn/parent/tags/ehcache-spring-annotations-parent-3</url>
+        <connection>scm:svn:http://ehcache-spring-annotations.googlecode.com/svn/parent/trunk/</connection>
+        <developerConnection>scm:svn:https://ehcache-spring-annotations.googlecode.com/svn/parent/trunk/</developerConnection>
+        <url>http://ehcache-spring-annotations.googlecode.com/svn/parent/trunk/</url>
     </scm>
     
     <issueManagement>
