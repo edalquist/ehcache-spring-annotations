@@ -1,7 +1,50 @@
 #summary Frequently Asked Questions
 #sidebar TableOfContents
 
-== 1. Do I have to implement hashCode() for beans that are used as arguments for `@Cacheable`/`@TriggersRemove` methods? ==
+== 1. What does this product do?
+
+This project is intended to provide an easy way to incorporate caching semantics implemented with EhCache within a project already using the Spring Framework
+for dependency injection.
+
+If you are using this project and including Spring only because this project depends on Spring, you are doing it wrong. If you aren't already
+using Spring to manage your project's beans and services, you should use EhCache directly.
+
+On the other hand, if you have an existing Spring project and use Spring to wire your data-access-objects and services together, this project is a good fit. Adding this to your Spring project will let you add caching backed by EhCache without having to call the EhCache API directly within your code.
+
+== 2. How does this product work?
+
+Here's a short summary of how this works:
+
+When ehcache-spring-annotations is initialized, it scans classes looking for @Cacheable/@TriggersRemove annotated methods on beans already loaded
+by the Spring ApplicationContext. 
+When it finds an annotated method on a spring bean, it then looks for the interface that the class implements. It then generates a http://download.oracle.com/javase/6/docs/api/java/lang/reflect/Proxy.html that implements the same interface as your class. 
+The methods that do not have any annotations are implemented by delegating to your class; the methods that do have annotations apply the cache semantics you 
+specified in the annotation.
+
+== 3. Where does @Cacheable go in my source?
+
+*Requirement 1*: your class MUST implement some (any) interface. If your class does not implement an interface, this project will not
+be able to create a Proxy to mimic your class and apply the cache semantics around your annotated methods.
+
+*Requirement 2*: `@Cacheable`/`@TriggersRemove` only apply to methods, not to classes.
+
+*Requirement 3*: self-invocation is not supported. If you annotate a method that is only called internally within the class, caching will not be applied (since 'this' doesn't invoke the proxy that was created around your annotated class).
+
+*Strong Recommendation*: the arguments of the methods you annotate and the objects they return should have proper equals() and hashCode() implementations.
+
+== 4. My method isn't being cached!
+
+See the requirements in Answer 3. Most often people aren't implementing any interface.
+
+Also be sure that the calls to your annotated methods are being invoke by other Spring beans; self invocation is not supported .
+
+== 5. Can I see an example?
+
+Why yes: WeatherServiceExample
+
+You can also browse the source and look at the many unit tests.
+
+== 6. Do I have to implement hashCode() for beans that are used as arguments for `@Cacheable`/`@TriggersRemove` methods? ==
 
 Example: 
 {{{
@@ -23,7 +66,7 @@ If you do not wish to implement `hashCode` on beans like `MyBean`, you will need
 *Many IDEs have the capability to automatically generate proper equals(), hashCode() and toString() implementations for your Java beans, we strongly recommend using this feature.*
 
 
-== 2. How can I generate a cache key that isn't based on the arguments? ==
+== 7. How can I generate a cache key that isn't based on the arguments? ==
 This example generates a cache key that is a formatted string of the current date.
 
 The !CacheKeyGenerator implementation
