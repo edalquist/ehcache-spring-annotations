@@ -3,13 +3,13 @@
 
 == 1. What does this product do? ==
 
-This project is intended to provide an easy way to incorporate caching semantics implemented with EhCache within a project already using the Spring Framework
+This project is intended to provide an easy way to incorporate caching semantics implemented with `EhCache` within a project already using the Spring Framework
 for dependency injection.
 
 If you are using this project and including Spring only because this project depends on Spring, you are doing it wrong. If you aren't already
-using Spring to manage your project's beans and services, you should use EhCache directly.
+using Spring to manage your project's beans and services, you should use `EhCache` API directly in your code.
 
-On the other hand, if you have an existing Spring project and use Spring to wire your data-access-objects and services together, this project is a good fit. Adding this to your Spring project will let you add caching backed by EhCache without having to call the EhCache API directly within your code.
+On the other hand, if you have an existing Spring project and use Spring to wire your data-access-objects and services together, this project is a good fit. Adding this to your Spring project will let you add caching backed by `EhCache` without having to call the `EhCache` API directly within your code.
 
 == 2. How does this product work? ==
 
@@ -34,9 +34,13 @@ be able to create a Proxy to mimic your class and apply the cache semantics arou
 
 == 4. My method isn't being cached! ==
 
-See the requirements in Answer 3. Most often people aren't implementing any interface.
+See the requirements in Answer 3. Most often people aren't a) implementing any interface or b) expecting self-invocation to work.
 
-Also be sure that the calls to your annotated methods are being invoke by other Spring beans; self invocation is not supported .
+All else fails you can add debug logging for the project:
+{{{
+log4j.category.com.googlecode.ehcache.annotations=DEBUG,R
+log4j.additivity.com.googlecode.ehcache.annotations=false
+}}}
 
 == 5. Can I see an example? ==
 
