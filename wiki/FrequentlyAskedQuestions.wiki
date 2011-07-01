@@ -15,9 +15,9 @@ On the other hand, if you have an existing Spring project and use Spring to wire
 
 Here's a short summary of how this works:
 
-When ehcache-spring-annotations is initialized, it scans classes looking for @Cacheable/@TriggersRemove annotated methods on beans already loaded
-by the Spring ApplicationContext. 
-When it finds an annotated method on a spring bean, it then looks for the interface that the class implements. It then generates a http://download.oracle.com/javase/6/docs/api/java/lang/reflect/Proxy.html that implements the same interface as your class. 
+When ehcache-spring-annotations is initialized, it scans classes looking for `@Cacheable`/`@TriggersRemove` annotated methods on beans already loaded
+by the Spring `ApplicationContext`. 
+When it finds an annotated method on a Spring bean, it then looks for the interface that the class implements. It then generates a http://download.oracle.com/javase/6/docs/api/java/lang/reflect/Proxy.html that implements the same interface as your class. 
 The methods that do not have any annotations are implemented by delegating to your class; the methods that do have annotations apply the cache semantics you 
 specified in the annotation.
 
