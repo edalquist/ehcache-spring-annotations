@@ -1,7 +1,7 @@
 #summary Frequently Asked Questions
 #sidebar TableOfContents
 
-== 1. What does this product do?
+== 1. What does this product do? ==
 
 This project is intended to provide an easy way to incorporate caching semantics implemented with EhCache within a project already using the Spring Framework
 for dependency injection.
@@ -11,7 +11,7 @@ using Spring to manage your project's beans and services, you should use EhCache
 
 On the other hand, if you have an existing Spring project and use Spring to wire your data-access-objects and services together, this project is a good fit. Adding this to your Spring project will let you add caching backed by EhCache without having to call the EhCache API directly within your code.
 
-== 2. How does this product work?
+== 2. How does this product work? ==
 
 Here's a short summary of how this works:
 
@@ -21,7 +21,7 @@ When it finds an annotated method on a spring bean, it then looks for the interf
 The methods that do not have any annotations are implemented by delegating to your class; the methods that do have annotations apply the cache semantics you 
 specified in the annotation.
 
-== 3. Where does @Cacheable go in my source?
+== 3. Where does @Cacheable go in my source? ==
 
 *Requirement 1*: your class MUST implement some (any) interface. If your class does not implement an interface, this project will not
 be able to create a Proxy to mimic your class and apply the cache semantics around your annotated methods.
@@ -32,15 +32,15 @@ be able to create a Proxy to mimic your class and apply the cache semantics arou
 
 *Strong Recommendation*: the arguments of the methods you annotate and the objects they return should have proper equals() and hashCode() implementations.
 
-== 4. My method isn't being cached!
+== 4. My method isn't being cached! ==
 
 See the requirements in Answer 3. Most often people aren't implementing any interface.
 
 Also be sure that the calls to your annotated methods are being invoke by other Spring beans; self invocation is not supported .
 
-== 5. Can I see an example?
+== 5. Can I see an example? ==
 
-Why yes: WeatherServiceExample
+WeatherServiceExample
 
 You can also browse the source and look at the many unit tests.
 
