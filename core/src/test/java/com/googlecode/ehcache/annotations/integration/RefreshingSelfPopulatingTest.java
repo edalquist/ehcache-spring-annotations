@@ -15,6 +15,8 @@
  */
 package com.googlecode.ehcache.annotations.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
@@ -69,7 +71,8 @@ public class RefreshingSelfPopulatingTest {
             public void run() {
                 threadRunningLatch.countDown();
                 logger.trace("Calling blockingA(test2)");
-                refreshingSelfPopulatingTestInterface.blockingA("test2");
+                final String result = refreshingSelfPopulatingTestInterface.blockingA("test2");
+                assertEquals("blockingA says: test2", result);
             }
         });
         

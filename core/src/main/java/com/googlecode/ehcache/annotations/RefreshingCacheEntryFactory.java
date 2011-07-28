@@ -41,8 +41,8 @@ public class RefreshingCacheEntryFactory extends ThreadLocalCacheEntryFactory im
         try {
             entryFactory.set(methodInvocation);
             
-            final Object newEntry = this.createEntry(key);
-            refreshableCacheEntry.setValue(newEntry);
+            final RefreshableCacheEntry newEntry = (RefreshableCacheEntry) this.createEntry(key);
+            refreshableCacheEntry.setValue(newEntry.getValue());
         }
         finally {
             if (existingMethodInvocation == null) {
