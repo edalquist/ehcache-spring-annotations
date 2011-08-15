@@ -175,6 +175,10 @@ public class EhCacheInterceptor implements MethodInterceptor {
         }
         catch (Throwable t) {
             Throwable cause = t.getCause();
+            //Some versions of Ehcache don't populate the cause correctly, in that case use the original exception
+            if (cause == null) {
+            	cause = t;
+            }
             this.cacheException(cacheableAttribute, methodInvocation, key, cause);
             throw cause;
         }
