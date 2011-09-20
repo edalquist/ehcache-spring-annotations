@@ -1,1 +1,0 @@
-A place to track ideas for extensions/additions to the JSR107 draft specification
