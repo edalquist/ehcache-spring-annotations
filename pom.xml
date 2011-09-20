@@ -74,10 +74,10 @@
         <!-- compile dependencies -->
         <aopalliance.version>1.0</aopalliance.version>
         <commons-codec.version>1.5</commons-codec.version>
-        <ehcache.version>2.4.3</ehcache.version>
+        <ehcache.version>2.4.5</ehcache.version>
         <guava.version>r09</guava.version>
-        <org.springframework.version>3.0.5.RELEASE</org.springframework.version>
-        <slf4j.version>1.6.1</slf4j.version>
+        <org.springframework.version>3.0.6.RELEASE</org.springframework.version>
+        <slf4j.version>1.6.2</slf4j.version>
 
         <!-- 
          | Note that the osgi version properties specify the minimum version that works
@@ -92,7 +92,7 @@
         <!-- test dependencies -->
         <cglib.version>2.2.2</cglib.version>
         <easymock.version>3.0</easymock.version>
-        <junit.version>4.8.2</junit.version>
+        <junit.version>4.9</junit.version>
         <log4j.version>1.2.16</log4j.version>
     </properties>
     
@@ -258,11 +258,11 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>2.4.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>2.3.2</version>
                     <configuration>
                         <source>1.5</source>
                         <target>1.5</target>
@@ -275,27 +275,36 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>2.6</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.4.2</version>
+                    <version>2.4.3</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>2.7</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>2.3.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.2-beta-5</version>
+                    <version>2.2.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.3</version>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <archive>
+                            <index>true</index>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.jasig.maven</groupId>
@@ -325,7 +334,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.1</version>
+                    <version>2.2.1</version>
                     <configuration>
                         <mavenExecutorId>forked-path</mavenExecutorId>
                         <useReleaseProfile>false</useReleaseProfile>
@@ -334,7 +343,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.0-beta-3</version>
+                    <version>3.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.doxia</groupId>
